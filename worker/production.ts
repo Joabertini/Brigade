@@ -1,6 +1,6 @@
 import type { Hono } from "hono";
 import { HTTPException } from "hono/http-exception";
-import { assertPositiveMilli } from "../shared/kitchen";
+import { assertPositiveMilli, compatibleStockUnit, scaleIngredient, toStockMilli, type StockUnit, type Unit } from "../shared/kitchen";
 import type { AuthBindings } from "./auth";
 import { requireManager, requireMember } from "./permissions";
 
@@ -78,8 +78,9 @@ export function registerProductionRoutes(app: App) {
     const productionId = context.req.param("productionId");
     const actor = await requireMember(context, kitchenId);
     const production = await context.env.DB.prepare(
-      "SELECT id, status, produced_yield_milli FROM productions WHERE id = ? AND kitchen_id = ?",
-    ).bind(productionId, kitchenId).first<{ id: string; status: string; produced_yield_milli: number }>();
+      `SELECT p.id, p.status, p.produced_yield_milli, p.recipe_version_id, v.yield_milli
+       FROM productions p JOIN recipe_versions v ON v.id = p.recipe_version_id WHERE p.id = ? AND p.kitchen_id = ?`,
+    ).bind(productionId, kitchenId).first<{ id: string; status: string; produced_yield_milli: number; recipe_version_id: string; yield_milli: number }>();
     if (!production) throw new HTTPException(404, { message: "Producción no encontrada" });
     if (actor.role === "commis") {
       const assigned = await context.env.DB.prepare(
@@ -104,9 +105,33 @@ export function registerProductionRoutes(app: App) {
       return context.json({ operationId: body.operationId, duplicate: true, producedYieldMilli: production.produced_yield_milli });
     }
     if (production.status === "completed" || production.status === "cancelled") throw new HTTPException(409, { message: "Producción cerrada" });
-    const insertion = await context.env.DB.prepare(
-      "INSERT OR IGNORE INTO production_entries (operation_id, production_id, actor_user_id, amount_milli, recorded_at) VALUES (?, ?, ?, ?, ?)",
-    ).bind(body.operationId, productionId, actor.userId, body.amountMilli, body.recordedAt).run();
+    // Each batch consumes the gross amount of every stock-linked ingredient, in the same D1 batch as the entry.
+    // Movement IDs derive from the entry, so a replayed offline batch cannot consume twice. Recorded stock never
+    // goes below zero: the batch happened in the kitchen, so a short register is clamped instead of rejected.
+    const linked = await context.env.DB.prepare(
+      `SELECT ri.id, ri.ingredient_name, ri.net_milli, ri.unit, ri.waste_permille, c.id AS catalog_id, c.base_unit
+       FROM recipe_ingredients ri JOIN catalog_ingredients c ON c.id = ri.catalog_ingredient_id AND c.kitchen_id = ?
+       WHERE ri.version_id = ?`,
+    ).bind(kitchenId, production.recipe_version_id).all<{
+      id: string; ingredient_name: string; net_milli: number; unit: Unit; waste_permille: number; catalog_id: string; base_unit: StockUnit;
+    }>();
+    const consumption = linked.results.filter((row) => compatibleStockUnit(row.unit, row.base_unit)).map((row) => {
+      const scaled = scaleIngredient({ id: row.id, name: row.ingredient_name, netMilli: row.net_milli, unit: row.unit, wastePermille: row.waste_permille },
+        production.yield_milli, body.amountMilli!);
+      return { catalogId: row.catalog_id, milli: toStockMilli(scaled.requiredGrossMilli, row.unit, row.base_unit), ingredientId: row.id };
+    }).filter((row) => row.milli > 0);
+    const now = new Date().toISOString();
+    const [insertion] = await context.env.DB.batch([
+      context.env.DB.prepare(
+        "INSERT OR IGNORE INTO production_entries (operation_id, production_id, actor_user_id, amount_milli, recorded_at) VALUES (?, ?, ?, ?, ?)",
+      ).bind(body.operationId, productionId, actor.userId, body.amountMilli, body.recordedAt),
+      ...consumption.map((row) => context.env.DB.prepare(
+        `INSERT OR IGNORE INTO stock_movements (operation_id, kitchen_id, ingredient_id, delta_milli, kind, note, actor_user_id, recorded_at)
+         SELECT ?, ?, ?, -MIN(?, balance), 'consumed', ?, ?, ? FROM
+           (SELECT COALESCE(SUM(delta_milli), 0) AS balance FROM stock_movements WHERE ingredient_id = ?)
+         WHERE balance > 0`,
+      ).bind(`${body.operationId}:${row.ingredientId}`, kitchenId, row.catalogId, row.milli, `Producción ${productionId}`, actor.userId, now, row.catalogId)),
+    ]);
     if (insertion.meta.changes === 0) {
       const saved = await context.env.DB.prepare(
         "SELECT production_id, actor_user_id, amount_milli FROM production_entries WHERE operation_id = ?",

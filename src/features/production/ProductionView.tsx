@@ -200,7 +200,7 @@ export function ProductionView({ recipes, productions, events, ingredients, requ
           <Button full type="submit">Revisar registro</Button>
         </form> : <div className="b2-panel">
           <h2>Sumar {formatMilli(confirming, unit)}</h2>
-          <p className="b2-sub">El total pasará a {formatMilli(production.producedYieldMilli + confirming, unit)}. {cloudMode && !navigator.onLine ? "Quedará guardado aquí hasta recuperar conexión." : ""}</p>
+          <p className="b2-sub">El total pasará a {formatMilli(production.producedYieldMilli + confirming, unit)}. {cloudMode ? "Descuenta del stock los ingredientes vinculados." : ""} {cloudMode && !navigator.onLine ? "Quedará guardado aquí hasta recuperar conexión." : ""}</p>
           <ErrorNote>{error}</ErrorNote>
           <div className="b2-actions"><Button full onClick={() => void record()}>Confirmar registro</Button><Button quiet onClick={() => setConfirming(null)}>Cancelar</Button></div>
         </div>}
