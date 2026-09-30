@@ -45,7 +45,7 @@ Las recetas heredadas tienen rendimientos descriptivos o ingredientes sin cantid
 - `npm audit` tras actualizar Vitest: cero alertas. Las pruebas unitarias usan `vitest.config.ts` para aislar cálculos del Worker.
 - Los servidores de vista previa se detuvieron después de cada prueba. Capturas y scripts de comprobación están en `work/` del workspace de la sesión, fuera de Brigade.
 
-Estas pruebas usan Chromium; faltan Safari y Android reales. Los datos D1 usados fueron de prueba, no una cocina del usuario. No hay despliegue, commit ni PR.
+Estas pruebas usan Chromium; faltan Safari y Android reales. Los datos D1 usados fueron de prueba, no una cocina del usuario. La base se publicó para revisión en el [PR draft #2](https://github.com/Joabertini/Brigade/pull/2); no hay despliegue de Brigade en Cloudflare ni merge.
 
 ## Riesgos y próximos módulos
 
