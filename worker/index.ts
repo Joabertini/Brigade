@@ -6,6 +6,7 @@ import { registerMemberRoutes } from "./members";
 import { registerEventRoutes } from "./events";
 import { registerInventoryRoutes } from "./inventory";
 import { registerPurchaseRoutes } from "./purchases";
+import { registerRequirementRoutes } from "./requirements";
 
 const app = new Hono<{ Bindings: AuthBindings }>();
 
@@ -64,6 +65,7 @@ registerMemberRoutes(app);
 registerEventRoutes(app);
 registerInventoryRoutes(app);
 registerPurchaseRoutes(app);
+registerRequirementRoutes(app);
 
 app.get("/api/health", async (context) => {
   const result = await context.env.DB.prepare("SELECT 1 AS ok").first<{ ok: number }>();

@@ -16,8 +16,8 @@ export default defineConfig({
         description: "Recetas y producción para una cocina profesional.",
         start_url: "/",
         display: "standalone",
-        theme_color: "#121610",
-        background_color: "#121610",
+        theme_color: "#101310",
+        background_color: "#101310",
         icons: [{ src: "/brigade-mark.svg", sizes: "any", type: "image/svg+xml", purpose: "any maskable" }],
       },
       workbox: {

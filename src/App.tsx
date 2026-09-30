@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { BottomNav, type Section } from "./components/BottomNav";
-import { CloudRepository, LocalRepository, isAccessError, type CatalogIngredient, type Identity, type PurchaseOrder, type StockMovement, type Supplier } from "./data/repository";
+import { CloudCheck, CloudOff } from "lucide-react";
+import { CloudRepository, LocalRepository, isAccessError, type CatalogIngredient, type Identity, type PurchaseOrder, type Requirements, type StockMovement, type Supplier } from "./data/repository";
 import { clearUserCache } from "./data/cloud-cache";
 import { LoginView } from "./features/auth/LoginView";
 import { RecipesView } from "./features/recipes/RecipesView";
@@ -11,7 +12,9 @@ import { EventsView } from "./features/events/EventsView";
 import { StockView } from "./features/stock/StockView";
 import { OrdersView } from "./features/orders/OrdersView";
 import type { LocalEvent, LocalProduction, LocalRecipe } from "./local-db";
-import { formatMilli } from "../shared/kitchen";
+import { HomeView } from "./features/home/HomeView";
+import { MoreView, SyncView } from "./features/home/MoreViews";
+import { ErrorNote, initials } from "./components/ui";
 
 type Mode = "loading" | "login" | "join" | "local" | "cloud";
 const identityKey = "brigade_last_identity";
@@ -29,6 +32,12 @@ export default function App() {
   const [movements, setMovements] = useState<StockMovement[]>([]);
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
   const [orders, setOrders] = useState<PurchaseOrder[]>([]);
+  const [requirements, setRequirements] = useState<Requirements>({ needs: [], unlinked: [] });
+  const [lastSync, setLastSync] = useState<Date | null>(null);
+  const [focusProductionId, setFocusProductionId] = useState("");
+  const [newRecipeRequest, setNewRecipeRequest] = useState(0);
+  const [navKey, setNavKey] = useState(0);
+  const [ready, setReady] = useState(false);
   const [requestedRecipe, setRequestedRecipe] = useState<LocalRecipe | null>(null);
   const [online, setOnline] = useState(navigator.onLine);
   const [pending, setPending] = useState({ waiting: 0, conflicts: 0 });
@@ -84,10 +93,12 @@ export default function App() {
     if (mode !== "local" && mode !== "cloud") return;
     try {
       await repository.syncPending();
-      const [recipeRows, eventRows, ingredientRows, movementRows, supplierRows, orderRows] = await Promise.all([
+      const commis = mode === "cloud" && identity?.role === "commis";
+      const [recipeRows, eventRows, ingredientRows, movementRows, supplierRows, orderRows, requirementRows] = await Promise.all([
         repository.listRecipes(), repository.listEvents(), repository.listIngredients(), repository.listStockMovements(),
-        mode === "cloud" && identity?.role === "commis" ? Promise.resolve([]) : repository.listSuppliers(),
-        mode === "cloud" && identity?.role === "commis" ? Promise.resolve([]) : repository.listOrders(),
+        commis ? Promise.resolve([]) : repository.listSuppliers(),
+        commis ? Promise.resolve([]) : repository.listOrders(),
+        commis ? Promise.resolve({ needs: [], unlinked: [] }) : repository.listRequirements(),
       ]);
       const productionRows = await repository.listProductions(recipeRows);
       const queued = await repository.pendingEntries();
@@ -98,6 +109,8 @@ export default function App() {
       setMovements(movementRows);
       setSuppliers(supplierRows);
       setOrders(orderRows);
+      setRequirements(requirementRows);
+      if (navigator.onLine) setLastSync(new Date());
       setPending({
         waiting: queued.filter((entry) => entry.status === "pending").length,
         conflicts: queued.filter((entry) => entry.status === "conflict").length,
@@ -112,6 +125,8 @@ export default function App() {
         await clearUserCache(identity.user.id, identity.kitchenId).catch(() => {});
       }
       setLoadError(cause instanceof Error ? cause.message : "No se pudieron cargar los datos");
+    } finally {
+      setReady(true);
     }
   }, [mode, repository, identity]);
 
@@ -164,66 +179,62 @@ export default function App() {
     if (identity) await clearUserCache(identity.user.id, identity.kitchenId).catch(() => {});
     localStorage.removeItem(identityKey);
     setRecipes([]); setProductions([]); setEvents([]); setIngredients([]); setMovements([]); setSuppliers([]); setOrders([]);
+    setRequirements({ needs: [], unlinked: [] });
     setIdentity(null);
     setMode("login");
   }
 
   function navigate(next: Section) {
     setSection(next);
-    if (next !== "production") setRequestedRecipe(null);
-    window.scrollTo({ top: 0, behavior: "instant" });
+    setNavKey((value) => value + 1);
+    setNewRecipeRequest(0);
+    setRequestedRecipe(null);
+    setFocusProductionId("");
+    document.querySelector(".b2-scroll")?.scrollTo({ top: 0 });
   }
 
   function plan(recipe: LocalRecipe) {
-    setRequestedRecipe(recipe);
     navigate("production");
+    setRequestedRecipe(recipe);
   }
 
-  if (mode === "loading") return <div className="login-shell"><div className="brand">brigade<span>.</span></div><p className="muted">Preparando tu cocina…</p></div>;
+  function openProduction(id: string) {
+    navigate("production");
+    setFocusProductionId(id);
+  }
+
+  if (mode === "loading") return <div className="b2-frame"><header className="b2-header"><div className="b2-brand">brigade<em>.</em></div></header><main className="b2-login"><p className="b2-muted">Preparando tu cocina…</p></main></div>;
   if (mode === "join" && joinToken) return <JoinView token={joinToken} onJoined={loggedIn} />;
   if (mode === "login") return <LoginView onLogin={loggedIn} onLocal={chooseLocal} />;
 
-  return <div className="app-shell">
-    <header className="app-header">
-      <div className="brand">brigade<span>.</span></div>
-      <div className="header-right">
-        <button className="connection connection-button" onClick={() => void refresh()} title="Sincronizar ahora"><span className={online ? "dot" : "dot offline"} />{online ? "Sincronizar" : "Sin conexión"}</button>
-        <button className="avatar avatar-button" onClick={() => mode === "cloud" ? void signOut() : setMode("login")} title={mode === "cloud" ? "Cerrar sesión" : "Conectar cocina"} aria-label={mode === "cloud" ? "Cerrar sesión" : "Conectar cocina"}>
-          {identity?.user.name.split(" ").map((part) => part[0]).join("").slice(0, 2).toUpperCase() ?? "BC"}
-        </button>
+  const commis = mode === "cloud" && identity?.role === "commis";
+  const manager = mode === "local" || !commis;
+  return <div className="b2-frame">
+    <header className="b2-header">
+      <div className="b2-brand">brigade<em>.</em></div>
+      <div className="b2-headright">
+        <button type="button" className="b2-sync" onClick={() => navigate("sync")}>{online ? <CloudCheck /> : <CloudOff />}{!online ? "Sin conexión" : pending.waiting ? `${pending.waiting} pendientes` : "Al día"}</button>
+        <button type="button" className="b2-avatar" onClick={() => navigate("sync")} aria-label={identity ? `${identity.user.name}, ${identity.role}` : "Cuaderno local"}>{initials(identity?.user.name)}</button>
       </div>
     </header>
-    <main className="main-content">
-      {loadError && <p className="error" role="alert">{loadError}</p>}
-      {mode === "cloud" && (pending.waiting > 0 || pending.conflicts > 0) &&
-        <p className="sync-banner" role="status">{pending.waiting} registros esperando sincronización · {pending.conflicts} con conflicto</p>}
-      {section === "today" && <section>
-        <p className="eyebrow">COCINA DE HOY</p>
-        <h1>Todo en su<br />lugar.</h1>
-        <p className="lead">Recetas, cantidades y trabajo de producción al alcance de tu equipo.</p>
-        <div className="home-grid">
-          <div className="focus-card">
-            <span className="eyebrow">SIGUIENTE PASO</span>
-            <h2 className="dish">{productions[0]?.recipe.title ?? "Tu primera receta"}</h2>
-            <p>{productions[0] ? formatMilli(productions[0].producedYieldMilli, productions[0].recipe.yieldUnit) + " de " + formatMilli(productions[0].targetYieldMilli, productions[0].recipe.yieldUnit) + " producidos" : "Ingresá una receta y empezá a planificar desde ella."}</p>
-            <button className="primary" onClick={() => navigate(productions.length ? "production" : "recipes")}>{productions.length ? "Abrir producción" : "Abrir recetario"} →</button>
-          </div>
-          <div className="panel">
-            <p className="eyebrow">{mode === "cloud" ? "TU COCINA" : "EN ESTE DISPOSITIVO"}</p>
-            <div className="home-metric"><strong>{recipes.length}</strong><span>recetas disponibles</span></div>
-            <div className="home-metric"><strong>{productions.length}</strong><span>producciones registradas</span></div>
-            <p className="muted">{mode === "cloud" ? "Lo consultado queda en el dispositivo. Las tandas sin red se envían al recuperar conexión." : "Cuaderno local: disponible sin conexión, todavía sin respaldo ni acceso del equipo."}</p>
-          </div>
-        </div>
-      </section>}
-      {section === "recipes" && <RecipesView recipes={recipes} cloudMode={mode === "cloud"} canPlan={mode === "local" || identity?.role !== "commis"} currentUserId={identity?.user.id} onCreate={(version) => repository.createRecipe(version)} onSaved={refresh} onPlan={plan} onMembers={() => repository.listMembers()} onShare={(recipeId, userId) => repository.shareRecipe(recipeId, userId)} onVisibility={(recipeId, visibility) => repository.setRecipeVisibility(recipeId, visibility)} />}
-      {section === "production" && <ProductionView recipes={recipes} productions={productions} events={events} requestedRecipe={requestedRecipe} cloudMode={mode === "cloud"} canPlan={mode === "local" || identity?.role !== "commis"} onPlan={(recipe, target, date, eventId) => repository.planProduction(recipe, target, date, eventId)} onRecord={(production, amount) => repository.recordBatch(production, amount)} onSaved={refresh} />}
-      {section === "team" && <TeamView identity={identity} onMembers={() => repository.listMembers()} onInvite={(email, role) => repository.inviteMember(email, role)} />}
-      {section === "events" && <EventsView events={events} productions={productions} canEdit={mode === "local" || identity?.role !== "commis"} onSave={(event) => repository.saveEvent(event)} onSaved={refresh} />}
-      {section === "stock" && <StockView ingredients={ingredients} movements={movements} cloudMode={mode === "cloud"} canEdit={identity?.role !== "commis"} online={online} onCreate={(name, unit) => repository.createIngredient(name, unit)} onMovement={(ingredientId, delta, kind, note) => repository.recordStockMovement(ingredientId, delta, kind, note)} onSaved={refresh} />}
-      {section === "orders" && <OrdersView suppliers={suppliers} ingredients={ingredients} orders={orders} cloudMode={mode === "cloud"} canEdit={identity?.role !== "commis"} online={online} onSupplier={(name, contact) => repository.createSupplier(name, contact)} onOrder={(supplierId, lines, note, orderId) => repository.createOrder(supplierId, lines, note, orderId)} onStatus={(orderId, status) => repository.setOrderStatus(orderId, status)} onReceipt={(orderId, lines, operationId) => repository.receiveOrder(orderId, lines, operationId)} onSaved={refresh} />}
-      {section === "more" && <section><p className="eyebrow">BRIGADE</p><h1>Tu cocina,<br />completa.</h1><div className="more-grid">{(["stock", "team", "events"] as const).map((item) => <button className="more-card" onClick={() => navigate(item)} key={item}>{({stock:"Stock",team:"Equipo",events:"Eventos"})[item]} <span>↗</span></button>)}</div></section>}
-    </main>
-    <BottomNav section={section} onNavigate={navigate} />
+    <div className="b2-scroll" role="region" aria-label="Contenido">
+      <main className="b2-content" key={navKey}>
+        {!online && section !== "sync" && <div className="b2-offline">Guardado en este dispositivo · {pending.waiting} pendientes</div>}
+        {mode === "cloud" && pending.conflicts > 0 && <div className="b2-offline">{pending.conflicts} registros con conflicto. Revisalos en Conexión.</div>}
+        <ErrorNote>{loadError}</ErrorNote>
+        {!ready ? <p className="b2-muted">Preparando tu cocina…</p> : <>
+        {section === "today" && <HomeView name={identity?.user.name} commis={commis} productions={productions} requirements={requirements} lastSync={lastSync} onNavigate={navigate} onOpenProduction={openProduction} />}
+        {section === "recipes" && <RecipesView recipes={recipes} ingredients={ingredients} cloudMode={mode === "cloud"} canPlan={manager} canLink={mode === "cloud" && !commis} currentUserId={identity?.user.id} newRequest={newRecipeRequest} onCreate={(version) => repository.createRecipe(version)} onSaved={refresh} onPlan={plan} onMembers={() => repository.listMembers()} onShare={(recipeId, userId) => repository.shareRecipe(recipeId, userId)} onVisibility={(recipeId, visibility) => repository.setRecipeVisibility(recipeId, visibility)} onLink={(recipeId, ingredientId, catalogId) => repository.linkIngredient(recipeId, ingredientId, catalogId)} />}
+        {section === "production" && <ProductionView recipes={recipes} productions={productions} events={events} ingredients={ingredients} requirements={requirements} requestedRecipe={requestedRecipe} focusProductionId={focusProductionId} cloudMode={mode === "cloud"} canPlan={manager} onPlan={(recipe, target, date, eventId) => repository.planProduction(recipe, target, date, eventId)} onRecord={(production, amount) => repository.recordBatch(production, amount)} onSaved={refresh} onOrders={() => navigate("orders")} onRecipes={() => navigate("recipes")} />}
+        {section === "team" && <TeamView identity={identity} onMembers={() => repository.listMembers()} onInvite={(email, role) => repository.inviteMember(email, role)} />}
+        {section === "events" && <EventsView events={events} productions={productions} canEdit={manager} onSave={(event) => repository.saveEvent(event)} onSaved={refresh} onOpenProduction={openProduction} />}
+        {section === "stock" && <StockView ingredients={ingredients} movements={movements} cloudMode={mode === "cloud"} canEdit={!commis} online={online} lastSync={lastSync} onCreate={(name, unit) => repository.createIngredient(name, unit)} onMovement={(ingredientId, delta, kind, note) => repository.recordStockMovement(ingredientId, delta, kind, note)} onSaved={refresh} />}
+        {section === "orders" && <OrdersView suppliers={suppliers} ingredients={ingredients} orders={orders} requirements={requirements} cloudMode={mode === "cloud"} canEdit={!commis} online={online} onSupplier={(name, contact) => repository.createSupplier(name, contact)} onOrder={(supplierId, lines, note, orderId) => repository.createOrder(supplierId, lines, note, orderId)} onStatus={(orderId, status) => repository.setOrderStatus(orderId, status)} onReceipt={(orderId, lines, operationId) => repository.receiveOrder(orderId, lines, operationId)} onSaved={refresh} />}
+        {section === "more" && <MoreView commis={commis} onNavigate={navigate} onNewRecipe={() => { navigate("recipes"); setNewRecipeRequest((value) => value + 1); }} />}
+        {section === "sync" && <SyncView online={online} cloudMode={mode === "cloud"} pending={pending.waiting} conflicts={pending.conflicts} recipes={recipes.length} lastSync={lastSync} onSync={() => void refresh()} onSignOut={() => void signOut()} onConnect={() => setMode("login")} />}
+        </>}
+      </main>
+    </div>
+    <BottomNav section={section} commis={commis} onNavigate={navigate} />
   </div>;
 }
