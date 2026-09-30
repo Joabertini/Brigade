@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Button, ErrorNote, PageHead } from "../../components/ui";
 import type { Identity } from "../../data/repository";
 
 export function LoginView({ onLogin, onLocal }: { onLogin: (identity: Identity) => void; onLocal: () => void }) {
@@ -33,19 +34,17 @@ export function LoginView({ onLogin, onLocal }: { onLogin: (identity: Identity) 
     }
   }
 
-  return <div className="login-shell">
-    <div className="brand">brigade<span>.</span></div>
-    <div className="login-card">
-      <p className="eyebrow">TU COCINA, EN ORDEN</p>
-      <h1>Bienvenido<br />a cocina.</h1>
-      <p className="muted">Ingresá con la cuenta que recibió una invitación de tu chef.</p>
+  return <div className="b2-frame">
+    <header className="b2-header"><div className="b2-brand">brigade<em>.</em></div></header>
+    <div className="b2-scroll"><main className="b2-login">
+      <PageHead eyebrow="TU COCINA, EN ORDEN" title={<>Bienvenido<br />a cocina.</>} sub="Ingresá con la cuenta que recibió una invitación de tu chef." />
       <form onSubmit={signIn}>
-        <label className="field">Email<input type="email" autoComplete="email" value={email} onChange={(event) => setEmail(event.target.value)} required /></label>
-        <label className="field">Contraseña<input type="password" autoComplete="current-password" value={password} onChange={(event) => setPassword(event.target.value)} required /></label>
-        {error && <p className="error" role="alert">{error}</p>}
-        <button className="primary" type="submit" disabled={loading}>{loading ? "Entrando…" : "Entrar a Brigade"}</button>
+        <label className="b2-field">Email<input type="email" autoComplete="email" value={email} onChange={(event) => setEmail(event.target.value)} required /></label>
+        <label className="b2-field">Contraseña<input type="password" autoComplete="current-password" value={password} onChange={(event) => setPassword(event.target.value)} required /></label>
+        <ErrorNote>{error}</ErrorNote>
+        <Button full type="submit" disabled={loading}>{loading ? "Entrando…" : "Entrar a Brigade"}</Button>
       </form>
-      <button className="text-button" onClick={onLocal}>Abrir cuaderno local de este dispositivo</button>
-    </div>
+      <div className="b2-actions"><button type="button" className="b2-link" onClick={onLocal}>Abrir cuaderno local de este dispositivo</button></div>
+    </main></div>
   </div>;
 }

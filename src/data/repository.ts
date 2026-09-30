@@ -1,4 +1,5 @@
 import type { RecipeVersion } from "../../shared/kitchen";
+import type { IngredientNeed, UnlinkedNeed } from "../../shared/requirements";
 import { listLocal, putLocal, type LocalEvent, type LocalProduction, type LocalRecipe } from "../local-db";
 import { deletePending, listPending, putPending, readCache, writeCache, type PendingEntry } from "./cloud-cache";
 
@@ -18,6 +19,8 @@ export type StockMovement = { operationId: string; ingredientId: string; ingredi
 export type Supplier = { id: string; name: string; contact: string };
 export type PurchaseLine = { id: string; ingredientId: string; ingredientName: string; quantityMilli: number; receivedMilli: number; unit: StockUnit; note: string };
 export type PurchaseOrder = { id: string; supplierId: string; supplierName: string; supplierContact: string; status: "draft" | "sent" | "confirmed" | "received" | "cancelled"; sentAt: string | null; createdAt: string; note: string; lines: PurchaseLine[] };
+
+export type Requirements = { needs: IngredientNeed[]; unlinked: UnlinkedNeed[] };
 
 export interface KitchenRepository {
   listRecipes(): Promise<LocalRecipe[]>;
@@ -43,6 +46,8 @@ export interface KitchenRepository {
   createOrder(supplierId: string, lines: { ingredientId: string; quantityMilli: number; note: string }[], note: string, orderId: string): Promise<void>;
   setOrderStatus(orderId: string, status: "sent" | "confirmed" | "cancelled"): Promise<void>;
   receiveOrder(orderId: string, lines: { lineId: string; quantityMilli: number }[], operationId: string): Promise<void>;
+  listRequirements(): Promise<Requirements>;
+  linkIngredient(recipeId: string, ingredientId: string, catalogIngredientId: string | null): Promise<void>;
 }
 
 export class LocalRepository implements KitchenRepository {
@@ -83,6 +88,8 @@ export class LocalRepository implements KitchenRepository {
   createOrder() { return Promise.reject(new Error("Conectá tu cocina para preparar pedidos")); }
   setOrderStatus() { return Promise.reject(new Error("Conectá tu cocina para actualizar pedidos")); }
   receiveOrder() { return Promise.reject(new Error("Conectá tu cocina para recibir pedidos")); }
+  listRequirements() { return Promise.resolve({ needs: [], unlinked: [] }); }
+  linkIngredient() { return Promise.reject(new Error("Conectá tu cocina para vincular stock")); }
 }
 
 type RecipeSummary = { id: string; version_id: string; visibility: "private" | "kitchen"; owner_user_id: string };
@@ -132,7 +139,7 @@ export class CloudRepository implements KitchenRepository {
       body: JSON.stringify({
         title: version.title, description: version.description, yieldMilli: version.yieldMilli,
         yieldUnit: version.yieldUnit,
-        ingredients: version.ingredients.map(({ name, netMilli, unit, wastePermille }) => ({ name, netMilli, unit, wastePermille })),
+        ingredients: version.ingredients.map(({ name, netMilli, unit, wastePermille, catalogIngredientId }) => ({ name, netMilli, unit, wastePermille, catalogIngredientId: catalogIngredientId ?? null })),
         steps: version.steps.map(({ title, instruction, ingredientIds }) => ({
           title, instruction, ingredientIndexes: ingredientIds.map((id) => ingredientIndexes.get(id)).filter((index): index is number => index !== undefined),
         })),
@@ -347,6 +354,24 @@ export class CloudRepository implements KitchenRepository {
   async receiveOrder(orderId: string, lines: { lineId: string; quantityMilli: number }[], operationId: string): Promise<void> {
     await this.request(`${this.root()}/orders/${orderId}/receipts`, {
       method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ operationId, lines }),
+    });
+  }
+
+  async listRequirements(): Promise<Requirements> {
+    const key = this.cacheKey("requirements");
+    try {
+      const result = await this.request<Requirements>(`${this.root()}/requirements`);
+      await writeCache(key, result);
+      return result;
+    } catch (cause) {
+      if (isAccessError(cause)) throw cause;
+      return (await readCache<Requirements>(key)) ?? { needs: [], unlinked: [] };
+    }
+  }
+
+  async linkIngredient(recipeId: string, ingredientId: string, catalogIngredientId: string | null): Promise<void> {
+    await this.request(`${this.root()}/recipes/${recipeId}/ingredients/${ingredientId}/catalog`, {
+      method: "PUT", headers: { "content-type": "application/json" }, body: JSON.stringify({ catalogIngredientId }),
     });
   }
 

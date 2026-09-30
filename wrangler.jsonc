@@ -8,11 +8,15 @@
     "not_found_handling": "single-page-application",
     "run_worker_first": ["/api/*"]
   },
+  "workers_dev": true,
+  "vars": {
+    "PUBLIC_ORIGIN": "https://brigade.bertinilabs.xyz,https://brigade-one.vercel.app,https://brigade-*-joas-projects-38da3ca1.vercel.app"
+  },
   "d1_databases": [
     {
       "binding": "DB",
       "database_name": "brigade",
-      "database_id": "00000000-0000-0000-0000-000000000001",
+      "database_id": "34cc4b3b-2737-4707-bd84-750b4668b642",
       "migrations_dir": "migrations"
     }
   ]

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Button, ErrorNote, PageHead } from "../../components/ui";
 import type { Identity } from "../../data/repository";
 
 type Invite = { email: string; role: Identity["role"]; kitchenName: string; expiresAt: string };
@@ -59,21 +60,21 @@ export function JoinView({ token, onJoined }: { token: string; onJoined: (identi
     finally { setBusy(false); }
   }
 
-  return <div className="login-shell">
-    <div className="brand">brigade<span>.</span></div>
-    <div className="login-card">
-      <p className="eyebrow">INVITACIÓN AL EQUIPO</p>
-      <h1>Sumate a<br />la brigada.</h1>
+  return <div className="b2-frame">
+    <header className="b2-header"><div className="b2-brand">brigade<em>.</em></div></header>
+    <div className="b2-scroll"><main className="b2-login">
+      <PageHead eyebrow="INVITACIÓN AL EQUIPO" title={<>Sumate a<br />la brigada.</>} />
       {invite && <>
-        <p className="muted">Cocina: <strong>{invite.kitchenName}</strong><br />Email: {invite.email}<br />Rol: {invite.role}</p>
+        <div className="b2-facts"><div><b>{invite.kitchenName}</b><span>Cocina</span></div><div><b>{({ chef: "Chef", sous_chef: "Sous chef", commis: "Commis" })[invite.role]}</b><span>Rol</span></div></div>
+        <p className="b2-sub">{invite.email}</p>
         <form onSubmit={join}>
-          {!existing && <label className="field">Tu nombre<input value={name} onChange={(event) => setName(event.target.value)} autoComplete="name" required /></label>}
-          <label className="field">{existing ? "Tu contraseña" : "Crear contraseña"}<input type="password" minLength={existing ? undefined : 12} value={password} onChange={(event) => setPassword(event.target.value)} autoComplete={existing ? "current-password" : "new-password"} required /></label>
-          <button className="primary" type="submit" disabled={busy}>{busy ? "Ingresando…" : existing ? "Entrar y aceptar" : "Crear cuenta y aceptar"}</button>
+          {!existing && <label className="b2-field">Tu nombre<input value={name} onChange={(event) => setName(event.target.value)} autoComplete="name" required /></label>}
+          <label className="b2-field">{existing ? "Tu contraseña" : "Crear contraseña · 12 caracteres o más"}<input type="password" minLength={existing ? undefined : 12} value={password} onChange={(event) => setPassword(event.target.value)} autoComplete={existing ? "current-password" : "new-password"} required /></label>
+          <Button full type="submit" disabled={busy}>{busy ? "Ingresando…" : existing ? "Entrar y aceptar" : "Crear cuenta y aceptar"}</Button>
         </form>
-        <button className="text-button" onClick={() => { setExisting(!existing); setError(""); }}>{existing ? "Crear una cuenta nueva" : "Ya tengo cuenta"}</button>
+        <div className="b2-actions"><button type="button" className="b2-link" onClick={() => { setExisting(!existing); setError(""); }}>{existing ? "Crear una cuenta nueva" : "Ya tengo cuenta"}</button></div>
       </>}
-      {error && <p className="error" role="alert">{error}</p>}
-    </div>
+      <ErrorNote>{error}</ErrorNote>
+    </main></div>
   </div>;
 }

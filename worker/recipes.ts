@@ -1,13 +1,13 @@
 import type { Hono } from "hono";
 import { HTTPException } from "hono/http-exception";
-import { assertPositiveMilli, type RecipeVersion, type Unit } from "../shared/kitchen";
+import { assertPositiveMilli, compatibleStockUnit, type RecipeVersion, type StockUnit, type Unit } from "../shared/kitchen";
 import type { AuthBindings } from "./auth";
-import { requireMember } from "./permissions";
+import { requireMember, type KitchenRole } from "./permissions";
 
 type App = Hono<{ Bindings: AuthBindings }>;
 const units = new Set<Unit>(["g", "kg", "ml", "L", "un", "atado", "paq", "bandeja", "porción"]);
 
-type IngredientInput = { name: string; netMilli: number; unit: Unit; wastePermille: number };
+type IngredientInput = { name: string; netMilli: number; unit: Unit; wastePermille: number; catalogIngredientId?: string | null };
 type StepInput = { title: string; instruction: string; ingredientIndexes: number[] };
 type RecipeInput = {
   title: string;
@@ -37,6 +37,9 @@ function validateInput(raw: unknown): RecipeInput {
     if (!Number.isInteger(ingredient.wastePermille) || ingredient.wastePermille < 0 || ingredient.wastePermille > 999) {
       throw new HTTPException(400, { message: "Merma inválida" });
     }
+    if (ingredient.catalogIngredientId != null && typeof ingredient.catalogIngredientId !== "string") {
+      throw new HTTPException(400, { message: "Vínculo de stock inválido" });
+    }
   });
   if (!Array.isArray(data.steps) || !data.steps.length || data.steps.length > 200) throw new HTTPException(400, { message: "Pasos inválidos" });
   data.steps.forEach((step) => {
@@ -50,6 +53,29 @@ function validateInput(raw: unknown): RecipeInput {
   return data as RecipeInput;
 }
 
+type CatalogRow = { id: string; name: string; base_unit: StockUnit };
+
+async function kitchenCatalog(db: D1Database, kitchenId: string) {
+  const rows = await db.prepare("SELECT id, name, base_unit FROM catalog_ingredients WHERE kitchen_id = ? AND archived_at IS NULL")
+    .bind(kitchenId).all<CatalogRow>();
+  return rows.results;
+}
+
+/** Explicit link must exist in this kitchen and share a unit family; otherwise an exact name match links automatically. */
+function resolveCatalogLink(catalog: CatalogRow[], ingredient: IngredientInput): string | null {
+  if (ingredient.catalogIngredientId) {
+    const match = catalog.find((row) => row.id === ingredient.catalogIngredientId);
+    if (!match) throw new HTTPException(400, { message: `${ingredient.name}: ingrediente de stock inexistente` });
+    if (!compatibleStockUnit(ingredient.unit, match.base_unit)) {
+      throw new HTTPException(400, { message: `${ingredient.name}: la unidad ${ingredient.unit} no se puede convertir a ${match.base_unit}` });
+    }
+    return match.id;
+  }
+  const name = ingredient.name.trim().toLocaleLowerCase("es");
+  const match = catalog.find((row) => row.name.toLocaleLowerCase("es") === name && compatibleStockUnit(ingredient.unit, row.base_unit));
+  return match?.id ?? null;
+}
+
 async function readableRecipe(db: D1Database, kitchenId: string, recipeId: string, userId: string) {
   return db.prepare(
     `SELECT r.id, r.title, r.visibility, r.owner_user_id, r.current_version
@@ -61,6 +87,8 @@ async function readableRecipe(db: D1Database, kitchenId: string, recipeId: strin
     id: string; title: string; visibility: string; owner_user_id: string; current_version: number;
   }>();
 }
+
+function canManage(role: KitchenRole) { return role === "chef" || role === "sous_chef"; }
 
 export function registerRecipeRoutes(app: App) {
   app.get("/api/kitchens/:kitchenId/recipes", async (context) => {
@@ -84,6 +112,8 @@ export function registerRecipeRoutes(app: App) {
     let raw: unknown;
     try { raw = await context.req.json(); } catch { throw new HTTPException(400, { message: "JSON inválido" }); }
     const input = validateInput(raw);
+    const catalog = await kitchenCatalog(context.env.DB, kitchenId);
+    const links = input.ingredients.map((ingredient) => resolveCatalogLink(catalog, ingredient));
     const recipeId = crypto.randomUUID();
     const versionId = crypto.randomUUID();
     const ingredientIds = input.ingredients.map(() => crypto.randomUUID());
@@ -96,8 +126,8 @@ export function registerRecipeRoutes(app: App) {
     ];
     input.ingredients.forEach((ingredient, index) => {
       statements.push(context.env.DB.prepare(
-        "INSERT INTO recipe_ingredients (id, version_id, ingredient_name, net_milli, unit, waste_permille, position) VALUES (?, ?, ?, ?, ?, ?, ?)",
-      ).bind(ingredientIds[index], versionId, ingredient.name.trim(), ingredient.netMilli, ingredient.unit, ingredient.wastePermille, index));
+        "INSERT INTO recipe_ingredients (id, version_id, ingredient_name, net_milli, unit, waste_permille, position, catalog_ingredient_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+      ).bind(ingredientIds[index], versionId, ingredient.name.trim(), ingredient.netMilli, ingredient.unit, ingredient.wastePermille, index, links[index]));
     });
     input.steps.forEach((step, index) => {
       statements.push(context.env.DB.prepare(
@@ -134,6 +164,7 @@ export function registerRecipeRoutes(app: App) {
       ingredients: (ingredients.results as Array<Record<string, unknown>>).map((item) => ({
         id: item.id as string, name: item.ingredient_name as string, netMilli: item.net_milli as number,
         unit: item.unit as Unit, wastePermille: item.waste_permille as number,
+        catalogIngredientId: (item.catalog_ingredient_id as string | null) ?? null,
       })),
       steps: (steps.results as Array<Record<string, unknown>>).map((item) => ({
         id: item.id as string, title: item.title as string, instruction: item.instruction as string,
@@ -141,6 +172,31 @@ export function registerRecipeRoutes(app: App) {
       })),
     };
     return context.json({ recipe: { id: recipe.id, ownerUserId: recipe.owner_user_id, visibility: recipe.visibility }, version: value });
+  });
+
+  app.put("/api/kitchens/:kitchenId/recipes/:recipeId/ingredients/:ingredientId/catalog", async (context) => {
+    const kitchenId = context.req.param("kitchenId");
+    const actor = await requireMember(context, kitchenId);
+    const recipe = await readableRecipe(context.env.DB, kitchenId, context.req.param("recipeId"), actor.userId);
+    if (!recipe) throw new HTTPException(404, { message: "Receta no encontrada" });
+    if (recipe.owner_user_id !== actor.userId && !canManage(actor.role)) {
+      throw new HTTPException(403, { message: "Solo el autor o la jefatura pueden vincular stock" });
+    }
+    const ingredient = await context.env.DB.prepare(
+      `SELECT ri.id, ri.ingredient_name, ri.unit FROM recipe_ingredients ri
+       JOIN recipe_versions v ON v.id = ri.version_id WHERE ri.id = ? AND v.recipe_id = ?`,
+    ).bind(context.req.param("ingredientId"), recipe.id).first<{ id: string; ingredient_name: string; unit: Unit }>();
+    if (!ingredient) throw new HTTPException(404, { message: "Ingrediente no encontrado" });
+    let body: { catalogIngredientId?: string | null };
+    try { body = await context.req.json(); } catch { throw new HTTPException(400, { message: "JSON inválido" }); }
+    let link: string | null = null;
+    if (body.catalogIngredientId) {
+      link = resolveCatalogLink(await kitchenCatalog(context.env.DB, kitchenId), {
+        name: ingredient.ingredient_name, unit: ingredient.unit, netMilli: 1, wastePermille: 0, catalogIngredientId: body.catalogIngredientId,
+      });
+    }
+    await context.env.DB.prepare("UPDATE recipe_ingredients SET catalog_ingredient_id = ? WHERE id = ?").bind(link, ingredient.id).run();
+    return context.json({ ingredientId: ingredient.id, catalogIngredientId: link });
   });
 
   app.put("/api/kitchens/:kitchenId/recipes/:recipeId/sharing", async (context) => {

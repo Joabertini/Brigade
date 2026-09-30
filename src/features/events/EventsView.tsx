@@ -1,12 +1,17 @@
 import { useState } from "react";
+import { ArrowUpRight, Pencil, Plus } from "lucide-react";
 import type { LocalEvent, LocalProduction } from "../../local-db";
+import { Button, ErrorNote, PageHead, Tag } from "../../components/ui";
 
-export function EventsView({ events, productions, canEdit, onSave, onSaved }: {
+const eventDate = new Intl.DateTimeFormat("es-UY", { weekday: "short", day: "2-digit", month: "long" });
+
+export function EventsView({ events, productions, canEdit, onSave, onSaved, onOpenProduction }: {
   events: LocalEvent[];
   productions: LocalProduction[];
   canEdit: boolean;
   onSave: (event: LocalEvent) => Promise<void>;
   onSaved: () => void;
+  onOpenProduction: (id: string) => void;
 }) {
   const [editing, setEditing] = useState<LocalEvent | null>(null);
   const [formOpen, setFormOpen] = useState(false);
@@ -41,32 +46,37 @@ export function EventsView({ events, productions, canEdit, onSave, onSaved }: {
     } catch (cause) { setError(cause instanceof Error ? cause.message : "No se pudo guardar el evento"); }
   }
 
+  const form = formOpen && <div className="b2-panel">
+    <h2>{editing ? "Editar evento" : "Nuevo evento"}</h2>
+    <form onSubmit={save}>
+      <label className="b2-field">Nombre u ocasión<input value={name} onChange={(event) => setName(event.target.value)} required /></label>
+      <div className="b2-formrow">
+        <label className="b2-field">Fecha<input type="date" value={date} onChange={(event) => setDate(event.target.value)} required /></label>
+        <label className="b2-field">Comensales<input type="number" min="0" inputMode="numeric" value={guests} onChange={(event) => setGuests(event.target.value)} /></label>
+      </div>
+      <label className="b2-field">Notas<textarea value={notes} onChange={(event) => setNotes(event.target.value)} /></label>
+      <ErrorNote>{error}</ErrorNote>
+      <div className="b2-actions"><Button full type="submit">Guardar evento</Button><Button quiet onClick={() => setFormOpen(false)}>Cancelar</Button></div>
+    </form>
+  </div>;
+
   return <section>
-    <p className="eyebrow">EVENTOS · CONTEXTO OPCIONAL</p>
-    <div className="row spread"><h1>Eventos.</h1>{canEdit && <button className="secondary" onClick={() => open()}>+ Nuevo</button>}</div>
-    <p className="lead">La cocina funciona todos los días. Vinculá una producción a un evento cuando corresponda.</p>
-    {formOpen && <div className="panel event-form">
-      <h2>{editing ? "Editar evento" : "Nuevo evento"}</h2>
-      <form onSubmit={save}>
-        <label className="field">Nombre u ocasión<input value={name} onChange={(event) => setName(event.target.value)} required /></label>
-        <div className="form-row">
-          <label className="field">Fecha<input type="date" value={date} onChange={(event) => setDate(event.target.value)} required /></label>
-          <label className="field">Comensales<input type="number" min="0" inputMode="numeric" value={guests} onChange={(event) => setGuests(event.target.value)} /></label>
-        </div>
-        <label className="field">Notas<textarea value={notes} onChange={(event) => setNotes(event.target.value)} /></label>
-        {error && <p className="error" role="alert">{error}</p>}
-        <div className="row"><button className="primary" type="submit">Guardar evento</button><button className="text-button" type="button" onClick={() => setFormOpen(false)}>Cancelar</button></div>
-      </form>
-    </div>}
-    {events.length ? <div className="event-grid">{events.map((event) => {
+    <PageHead eyebrow="EVENTOS" title="Eventos." sub="Una ocasión más en tu cocina." />
+    {!editing && form}
+    {events.length ? events.map((event) => {
       const linked = productions.filter((production) => production.eventId === event.id);
-      return <div className="event-card" key={event.id}>
-        <span className="eyebrow">{event.eventDate}</span>
-        <h2 className="dish">{event.name}</h2>
-        <p className="muted">{event.guestCount === null ? "Comensales por definir" : event.guestCount + " comensales"} · {linked.length} producciones vinculadas</p>
-        {event.notes && <p>{event.notes}</p>}
-        {canEdit && <button className="text-button" onClick={() => open(event)}>Editar →</button>}
+      return <div key={event.id}>
+        <article className="b2-focus" style={{ marginBottom: 18 }}>
+          <div className="b2-row"><Tag>{event.eventDate ? eventDate.format(new Date(event.eventDate + "T12:00:00")) : "Sin fecha"}</Tag></div>
+          <h2 className="b2-dish">{event.name}</h2>
+          <div className="b2-facts"><div><b>{event.guestCount ?? "—"}</b><span>Comensales</span></div><div><b>{linked.length}</b><span>Producciones</span></div></div>
+          {event.notes && <p className="b2-sub" style={{ marginBottom: 18 }}>{event.notes}</p>}
+          {linked.map((production) => <button type="button" className="b2-link" key={production.id} onClick={() => onOpenProduction(production.id)}>{production.recipe.title} <ArrowUpRight /></button>)}
+          {canEdit && <div className="b2-actions"><Button full quiet onClick={() => open(event)}><Pencil /> Editar evento</Button></div>}
+        </article>
+        {editing?.id === event.id && form}
       </div>;
-    })}</div> : <div className="empty"><h2>No hay eventos aún.</h2><p>Las recetas y producciones no necesitan un evento para existir.</p></div>}
+    }) : <div className="b2-empty"><h2>No hay eventos aún</h2><p className="b2-sub">Recetas y producciones no necesitan un evento para existir.</p></div>}
+    {canEdit && <div className="b2-actions"><Button full onClick={() => open()}><Plus /> Nuevo evento</Button></div>}
   </section>;
 }

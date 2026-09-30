@@ -1,32 +1,33 @@
-export type Section = "today" | "recipes" | "production" | "orders" | "stock" | "team" | "events" | "more";
+import { BookOpen, Boxes, CalendarDays, CookingPot, Grid2x2, ShoppingBasket, Sun, Users, type LucideIcon } from "lucide-react";
 
-const links: { id: Section; label: string; icon: string }[] = [
-  { id: "today", label: "Hoy", icon: "◌" },
-  { id: "recipes", label: "Recetas", icon: "▤" },
-  { id: "production", label: "Cocina", icon: "▦" },
-  { id: "orders", label: "Pedidos", icon: "◫" },
-  { id: "stock", label: "Stock", icon: "▣" },
-  { id: "team", label: "Equipo", icon: "♧" },
-  { id: "events", label: "Eventos", icon: "▥" },
+export type Section = "today" | "recipes" | "production" | "orders" | "stock" | "team" | "events" | "more" | "sync";
+
+const links: { id: Section; label: string; icon: LucideIcon }[] = [
+  { id: "today", label: "Hoy", icon: Sun },
+  { id: "recipes", label: "Recetas", icon: BookOpen },
+  { id: "production", label: "Cocina", icon: CookingPot },
+  { id: "orders", label: "Pedidos", icon: ShoppingBasket },
+  { id: "stock", label: "Stock", icon: Boxes },
+  { id: "team", label: "Equipo", icon: Users },
+  { id: "events", label: "Eventos", icon: CalendarDays },
 ];
 
-export function BottomNav({ section, onNavigate }: { section: Section; onNavigate: (section: Section) => void }) {
-  return (
-    <nav className="dock" aria-label="Navegación principal">
-      {links.map((link, index) => (
-        <button
-          className={index > 3 ? "desktop-link" : ""}
-          type="button"
-          key={link.id}
-          aria-current={section === link.id ? "page" : undefined}
-          onClick={() => onNavigate(link.id)}
-        >
-          <span aria-hidden="true">{link.icon}</span><small>{link.label}</small>
-        </button>
-      ))}
-      <button className="mobile-more" type="button" aria-current={section === "more" ? "page" : undefined} onClick={() => onNavigate("more")}>
-        <span aria-hidden="true">☷</span><small>Más</small>
+/** Commis do not see purchasing, stock or events, as in the approved role view. */
+export function BottomNav({ section, commis, onNavigate }: { section: Section; commis: boolean; onNavigate: (section: Section) => void }) {
+  const visible = links.filter((link) => !commis || !["orders", "stock", "events"].includes(link.id));
+  const active = section === "sync" || (["stock", "events"].includes(section)) || (section === "team" && !commis) ? "more" : section;
+  return <div className="b2-dock-area">
+    <nav className="b2-dock" aria-label="Navegación principal">
+      {visible.map((link, index) => {
+        const Icon = link.icon;
+        return <button type="button" key={link.id} className={index >= 4 ? "b2-wideitem" : ""}
+          aria-current={section === link.id || active === link.id ? "page" : undefined} onClick={() => onNavigate(link.id)}>
+          <Icon /><span>{link.label}</span>
+        </button>;
+      })}
+      <button type="button" className="b2-moreitem" aria-current={active === "more" ? "page" : undefined} onClick={() => onNavigate("more")}>
+        <Grid2x2 /><span>Más</span>
       </button>
     </nav>
-  );
+  </div>;
 }
