@@ -79,7 +79,7 @@ class SupabaseClient {
     if (limit)  url += `&limit=${limit}`;
     if (single) url += "&limit=1";
     const res = await fetch(url, {
-      headers: this._headers(single ? { "Accept": "application/vnd.pgsql.v2+json" } : {}),
+      headers: this._headers(),
     });
     const data = await res.json();
     if (!res.ok) return { data: null, error: data.message || data };
