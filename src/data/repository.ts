@@ -1,5 +1,6 @@
 import type { RecipeVersion } from "../../shared/kitchen";
 import type { IngredientNeed, UnlinkedNeed } from "../../shared/requirements";
+import type { RecipeDraft } from "../../shared/capture";
 import { listLocal, putLocal, type LocalEvent, type LocalProduction, type LocalRecipe } from "../local-db";
 import { deletePending, listPending, putPending, readCache, writeCache, type PendingEntry } from "./cloud-cache";
 
@@ -48,6 +49,7 @@ export interface KitchenRepository {
   receiveOrder(orderId: string, lines: { lineId: string; quantityMilli: number }[], operationId: string): Promise<void>;
   listRequirements(): Promise<Requirements>;
   linkIngredient(recipeId: string, ingredientId: string, catalogIngredientId: string | null): Promise<void>;
+  interpretRecipe(text: string): Promise<RecipeDraft>;
 }
 
 export class LocalRepository implements KitchenRepository {
@@ -90,6 +92,7 @@ export class LocalRepository implements KitchenRepository {
   receiveOrder() { return Promise.reject(new Error("Conectá tu cocina para recibir pedidos")); }
   listRequirements() { return Promise.resolve({ needs: [], unlinked: [] }); }
   linkIngredient() { return Promise.reject(new Error("Conectá tu cocina para vincular stock")); }
+  interpretRecipe(): Promise<RecipeDraft> { return Promise.reject(new Error("Conectá tu cocina para interpretar recetas")); }
 }
 
 type RecipeSummary = { id: string; version_id: string; visibility: "private" | "kitchen"; owner_user_id: string };
@@ -373,6 +376,14 @@ export class CloudRepository implements KitchenRepository {
     await this.request(`${this.root()}/recipes/${recipeId}/ingredients/${ingredientId}/catalog`, {
       method: "PUT", headers: { "content-type": "application/json" }, body: JSON.stringify({ catalogIngredientId }),
     });
+  }
+
+  async interpretRecipe(text: string): Promise<RecipeDraft> {
+    if (!navigator.onLine) throw new Error("Sin conexión. La interpretación necesita red.");
+    const result = await this.request<{ draft: RecipeDraft }>(`${this.root()}/recipes/interpret`, {
+      method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ text }),
+    });
+    return result.draft;
   }
 
   async syncPending(): Promise<void> {

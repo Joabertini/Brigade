@@ -41,7 +41,7 @@ function validateInput(raw: unknown): RecipeInput {
       throw new HTTPException(400, { message: "Vínculo de stock inválido" });
     }
   });
-  if (!Array.isArray(data.steps) || !data.steps.length || data.steps.length > 200) throw new HTTPException(400, { message: "Pasos inválidos" });
+  if (!Array.isArray(data.steps) || data.steps.length > 200) throw new HTTPException(400, { message: "Pasos inválidos" });
   data.steps.forEach((step) => {
     if (!step || typeof step.title !== "string" || !step.title.trim() || step.title.length > 200 ||
       typeof step.instruction !== "string" || step.instruction.length > 5000 ||
