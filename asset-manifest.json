@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/Brigade/static/css/main.b1973637.css",
+    "main.js": "/Brigade/static/js/main.49e2ed9a.js",
+    "index.html": "/Brigade/index.html",
+    "main.b1973637.css.map": "/Brigade/static/css/main.b1973637.css.map",
+    "main.49e2ed9a.js.map": "/Brigade/static/js/main.49e2ed9a.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.b1973637.css",
+    "static/js/main.49e2ed9a.js"
+  ]
+}
