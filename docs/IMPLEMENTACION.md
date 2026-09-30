@@ -20,6 +20,8 @@ El Worker está separado en `worker/auth.ts`, `permissions.ts`, `recipes.ts`, `p
 
 El prototipo anterior CRA/Supabase y `vercel.json` se preservan sin ejecutar en `legacy/brigade-cra/`. No se migraron datos de una instancia Supabase real. El modo local de la nueva interfaz es útil para comprobar flujos, pero sus datos pertenecen a ese navegador y no tienen respaldo en D1.
 
+El `vercel.json` de la raíz impide nuevos despliegues automáticos del proyecto Vercel heredado. La última publicación de producción del prototipo sigue disponible; la nueva aplicación requiere Cloudflare Workers/D1 y todavía no está desplegada. El workflow de GitHub Actions `Brigade CI` ejecuta instalación reproducible, pruebas y compilación en cada PR.
+
 ## Correspondencia con B-B-Chef
 
 | Fuente | Destino actual | Trabajo pendiente |
@@ -63,3 +65,4 @@ Estas pruebas usan Chromium; faltan Safari y Android reales. Los datos D1 usados
 - [Better Auth: Hono](https://better-auth.com/docs/integrations/hono)
 - [Better Auth: D1](https://better-auth.com/blog/1-5)
 - [WebKit: Web Share en Safari](https://webkit.org/blog/8718/new-webkit-features-in-safari-12-1/)
+- [Vercel: desactivar despliegues Git](https://vercel.com/docs/project-configuration/git-configuration)
