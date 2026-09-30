@@ -4,6 +4,7 @@ import { CloudCheck, CloudOff } from "lucide-react";
 import { CloudRepository, LocalRepository, isAccessError, type CatalogIngredient, type Identity, type PurchaseOrder, type Requirements, type StockMovement, type Supplier } from "./data/repository";
 import { clearUserCache } from "./data/cloud-cache";
 import { LoginView } from "./features/auth/LoginView";
+import { mergeCourses } from "../shared/courses";
 import { RecipesView } from "./features/recipes/RecipesView";
 import { ProductionView } from "./features/production/ProductionView";
 import { JoinView } from "./features/team/JoinView";
@@ -29,6 +30,7 @@ export default function App() {
   const [productions, setProductions] = useState<LocalProduction[]>([]);
   const [events, setEvents] = useState<LocalEvent[]>([]);
   const [ingredients, setIngredients] = useState<CatalogIngredient[]>([]);
+  const [courses, setCourses] = useState<string[]>(mergeCourses([]));
   const [movements, setMovements] = useState<StockMovement[]>([]);
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
   const [orders, setOrders] = useState<PurchaseOrder[]>([]);
@@ -94,11 +96,12 @@ export default function App() {
     try {
       await repository.syncPending();
       const commis = mode === "cloud" && identity?.role === "commis";
-      const [recipeRows, eventRows, ingredientRows, movementRows, supplierRows, orderRows, requirementRows] = await Promise.all([
+      const [recipeRows, eventRows, ingredientRows, movementRows, supplierRows, orderRows, requirementRows, courseRows] = await Promise.all([
         repository.listRecipes(), repository.listEvents(), repository.listIngredients(), repository.listStockMovements(),
         commis ? Promise.resolve([]) : repository.listSuppliers(),
         commis ? Promise.resolve([]) : repository.listOrders(),
         commis ? Promise.resolve({ needs: [], unlinked: [] }) : repository.listRequirements(),
+        repository.listCourses(),
       ]);
       const productionRows = await repository.listProductions(recipeRows);
       const queued = await repository.pendingEntries();
@@ -106,6 +109,7 @@ export default function App() {
       setProductions(productionRows.sort((a, b) => b.id.localeCompare(a.id)));
       setEvents(eventRows.sort((a, b) => b.eventDate.localeCompare(a.eventDate)));
       setIngredients(ingredientRows);
+      setCourses(courseRows);
       setMovements(movementRows);
       setSuppliers(supplierRows);
       setOrders(orderRows);
@@ -224,7 +228,7 @@ export default function App() {
         <ErrorNote>{loadError}</ErrorNote>
         {!ready ? <p className="b2-muted">Preparando tu cocina…</p> : <>
         {section === "today" && <HomeView name={identity?.user.name} commis={commis} productions={productions} requirements={requirements} lastSync={lastSync} onNavigate={navigate} onOpenProduction={openProduction} onCapture={() => { navigate("recipes"); setRecipeIntent("capture"); }} />}
-        {section === "recipes" && <RecipesView recipes={recipes} ingredients={ingredients} cloudMode={mode === "cloud"} canPlan={manager} canLink={mode === "cloud" && !commis} online={online} currentUserId={identity?.user.id} intent={recipeIntent} onInterpret={(text) => repository.interpretRecipe(text)} onCreate={(version) => repository.createRecipe(version)} onSaved={refresh} onPlan={plan} onMembers={() => repository.listMembers()} onShare={(recipeId, userId) => repository.shareRecipe(recipeId, userId)} onVisibility={(recipeId, visibility) => repository.setRecipeVisibility(recipeId, visibility)} onLink={(recipeId, ingredientId, catalogId) => repository.linkIngredient(recipeId, ingredientId, catalogId)} />}
+        {section === "recipes" && <RecipesView recipes={recipes} ingredients={ingredients} cloudMode={mode === "cloud"} canPlan={manager} canLink={mode === "cloud" && !commis} online={online} currentUserId={identity?.user.id} intent={recipeIntent} onInterpret={(text) => repository.interpretRecipe(text)} courses={courses} canAddCourse={mode !== "cloud" || !commis} onAddCourse={async (name) => setCourses(await repository.addCourse(name))} onCourse={(recipe, course) => repository.setRecipeCourse(recipe, course)} onCreate={(version, course) => repository.createRecipe(version, course)} onSaved={refresh} onPlan={plan} onMembers={() => repository.listMembers()} onShare={(recipeId, userId) => repository.shareRecipe(recipeId, userId)} onVisibility={(recipeId, visibility) => repository.setRecipeVisibility(recipeId, visibility)} onLink={(recipeId, ingredientId, catalogId) => repository.linkIngredient(recipeId, ingredientId, catalogId)} />}
         {section === "production" && <ProductionView recipes={recipes} productions={productions} events={events} ingredients={ingredients} requirements={requirements} requestedRecipe={requestedRecipe} focusProductionId={focusProductionId} cloudMode={mode === "cloud"} canPlan={manager} onPlan={(recipe, target, date, eventId) => repository.planProduction(recipe, target, date, eventId)} onRecord={(production, amount) => repository.recordBatch(production, amount)} onSaved={refresh} onOrders={() => navigate("orders")} onRecipes={() => navigate("recipes")} />}
         {section === "team" && <TeamView identity={identity} onMembers={() => repository.listMembers()} onInvite={(email, role) => repository.inviteMember(email, role)} />}
         {section === "events" && <EventsView events={events} productions={productions} canEdit={manager} onSave={(event) => repository.saveEvent(event)} onSaved={refresh} onOpenProduction={openProduction} />}

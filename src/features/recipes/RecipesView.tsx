@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { ArrowUpRight, Download, LockKeyhole, Plus, ScanLine, Search, Users } from "lucide-react";
+import { ArrowUpRight, ChevronRight, Download, LockKeyhole, Plus, ScanLine, Search, Users } from "lucide-react";
 import { compatibleStockUnit, formatMilli, parseMilli, type IngredientAmount, type RecipeStep, type RecipeVersion, type Unit } from "../../../shared/kitchen";
 import type { CatalogIngredient } from "../../data/repository";
 import type { LocalRecipe } from "../../local-db";
 import { Back, Button, ErrorNote, PageHead, Tag } from "../../components/ui";
 import type { RecipeDraft } from "../../../shared/capture";
+import { groupByCourse } from "../../../shared/courses";
 import { CaptureView, type RecipePrefill } from "./CaptureView";
 
 const units: Unit[] = ["g", "kg", "ml", "L", "un", "atado", "paq", "bandeja", "porción"];
@@ -12,9 +13,11 @@ const newId = () => crypto.randomUUID();
 type Filter = "Todas" | "Compartidas" | "Privadas";
 type Member = { id: string; name: string; email?: string; role: string };
 
-export function RecipesView({ recipes, ingredients: catalog, cloudMode, online, canPlan, canLink, currentUserId, intent, onInterpret, onCreate, onSaved, onPlan, onMembers, onShare, onVisibility, onLink }: {
+export function RecipesView({ recipes, ingredients: catalog, courses, canAddCourse, cloudMode, online, canPlan, canLink, currentUserId, intent, onInterpret, onAddCourse, onCourse, onCreate, onSaved, onPlan, onMembers, onShare, onVisibility, onLink }: {
   recipes: LocalRecipe[];
   ingredients: CatalogIngredient[];
+  courses: string[];
+  canAddCourse: boolean;
   cloudMode: boolean;
   online: boolean;
   canPlan: boolean;
@@ -22,7 +25,9 @@ export function RecipesView({ recipes, ingredients: catalog, cloudMode, online, 
   currentUserId?: string;
   intent: "" | "new" | "capture";
   onInterpret: (text: string) => Promise<RecipeDraft>;
-  onCreate: (version: RecipeVersion) => Promise<void>;
+  onAddCourse: (name: string) => Promise<void>;
+  onCourse: (recipe: LocalRecipe, course: string | null) => Promise<void>;
+  onCreate: (version: RecipeVersion, course: string | null) => Promise<void>;
   onSaved: () => void;
   onPlan: (recipe: LocalRecipe) => void;
   onMembers: () => Promise<Member[]>;
@@ -42,6 +47,13 @@ export function RecipesView({ recipes, ingredients: catalog, cloudMode, online, 
   const [description, setDescription] = useState("");
   const [yieldText, setYieldText] = useState("");
   const [yieldUnit, setYieldUnit] = useState<Unit>("porción");
+  const [course, setCourse] = useState("");
+  const [addingCourse, setAddingCourse] = useState(false);
+  const [courseName, setCourseName] = useState("");
+  const [courseError, setCourseError] = useState("");
+  // Course picked in the detail view, shown until the refreshed list carries it.
+  const [moved, setMoved] = useState<Record<string, string | null>>({});
+  const courseOf = (recipe: LocalRecipe) => recipe.id in moved ? moved[recipe.id] : recipe.course ?? null;
   const [rows, setRows] = useState([{ name: "", amount: "", unit: "g" as Unit, waste: "", catalogId: "" }]);
   const [steps, setSteps] = useState<{ title: string; instruction: string; suggested?: boolean }[]>([{ title: "", instruction: "" }]);
   const [error, setError] = useState("");
@@ -63,6 +75,13 @@ export function RecipesView({ recipes, ingredients: catalog, cloudMode, online, 
 
   function closeForm() {
     setEditing(false); setCaptured(false); setConfirmed(false);
+  }
+
+  async function addCourse(event: React.FormEvent) {
+    event.preventDefault();
+    setCourseError("");
+    try { await onAddCourse(courseName); setCourseName(""); setAddingCourse(false); }
+    catch (cause) { setCourseError(cause instanceof Error ? cause.message : "No se pudo agregar el curso"); }
   }
   const selected = recipes.find((recipe) => recipe.id === selectedId) ?? null;
   const owned = (recipe: LocalRecipe) => !cloudMode || recipe.ownerUserId === currentUserId;
@@ -113,9 +132,9 @@ export function RecipesView({ recipes, ingredients: catalog, cloudMode, online, 
       await onCreate({
         id: newId(), recipeId: id, version: 1, title: title.trim(), description: description.trim(),
         yieldMilli, yieldUnit, ingredients: ingredientRows, steps: stepRows, confirmedByChef: true,
-      });
+      }, course || null);
       closeForm();
-      setTitle(""); setDescription(""); setYieldText("");
+      setTitle(""); setDescription(""); setYieldText(""); setCourse("");
       setRows([{ name: "", amount: "", unit: "g", waste: "", catalogId: "" }]);
       setSteps([{ title: "", instruction: "" }]);
       onSaved();
@@ -127,11 +146,22 @@ export function RecipesView({ recipes, ingredients: catalog, cloudMode, online, 
   if (selected) {
     const version = selected.version;
     const canShare = cloudMode && owned(selected);
+    const canMove = owned(selected) || canLink;
     return <section>
       <Back onClick={() => setSelectedId("")}>Recetario</Back>
       <div className="b2-row"><Tag>{selected.visibility === "kitchen" ? "Compartida con cocina" : label(selected)}</Tag><span className="b2-muted">Versión {version.version}</span></div>
       <h1 className="b2-dish" style={{ fontSize: 49, margin: "22px 0" }}>{version.title}</h1>
       {version.description && <p className="b2-sub" style={{ whiteSpace: "pre-line" }}>{version.description}</p>}
+      {canMove && <label className="b2-field">Curso de la carta<select value={courseOf(selected) ?? ""} disabled={busy}
+        onChange={(event) => {
+          const next = event.target.value || null;
+          const previous = courseOf(selected);
+          setMoved({ ...moved, [selected.id]: next });
+          void act(() => onCourse(selected, next).catch((cause) => { setMoved((value) => ({ ...value, [selected.id]: previous })); throw cause; }), "Curso guardado.");
+        }}>
+        <option value="">Sin curso</option>
+        {courses.map((name) => <option key={name}>{name}</option>)}
+      </select></label>}
       <div className="b2-facts">
         <div><b>{formatMilli(version.yieldMilli, version.yieldUnit)}</b><span>Rendimiento</span></div>
         <div><b>{version.ingredients.length}</b><span>Ingredientes</span></div>
@@ -196,6 +226,10 @@ export function RecipesView({ recipes, ingredients: catalog, cloudMode, online, 
         <label className="b2-field">Rendimiento<input inputMode="decimal" value={yieldText} onChange={(event) => setYieldText(event.target.value)} placeholder="20" required /></label>
         <label className="b2-field">Unidad<select value={yieldUnit} onChange={(event) => setYieldUnit(event.target.value as Unit)}>{units.map((unit) => <option key={unit}>{unit}</option>)}</select></label>
       </div>
+      <label className="b2-field">Curso de la carta<select value={course} onChange={(event) => setCourse(event.target.value)}>
+        <option value="">Sin curso</option>
+        {courses.map((name) => <option key={name}>{name}</option>)}
+      </select></label>
       <label className="b2-field">Descripción o nota<textarea value={description} onChange={(event) => setDescription(event.target.value)} style={{ minHeight: 90 }} /></label>
       <div className="b2-overline" style={{ marginTop: 28 }}><h2>Ingredientes</h2><span className="b2-muted">Cantidades netas</span></div>
       {rows.map((row, index) => {
@@ -236,14 +270,32 @@ export function RecipesView({ recipes, ingredients: catalog, cloudMode, online, 
     <div className="b2-inline-head"><PageHead eyebrow="RECETARIO" title="Tu recetario." /><Button onClick={() => setCapturing(true)}><ScanLine /> Capturar receta</Button></div>
     <div className="b2-searchbox"><Search /><input className="b2-search" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Buscar una preparación" aria-label="Buscar una preparación" /></div>
     <div className="b2-tabs">{(["Todas", "Compartidas", "Privadas"] as const).map((item) => <button type="button" key={item} aria-pressed={filter === item} onClick={() => setFilter(item)}>{item}</button>)}</div>
-    {shown.length ? <div className="b2-recipe-grid">{shown.map((recipe, index) => <button type="button" className="b2-recipe-cell" key={recipe.id} onClick={() => open(recipe)}>
-      <div className="b2-row"><span className="b2-recipe-index">RECETA / {String(index + 1).padStart(2, "0")}</span><span className="b2-tag neutral">{kind(recipe) === "Privadas" ? <LockKeyhole /> : <Users />}{label(recipe)}</span></div>
-      <h2 className="b2-dish">{recipe.version.title}</h2>
-      <div className="b2-cellfoot"><span>{formatMilli(recipe.version.yieldMilli, recipe.version.yieldUnit)} · Versión {recipe.version.version}</span><ArrowUpRight /></div>
-    </button>)}</div> : <div className="b2-empty">
-      <h2>{recipes.length ? "No encontramos esa receta" : "Empezá por una receta"}</h2>
-      <p className="b2-sub">{recipes.length ? "Probá otro nombre." : cloudMode ? "Las recetas consultadas quedan disponibles sin conexión." : "Queda en este dispositivo, incluso sin conexión."}</p>
+    {recipes.length > 0 && !shown.length && <div className="b2-empty"><h2>No encontramos esa receta</h2><p className="b2-sub">Probá otro nombre.</p></div>}
+    {!recipes.length && <div className="b2-empty">
+      <h2>Empezá por una receta</h2>
+      <p className="b2-sub">{cloudMode ? "Las recetas consultadas quedan disponibles sin conexión." : "Queda en este dispositivo, incluso sin conexión."}</p>
     </div>}
+    {shown.length > 0 && groupByCourse(shown, courses, courseOf)
+      .filter((section) => section.items.length || !query)
+      .map((section) => <div className="b2-course" key={section.name ?? ""}>
+        <div className="b2-course-head"><h2>{section.name ?? "Sin curso"}</h2><span>{section.items.length} {section.items.length === 1 ? "receta" : "recetas"}</span></div>
+        {section.items.length > 0 && <div className="b2-course-list">{[...section.items].sort((a, b) => a.version.title.localeCompare(b.version.title, "es")).map((recipe) =>
+          <button type="button" className="b2-course-item" key={recipe.id} onClick={() => open(recipe)}>
+            <span>
+              <strong className="b2-dish">{recipe.version.title}</strong>
+              <small>{recipe.version.ingredients.slice(0, 3).map((item) => item.name).join(" · ")}</small>
+              <span className="b2-course-tags"><Tag>{formatMilli(recipe.version.yieldMilli, recipe.version.yieldUnit)}</Tag><span className="b2-tag neutral">{kind(recipe) === "Privadas" ? <LockKeyhole /> : <Users />}{label(recipe)}</span></span>
+            </span>
+            <ChevronRight />
+          </button>)}</div>}
+      </div>)}
+    {canAddCourse && recipes.length > 0 && (addingCourse
+      ? <form className="b2-subform" onSubmit={addCourse}>
+        <label className="b2-field">Nuevo curso<input value={courseName} onChange={(event) => setCourseName(event.target.value)} placeholder="Por ejemplo: Cortesías" maxLength={60} autoFocus required /></label>
+        <ErrorNote>{courseError}</ErrorNote>
+        <div className="b2-actions"><Button small type="submit">Agregar</Button><button type="button" className="b2-link" onClick={() => { setAddingCourse(false); setCourseError(""); }}>Cancelar</button></div>
+      </form>
+      : <button type="button" className="b2-link" onClick={() => setAddingCourse(true)}><Plus /> Agregar curso</button>)}
     <div className="b2-actions"><Button full onClick={() => setEditing(true)}><Plus /> Escribir una receta</Button></div>
   </section>;
 }
