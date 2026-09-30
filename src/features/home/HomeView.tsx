@@ -1,4 +1,4 @@
-import { ArrowUpRight, NotebookPen, PackageSearch, Plus } from "lucide-react";
+import { ArrowUpRight, PackageSearch, Plus, ScanLine } from "lucide-react";
 import { formatMilli } from "../../../shared/kitchen";
 import type { Requirements } from "../../data/repository";
 import type { LocalProduction } from "../../local-db";
@@ -24,7 +24,7 @@ export function isOpen(production: LocalProduction) {
   return production.producedYieldMilli < production.targetYieldMilli;
 }
 
-export function HomeView({ name, commis, productions, requirements, lastSync, onNavigate, onOpenProduction }: {
+export function HomeView({ name, commis, productions, requirements, lastSync, onNavigate, onOpenProduction, onCapture }: {
   name?: string;
   commis: boolean;
   productions: LocalProduction[];
@@ -32,6 +32,7 @@ export function HomeView({ name, commis, productions, requirements, lastSync, on
   lastSync: Date | null;
   onNavigate: (section: Section) => void;
   onOpenProduction: (id: string) => void;
+  onCapture: () => void;
 }) {
   const open = productions.filter(isOpen).sort((a, b) => (a.plannedFor || "9999").localeCompare(b.plannedFor || "9999"));
   const current = open.find((entry) => entry.producedYieldMilli > 0) ?? open[0];
@@ -87,9 +88,9 @@ export function HomeView({ name, commis, productions, requirements, lastSync, on
             <button type="button" className="b2-square" onClick={() => onOpenProduction(next.id)} aria-label={`Abrir ${next.recipe.title}`}><ArrowUpRight /></button>
           </div>
         </div>}
-        <button type="button" className="b2-attention" onClick={() => onNavigate("recipes")}>
-          <span className="b2-attention-icon" style={{ background: "#273120", color: "var(--b-accent)" }}><NotebookPen /></span>
-          <span>Tu receta, en el recetario<small>Escribila una vez y escalala a cualquier cantidad</small></span>
+        <button type="button" className="b2-attention" onClick={onCapture}>
+          <span className="b2-attention-icon" style={{ background: "#273120", color: "var(--b-accent)" }}><ScanLine /></span>
+          <span>Tu receta, desde un texto<small>Mensajes, notas o cuadernos</small></span>
           <Plus />
         </button>
         {lastSync && <p className="b2-footnote">Última sincronización · {lastSync.toLocaleTimeString("es-UY", { hour: "2-digit", minute: "2-digit", hour12: false })}</p>}

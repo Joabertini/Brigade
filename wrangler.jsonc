@@ -9,6 +9,7 @@
     "run_worker_first": ["/api/*"]
   },
   "workers_dev": true,
+  "ai": { "binding": "AI" },
   "vars": {
     "PUBLIC_ORIGIN": "https://brigade.bertinilabs.xyz,https://brigade-one.vercel.app,https://brigade-*-joas-projects-38da3ca1.vercel.app"
   },

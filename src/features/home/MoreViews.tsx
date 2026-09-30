@@ -1,17 +1,17 @@
-import { Boxes, CalendarDays, CloudCheck, NotebookPen, Users } from "lucide-react";
+import { Boxes, CalendarDays, CloudCheck, NotebookPen, ScanLine, Users } from "lucide-react";
 import { Button, PageHead, Tag } from "../../components/ui";
 import type { Section } from "../../components/BottomNav";
 
-export function MoreView({ commis, onNavigate, onNewRecipe }: { commis: boolean; onNavigate: (section: Section) => void; onNewRecipe: () => void }) {
-  const items: [Section | "manual", string, typeof Boxes][] = [
-    ["stock", "Stock", Boxes], ["team", "Equipo", Users], ["events", "Eventos", CalendarDays],
+export function MoreView({ commis, onNavigate, onNewRecipe, onCapture }: { commis: boolean; onNavigate: (section: Section) => void; onNewRecipe: () => void; onCapture: () => void }) {
+  const items: [Section | "manual" | "capture", string, typeof Boxes][] = [
+    ["stock", "Stock", Boxes], ["team", "Equipo", Users], ["events", "Eventos", CalendarDays], ["capture", "Capturar", ScanLine],
     ["sync", "Conexión", CloudCheck], ["manual", "Nueva receta", NotebookPen],
   ];
   return <section>
     <PageHead eyebrow="TU COCINA" title="Toda tu cocina." sub="Elegí dónde querés trabajar." />
     <div className="b2-menu-grid">
       {items.filter(([id]) => !commis || !["stock", "events"].includes(id)).map(([id, label, Icon]) =>
-        <button type="button" key={id} onClick={() => id === "manual" ? onNewRecipe() : onNavigate(id)}><Icon />{label}</button>)}
+        <button type="button" key={id} onClick={() => id === "manual" ? onNewRecipe() : id === "capture" ? onCapture() : onNavigate(id)}><Icon />{label}</button>)}
     </div>
   </section>;
 }

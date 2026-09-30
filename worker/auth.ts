@@ -5,6 +5,7 @@ export type AuthBindings = {
   BETTER_AUTH_SECRET?: string;
   BOOTSTRAP_TOKEN?: string;
   PUBLIC_ORIGIN?: string;
+  AI?: Ai;
 };
 
 export function createAuth(env: AuthBindings, request: Request, allowSignUp = false) {

@@ -35,7 +35,7 @@ export default function App() {
   const [requirements, setRequirements] = useState<Requirements>({ needs: [], unlinked: [] });
   const [lastSync, setLastSync] = useState<Date | null>(null);
   const [focusProductionId, setFocusProductionId] = useState("");
-  const [newRecipeRequest, setNewRecipeRequest] = useState(0);
+  const [recipeIntent, setRecipeIntent] = useState<"" | "new" | "capture">("");
   const [navKey, setNavKey] = useState(0);
   const [ready, setReady] = useState(false);
   const [requestedRecipe, setRequestedRecipe] = useState<LocalRecipe | null>(null);
@@ -187,7 +187,7 @@ export default function App() {
   function navigate(next: Section) {
     setSection(next);
     setNavKey((value) => value + 1);
-    setNewRecipeRequest(0);
+    setRecipeIntent("");
     setRequestedRecipe(null);
     setFocusProductionId("");
     document.querySelector(".b2-scroll")?.scrollTo({ top: 0 });
@@ -223,14 +223,14 @@ export default function App() {
         {mode === "cloud" && pending.conflicts > 0 && <div className="b2-offline">{pending.conflicts} registros con conflicto. Revisalos en Conexión.</div>}
         <ErrorNote>{loadError}</ErrorNote>
         {!ready ? <p className="b2-muted">Preparando tu cocina…</p> : <>
-        {section === "today" && <HomeView name={identity?.user.name} commis={commis} productions={productions} requirements={requirements} lastSync={lastSync} onNavigate={navigate} onOpenProduction={openProduction} />}
-        {section === "recipes" && <RecipesView recipes={recipes} ingredients={ingredients} cloudMode={mode === "cloud"} canPlan={manager} canLink={mode === "cloud" && !commis} currentUserId={identity?.user.id} newRequest={newRecipeRequest} onCreate={(version) => repository.createRecipe(version)} onSaved={refresh} onPlan={plan} onMembers={() => repository.listMembers()} onShare={(recipeId, userId) => repository.shareRecipe(recipeId, userId)} onVisibility={(recipeId, visibility) => repository.setRecipeVisibility(recipeId, visibility)} onLink={(recipeId, ingredientId, catalogId) => repository.linkIngredient(recipeId, ingredientId, catalogId)} />}
+        {section === "today" && <HomeView name={identity?.user.name} commis={commis} productions={productions} requirements={requirements} lastSync={lastSync} onNavigate={navigate} onOpenProduction={openProduction} onCapture={() => { navigate("recipes"); setRecipeIntent("capture"); }} />}
+        {section === "recipes" && <RecipesView recipes={recipes} ingredients={ingredients} cloudMode={mode === "cloud"} canPlan={manager} canLink={mode === "cloud" && !commis} online={online} currentUserId={identity?.user.id} intent={recipeIntent} onInterpret={(text) => repository.interpretRecipe(text)} onCreate={(version) => repository.createRecipe(version)} onSaved={refresh} onPlan={plan} onMembers={() => repository.listMembers()} onShare={(recipeId, userId) => repository.shareRecipe(recipeId, userId)} onVisibility={(recipeId, visibility) => repository.setRecipeVisibility(recipeId, visibility)} onLink={(recipeId, ingredientId, catalogId) => repository.linkIngredient(recipeId, ingredientId, catalogId)} />}
         {section === "production" && <ProductionView recipes={recipes} productions={productions} events={events} ingredients={ingredients} requirements={requirements} requestedRecipe={requestedRecipe} focusProductionId={focusProductionId} cloudMode={mode === "cloud"} canPlan={manager} onPlan={(recipe, target, date, eventId) => repository.planProduction(recipe, target, date, eventId)} onRecord={(production, amount) => repository.recordBatch(production, amount)} onSaved={refresh} onOrders={() => navigate("orders")} onRecipes={() => navigate("recipes")} />}
         {section === "team" && <TeamView identity={identity} onMembers={() => repository.listMembers()} onInvite={(email, role) => repository.inviteMember(email, role)} />}
         {section === "events" && <EventsView events={events} productions={productions} canEdit={manager} onSave={(event) => repository.saveEvent(event)} onSaved={refresh} onOpenProduction={openProduction} />}
         {section === "stock" && <StockView ingredients={ingredients} movements={movements} cloudMode={mode === "cloud"} canEdit={!commis} online={online} lastSync={lastSync} onCreate={(name, unit) => repository.createIngredient(name, unit)} onMovement={(ingredientId, delta, kind, note) => repository.recordStockMovement(ingredientId, delta, kind, note)} onSaved={refresh} />}
         {section === "orders" && <OrdersView suppliers={suppliers} ingredients={ingredients} orders={orders} requirements={requirements} cloudMode={mode === "cloud"} canEdit={!commis} online={online} onSupplier={(name, contact) => repository.createSupplier(name, contact)} onOrder={(supplierId, lines, note, orderId) => repository.createOrder(supplierId, lines, note, orderId)} onStatus={(orderId, status) => repository.setOrderStatus(orderId, status)} onReceipt={(orderId, lines, operationId) => repository.receiveOrder(orderId, lines, operationId)} onSaved={refresh} />}
-        {section === "more" && <MoreView commis={commis} onNavigate={navigate} onNewRecipe={() => { navigate("recipes"); setNewRecipeRequest((value) => value + 1); }} />}
+        {section === "more" && <MoreView commis={commis} onNavigate={navigate} onNewRecipe={() => { navigate("recipes"); setRecipeIntent("new"); }} onCapture={() => { navigate("recipes"); setRecipeIntent("capture"); }} />}
         {section === "sync" && <SyncView online={online} cloudMode={mode === "cloud"} pending={pending.waiting} conflicts={pending.conflicts} recipes={recipes.length} lastSync={lastSync} onSync={() => void refresh()} onSignOut={() => void signOut()} onConnect={() => setMode("login")} />}
         </>}
       </main>
