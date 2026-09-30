@@ -4,6 +4,7 @@ export interface LocalRecipe {
   id: string;
   visibility: "private" | "kitchen";
   ownerUserId?: string;
+  course?: string | null;
   version: RecipeVersion;
   updatedAt: string;
 }

@@ -1,6 +1,7 @@
 import type { RecipeVersion } from "../../shared/kitchen";
 import type { IngredientNeed, UnlinkedNeed } from "../../shared/requirements";
 import type { RecipeDraft } from "../../shared/capture";
+import { cleanCourse, courseKey, mergeCourses } from "../../shared/courses";
 import { listLocal, putLocal, type LocalEvent, type LocalProduction, type LocalRecipe } from "../local-db";
 import { deletePending, listPending, putPending, readCache, writeCache, type PendingEntry } from "./cloud-cache";
 
@@ -25,7 +26,10 @@ export type Requirements = { needs: IngredientNeed[]; unlinked: UnlinkedNeed[] }
 
 export interface KitchenRepository {
   listRecipes(): Promise<LocalRecipe[]>;
-  createRecipe(version: RecipeVersion): Promise<void>;
+  createRecipe(version: RecipeVersion, course: string | null): Promise<void>;
+  listCourses(): Promise<string[]>;
+  addCourse(name: string): Promise<string[]>;
+  setRecipeCourse(recipe: LocalRecipe, course: string | null): Promise<void>;
   listProductions(recipes: LocalRecipe[]): Promise<LocalProduction[]>;
   planProduction(recipe: LocalRecipe, targetYieldMilli: number, plannedFor: string, eventId?: string): Promise<void>;
   recordBatch(production: LocalProduction, amountMilli: number): Promise<void>;
@@ -54,10 +58,25 @@ export interface KitchenRepository {
 
 export class LocalRepository implements KitchenRepository {
   listRecipes() { return listLocal<LocalRecipe>("recipes"); }
-  async createRecipe(version: RecipeVersion) {
+  async createRecipe(version: RecipeVersion, course: string | null) {
     await putLocal("recipes", {
-      id: version.recipeId, visibility: "private", version, updatedAt: new Date().toISOString(),
+      id: version.recipeId, visibility: "private", course, version, updatedAt: new Date().toISOString(),
     });
+  }
+  private customCourses(): string[] {
+    try { return JSON.parse(localStorage.getItem("brigade-courses") ?? "[]") as string[]; } catch { return []; }
+  }
+  listCourses() { return Promise.resolve(mergeCourses(this.customCourses())); }
+  async addCourse(name: string) {
+    const clean = cleanCourse(name);
+    if (!clean) throw new Error("Escribí un nombre de hasta 60 caracteres");
+    const courses = mergeCourses(this.customCourses());
+    if (courses.some((course) => courseKey(course) === courseKey(clean))) throw new Error("Ese curso ya existe");
+    localStorage.setItem("brigade-courses", JSON.stringify([...this.customCourses(), clean]));
+    return [...courses, clean];
+  }
+  async setRecipeCourse(recipe: LocalRecipe, course: string | null) {
+    await putLocal("recipes", { ...recipe, course, updatedAt: new Date().toISOString() });
   }
   listProductions() { return listLocal<LocalProduction>("productions"); }
   async planProduction(recipe: LocalRecipe, targetYieldMilli: number, plannedFor: string, eventId?: string) {
@@ -95,7 +114,7 @@ export class LocalRepository implements KitchenRepository {
   interpretRecipe(): Promise<RecipeDraft> { return Promise.reject(new Error("Conectá tu cocina para interpretar recetas")); }
 }
 
-type RecipeSummary = { id: string; version_id: string; visibility: "private" | "kitchen"; owner_user_id: string };
+type RecipeSummary = { id: string; version_id: string; visibility: "private" | "kitchen"; owner_user_id: string; course: string | null };
 type ProductionSummary = {
   id: string; recipe_version_id: string; title: string; version: number; yield_unit: RecipeVersion["yieldUnit"];
   target_yield_milli: number; produced_yield_milli: number; planned_for: string | null; event_id: string | null;
@@ -123,7 +142,7 @@ export class CloudRepository implements KitchenRepository {
         const detail = await this.request<{ version: RecipeVersion }>(`${this.root()}/recipes/${summary.id}`);
         return {
           id: summary.id, visibility: summary.visibility, version: detail.version,
-          ownerUserId: summary.owner_user_id, updatedAt: new Date().toISOString(),
+          ownerUserId: summary.owner_user_id, course: summary.course, updatedAt: new Date().toISOString(),
         } satisfies LocalRecipe;
       }));
       await writeCache(key, recipes);
@@ -134,14 +153,39 @@ export class CloudRepository implements KitchenRepository {
     }
   }
 
-  async createRecipe(version: RecipeVersion): Promise<void> {
+  async listCourses(): Promise<string[]> {
+    const key = this.cacheKey("courses");
+    try {
+      const result = await this.request<{ courses: string[] }>(`${this.root()}/courses`);
+      await writeCache(key, result.courses);
+      return result.courses;
+    } catch (cause) {
+      if (isAccessError(cause)) throw cause;
+      return (await readCache<string[]>(key)) ?? mergeCourses([]);
+    }
+  }
+
+  async addCourse(name: string): Promise<string[]> {
+    const result = await this.request<{ courses: string[] }>(`${this.root()}/courses`, {
+      method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ name }),
+    });
+    return result.courses;
+  }
+
+  async setRecipeCourse(recipe: LocalRecipe, course: string | null): Promise<void> {
+    await this.request(`${this.root()}/recipes/${recipe.id}/course`, {
+      method: "PUT", headers: { "content-type": "application/json" }, body: JSON.stringify({ course }),
+    });
+  }
+
+  async createRecipe(version: RecipeVersion, course: string | null): Promise<void> {
     if (!navigator.onLine) throw new Error("Conectate para guardar una receta compartible. Este formulario sigue abierto.");
     const ingredientIndexes = new Map(version.ingredients.map((ingredient, index) => [ingredient.id, index]));
     await this.request(`${this.root()}/recipes`, {
       method: "POST", headers: { "content-type": "application/json" },
       body: JSON.stringify({
         title: version.title, description: version.description, yieldMilli: version.yieldMilli,
-        yieldUnit: version.yieldUnit,
+        yieldUnit: version.yieldUnit, course,
         ingredients: version.ingredients.map(({ name, netMilli, unit, wastePermille, catalogIngredientId }) => ({ name, netMilli, unit, wastePermille, catalogIngredientId: catalogIngredientId ?? null })),
         steps: version.steps.map(({ title, instruction, ingredientIds }) => ({
           title, instruction, ingredientIndexes: ingredientIds.map((id) => ingredientIndexes.get(id)).filter((index): index is number => index !== undefined),

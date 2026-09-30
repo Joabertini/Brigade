@@ -1,8 +1,9 @@
 import type { Hono } from "hono";
 import { HTTPException } from "hono/http-exception";
+import { cleanCourse, courseKey, mergeCourses } from "../shared/courses";
 import { assertPositiveMilli, compatibleStockUnit, type RecipeVersion, type StockUnit, type Unit } from "../shared/kitchen";
 import type { AuthBindings } from "./auth";
-import { requireMember, type KitchenRole } from "./permissions";
+import { requireManager, requireMember, type KitchenRole } from "./permissions";
 
 type App = Hono<{ Bindings: AuthBindings }>;
 const units = new Set<Unit>(["g", "kg", "ml", "L", "un", "atado", "paq", "bandeja", "porción"]);
@@ -16,6 +17,7 @@ type RecipeInput = {
   yieldUnit: Unit;
   ingredients: IngredientInput[];
   steps: StepInput[];
+  course?: string | null;
 };
 
 function validateInput(raw: unknown): RecipeInput {
@@ -50,7 +52,13 @@ function validateInput(raw: unknown): RecipeInput {
       throw new HTTPException(400, { message: "Paso inválido" });
     }
   });
+  if (data.course != null && !cleanCourse(data.course)) throw new HTTPException(400, { message: "Curso inválido" });
   return data as RecipeInput;
+}
+
+async function kitchenCourses(db: D1Database, kitchenId: string) {
+  const rows = await db.prepare("SELECT name FROM kitchen_courses WHERE kitchen_id = ? ORDER BY position").bind(kitchenId).all<{ name: string }>();
+  return mergeCourses(rows.results.map((row) => row.name));
 }
 
 type CatalogRow = { id: string; name: string; base_unit: StockUnit };
@@ -91,11 +99,48 @@ async function readableRecipe(db: D1Database, kitchenId: string, recipeId: strin
 function canManage(role: KitchenRole) { return role === "chef" || role === "sous_chef"; }
 
 export function registerRecipeRoutes(app: App) {
+  app.get("/api/kitchens/:kitchenId/courses", async (context) => {
+    const kitchenId = context.req.param("kitchenId");
+    await requireMember(context, kitchenId);
+    return context.json({ courses: await kitchenCourses(context.env.DB, kitchenId) });
+  });
+
+  app.post("/api/kitchens/:kitchenId/courses", async (context) => {
+    const kitchenId = context.req.param("kitchenId");
+    const actor = await requireMember(context, kitchenId);
+    requireManager(actor.role);
+    let body: { name?: unknown };
+    try { body = await context.req.json(); } catch { throw new HTTPException(400, { message: "JSON inválido" }); }
+    const name = cleanCourse(body.name);
+    if (!name) throw new HTTPException(400, { message: "Escribí un nombre de hasta 60 caracteres" });
+    const courses = await kitchenCourses(context.env.DB, kitchenId);
+    if (courses.some((course) => courseKey(course) === courseKey(name))) throw new HTTPException(409, { message: "Ese curso ya existe" });
+    if (courses.length >= 20) throw new HTTPException(400, { message: "Máximo 20 cursos" });
+    await context.env.DB.prepare("INSERT INTO kitchen_courses (kitchen_id, name, position) VALUES (?, ?, ?)").bind(kitchenId, name, courses.length).run();
+    return context.json({ courses: [...courses, name] }, 201);
+  });
+
+  app.put("/api/kitchens/:kitchenId/recipes/:recipeId/course", async (context) => {
+    const kitchenId = context.req.param("kitchenId");
+    const actor = await requireMember(context, kitchenId);
+    const recipe = await readableRecipe(context.env.DB, kitchenId, context.req.param("recipeId"), actor.userId);
+    if (!recipe) throw new HTTPException(404, { message: "Receta no encontrada" });
+    if (recipe.owner_user_id !== actor.userId && !canManage(actor.role)) {
+      throw new HTTPException(403, { message: "Solo el autor o la jefatura pueden cambiar el curso" });
+    }
+    let body: { course?: unknown };
+    try { body = await context.req.json(); } catch { throw new HTTPException(400, { message: "JSON inválido" }); }
+    const course = body.course == null ? null : cleanCourse(body.course);
+    if (body.course != null && !course) throw new HTTPException(400, { message: "Curso inválido" });
+    await context.env.DB.prepare("UPDATE recipes SET course = ? WHERE id = ?").bind(course, recipe.id).run();
+    return context.json({ course });
+  });
+
   app.get("/api/kitchens/:kitchenId/recipes", async (context) => {
     const kitchenId = context.req.param("kitchenId");
     const actor = await requireMember(context, kitchenId);
     const result = await context.env.DB.prepare(
-      `SELECT r.id, r.title, r.visibility, r.current_version, r.owner_user_id,
+      `SELECT r.id, r.title, r.visibility, r.current_version, r.owner_user_id, r.course,
         v.id AS version_id, v.yield_milli, v.yield_unit
        FROM recipes r JOIN recipe_versions v ON v.recipe_id = r.id AND v.version = r.current_version
        WHERE r.kitchen_id = ? AND r.archived_at IS NULL
@@ -119,7 +164,7 @@ export function registerRecipeRoutes(app: App) {
     const ingredientIds = input.ingredients.map(() => crypto.randomUUID());
     const stepIds = input.steps.map(() => crypto.randomUUID());
     const statements: D1PreparedStatement[] = [
-      context.env.DB.prepare("INSERT INTO recipes (id, kitchen_id, owner_user_id, title) VALUES (?, ?, ?, ?)").bind(recipeId, kitchenId, actor.userId, input.title.trim()),
+      context.env.DB.prepare("INSERT INTO recipes (id, kitchen_id, owner_user_id, title, course) VALUES (?, ?, ?, ?, ?)").bind(recipeId, kitchenId, actor.userId, input.title.trim(), cleanCourse(input.course)),
       context.env.DB.prepare(
         "INSERT INTO recipe_versions (id, recipe_id, version, description, yield_milli, yield_unit, confirmed_by_user_id) VALUES (?, ?, 1, ?, ?, ?, ?)",
       ).bind(versionId, recipeId, input.description.trim(), input.yieldMilli, input.yieldUnit, actor.userId),

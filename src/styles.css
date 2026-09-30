@@ -38,3 +38,20 @@ body{min-width:320px}
 .b2-list-button[aria-pressed=true]{color:var(--b-accent)}
 .b2-list-button .b2-dish{font-size:27px;margin:0!important}
 details.b2-panel summary{cursor:pointer;color:var(--b-accent);font-size:14px;min-height:44px;display:flex;align-items:center}
+
+/* Recetario agrupado por curso de la carta */
+.b2-course{margin-top:26px}
+.b2-course-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding-bottom:10px;border-bottom:1px solid var(--b-line)}
+.b2-course-head h2{font-size:11px;font-weight:500;letter-spacing:1.7px;text-transform:uppercase;color:var(--b-accent)}
+.b2-course-head span{font-size:12px;color:var(--b-muted)}
+.b2-course-list{margin-top:10px;border:1px solid #3f4a39;border-radius:15px;overflow:hidden;background:var(--b-surface)}
+.b2-course-item{position:relative;isolation:isolate;width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;text-align:left;background:transparent;border:0;border-bottom:1px solid #3f4a39;color:var(--b-text);min-height:64px}
+.b2-course-item:last-child{border-bottom:0}
+.b2-course-item:before{content:'';position:absolute;inset:0;z-index:-1;background:radial-gradient(100% 140% at 70% 0,#d6f3a421,transparent 75%),linear-gradient(155deg,#384a2b,#1b2318);opacity:0;transition:opacity 160ms ease}
+.b2-course-item:hover:before,.b2-course-item:focus-visible:before{opacity:1}
+.b2-course-item>span{flex:1;min-width:0}
+.b2-course-item .b2-dish{display:block;font-size:25px;margin:0!important;max-width:none}
+.b2-course-item small{display:block;color:var(--b-muted);font-size:12px;margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.b2-course-tags{display:flex;flex-wrap:wrap;gap:12px;margin-top:8px}
+.b2-course-item>svg{color:var(--b-accent);width:18px}
+.b2-course+.b2-link,.b2-course~.b2-subform{margin-top:18px}
