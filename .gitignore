@@ -3,4 +3,5 @@ build/
 .env
 .env.local
 .DS_Store
-*.log.env*.local
+*.log
+.env*.local
