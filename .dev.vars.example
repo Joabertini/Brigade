@@ -1,0 +1,3 @@
+BETTER_AUTH_SECRET=replace-with-a-random-secret-of-at-least-32-characters
+BOOTSTRAP_TOKEN=replace-with-a-separate-random-secret-and-remove-after-setup
+PUBLIC_ORIGIN=http://localhost:5173

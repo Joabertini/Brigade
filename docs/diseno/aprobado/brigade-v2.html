@@ -1,0 +1,2360 @@
+<!doctype html>
+<html lang="en" data-visualize-standalone>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src 'unsafe-inline' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<title>Brigade V2.fragment</title>
+<style>:root{color-scheme:light dark;background:light-dark(rgb(255 255 255), rgb(24 24 24))}html,body{margin:0}body{box-sizing:border-box;padding:1rem;background:inherit}iframe{display:block;width:100%;height:calc(100vh - 2rem);margin:0 auto;border:0}</style>
+</head>
+<body>
+<iframe id="codex-visualization" sandbox="allow-scripts" referrerpolicy="no-referrer" title="Brigade V2.fragment" data-srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot; data-visualize-standalone&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;meta name=&quot;referrer&quot; content=&quot;no-referrer&quot;&gt;
+&lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;default-src &#x27;none&#x27;; script-src &#x27;unsafe-inline&#x27; &#x27;unsafe-eval&#x27; &#x27;wasm-unsafe-eval&#x27; blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src &#x27;unsafe-inline&#x27; blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src &#x27;none&#x27;; object-src &#x27;none&#x27;; base-uri &#x27;none&#x27;; form-action &#x27;none&#x27;&quot;&gt;
+&lt;title&gt;Brigade V2.fragment&lt;/title&gt;
+&lt;style&gt;:root {
+  color-scheme: light dark;
+  background-color: var(
+    --background,
+    var(--color-background-primary, light-dark(rgb(255 255 255), rgb(24 24 24)))
+  ) !important;
+
+  /* Agent-facing contract; keep in sync with SKILL.md. */
+  --background: var(
+    --color-background-primary,
+    light-dark(rgb(255 255 255), rgb(24 24 24))
+  );
+  --foreground: var(
+    --color-text-primary,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --card: color-mix(in oklab, var(--foreground) 5%, var(--background));
+  --card-foreground: var(
+    --color-text-primary,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --popover: var(
+    --color-background-secondary,
+    light-dark(rgb(255 255 255), rgb(45 45 45))
+  );
+  --popover-foreground: var(
+    --color-text-primary,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --primary: var(
+    --color-text-info,
+    light-dark(rgb(51 156 255), rgb(131 195 255))
+  );
+  --primary-foreground: var(
+    --color-text-inverse,
+    light-dark(rgb(255 255 255), rgb(13 13 13))
+  );
+  --secondary: var(
+    --color-background-secondary,
+    light-dark(rgb(255 255 255 / 96%), rgb(54 54 54 / 96%))
+  );
+  --secondary-foreground: var(
+    --color-text-primary,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --muted: color-mix(in srgb, var(--foreground) 10%, transparent);
+  --muted-foreground: var(
+    --color-text-secondary,
+    light-dark(rgb(26 28 31 / 49.4%), rgb(255 255 255 / 49.8%))
+  );
+  --accent: var(
+    --color-background-info,
+    light-dark(rgb(229 242 255), rgb(13 39 63))
+  );
+  --accent-foreground: var(
+    --color-text-info,
+    light-dark(rgb(51 156 255), rgb(131 195 255))
+  );
+  --destructive: var(
+    --color-text-warning,
+    light-dark(rgb(226 85 7), rgb(255 133 73))
+  );
+  --border: var(
+    --color-border-secondary,
+    light-dark(rgb(26 28 31 / 8%), rgb(255 255 255 / 8.2%))
+  );
+  --input: var(
+    --color-border-primary,
+    light-dark(
+      rgb(26 28 31 / 11.8%),
+      color-mix(in oklab, rgb(0 0 0) 10%, transparent)
+    )
+  );
+  --ring: var(
+    --color-ring-primary,
+    light-dark(rgb(51 156 255), rgb(131 195 255 / 76%))
+  );
+  --font-size-base: var(--font-text-md-size, 14px);
+  --blue: light-dark(rgb(51 156 255), rgb(51 156 255));
+  --orange: light-dark(rgb(226 85 7), rgb(251 106 34));
+  --green: light-dark(rgb(0 162 64), rgb(64 201 119));
+  --red: light-dark(rgb(224 46 42), rgb(255 103 100));
+  --purple: light-dark(rgb(146 79 247), rgb(173 123 249));
+  --yellow: light-dark(rgb(255 195 0), rgb(255 210 64));
+  --viz-series-1: var(--primary);
+  --viz-series-2: light-dark(rgb(243 136 59), rgb(245 154 86));
+  --viz-series-3: light-dark(rgb(93 201 119), rgb(116 213 139));
+  --viz-series-4: light-dark(rgb(235 119 177), rgb(240 143 192));
+  --viz-series-5: light-dark(rgb(155 121 236), rgb(170 145 239));
+  --viz-series-6: light-dark(rgb(58 185 177), rgb(90 203 194));
+
+  /* Internal implementation variables; not part of the agent contract. */
+  --font-sans: -apple-system, system-ui, &quot;Segoe UI&quot;, sans-serif;
+  --font-mono:
+    ui-monospace, SFMono-Regular, &quot;SF Mono&quot;, Menlo, Consolas, &quot;Liberation Mono&quot;,
+    monospace;
+  --font-size-normal: max(11px, var(--font-size-base));
+  --font-size-tooltip: calc(var(--font-size-base) - 1px);
+  --font-size-small: max(11px, calc(var(--font-size-base) - 2px));
+  --font-size-h1: calc(var(--font-size-normal) * 1.7142857143);
+  --font-size-h2: calc(var(--font-size-normal) * 1.4285714286);
+  --font-size-h3: calc(var(--font-size-normal) * 1.2857142857);
+  --font-weight-normal: 430;
+  --font-weight-medium: 500;
+  --icon-size: 16px;
+  --line-height-normal: calc(var(--font-size-normal) * 1.5);
+  --line-height-tooltip: calc(var(--font-size-tooltip) * 1.4285714286);
+  --line-height-small: calc(var(--font-size-small) + 4px);
+  --corner-shape: round;
+  --radius: var(--border-radius-lg, 10px);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-2xl: calc(var(--radius) * 1.6);
+  --radius-full: 9999px;
+  --shadow-sm: 0 1px 2px -1px rgb(0 0 0 / 8%);
+  --checkmark-image: url(&quot;data:image/svg+xml,%3Csvg xmlns=&#x27;http://www.w3.org/2000/svg&#x27; viewBox=&#x27;0 0 17 17&#x27;%3E%3Cpath d=&#x27;M12.8961 3.64101C13.1297 3.41418 13.4984 3.37523 13.7779 3.56581C14.0571 3.75635 14.1554 4.11331 14.0299 4.41347L13.9615 4.53847L7.71151 13.7045C7.59411 13.8767 7.4063 13.9877 7.19881 14.0072C6.99136 14.0267 6.78564 13.9533 6.63826 13.806L2.88826 10.056L2.79842 9.9457C2.6192 9.67407 2.64927 9.30496 2.88826 9.06581C3.12738 8.82669 3.49647 8.79676 3.76815 8.97597L3.8785 9.06581L7.03084 12.2182L12.8053 3.74941L12.8961 3.64101Z&#x27;/%3E%3C/svg%3E&quot;);
+
+  /* Legacy aliases; not part of the current agent contract. */
+  --viz-bg: transparent;
+  --viz-panel: var(--card);
+  --viz-border: var(--border);
+  --viz-text: var(--foreground);
+  --viz-muted: var(--muted-foreground);
+  --viz-accent: var(--primary);
+  --viz-accent-text: var(--primary-foreground);
+  --viz-accent-bg: var(--accent);
+  --viz-font-size: var(--font-size-base);
+  --viz-warning: var(--destructive);
+}
+
+:root[data-theme=&quot;light&quot;] {
+  color-scheme: light;
+}
+
+:root[data-theme=&quot;dark&quot;] {
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html &gt; body {
+  /* Preserve MCP aliases for older inline renderers without creating :root cycles. */
+  --color-background-primary: var(
+    --background,
+    light-dark(rgb(255 255 255), rgb(24 24 24))
+  );
+  --color-text-primary: var(
+    --foreground,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --color-border-secondary: var(
+    --border,
+    light-dark(rgb(26 28 31 / 8%), rgb(255 255 255 / 8.2%))
+  );
+
+  margin: 0;
+  padding: var(--visualize-paint-gutter, 0px);
+  color: var(--foreground);
+  background: transparent !important;
+  font-family: var(--font-sans) !important;
+  font-size: var(--font-size-normal);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-normal);
+}
+
+.cursor-interaction {
+  cursor: var(--cursor-interaction, pointer);
+}
+
+a {
+  color: color-mix(in srgb, var(--viz-accent) 80%, var(--viz-text) 20%);
+  cursor: var(--cursor-interaction, pointer);
+  font-weight: var(--font-weight-medium, 500);
+  text-decoration: none;
+  text-underline-offset: 2px;
+}
+
+a:is(:hover, :focus-visible) {
+  text-decoration-line: underline;
+  text-decoration-style: dashed;
+  text-decoration-thickness: 0.5px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin-block: 0;
+}
+
+h1 {
+  font-size: var(--font-size-h1);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.25;
+}
+
+h2 {
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.25;
+}
+
+h3,
+h4,
+h5,
+h6 {
+  font-size: var(--font-size-h3);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.3;
+}
+
+b,
+strong,
+th {
+  font-weight: var(--font-weight-medium);
+}
+
+code:not(pre code) {
+  display: inline;
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+  corner-shape: var(--corner-shape);
+  background: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+  overflow-wrap: anywhere;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  word-break: break-word;
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--foreground);
+  font: inherit;
+  text-align: start;
+}
+
+.table :is(th, td) {
+  padding-block: 10px;
+  padding-inline: 0 24px;
+  overflow-wrap: anywhere;
+  border-bottom: 1px solid var(--border);
+  text-align: start;
+  vertical-align: top;
+}
+
+.table-responsive &gt; .table :is(th, td) {
+  overflow-wrap: break-word;
+}
+
+.table :is(th, td):last-child {
+  padding-inline-end: 0;
+}
+
+.table :is(caption, thead th) {
+  font-weight: 600;
+}
+
+.table thead th {
+  padding-block: 8px;
+  border-bottom-color: color-mix(in srgb, var(--foreground) 16%, transparent);
+}
+
+.table tbody tr:last-child :is(th, td) {
+  border-bottom: 0;
+}
+
+.table.table-sm :is(th, td) {
+  padding-block: 6px;
+}
+
+.table.table-sm :is(th, td):not(:last-child) {
+  padding-inline-end: 16px;
+}
+
+.table :is(.text-end, [align=&quot;right&quot;]) {
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+
+.table :is(.text-center, [align=&quot;center&quot;]) {
+  text-align: center;
+}
+
+.table .text-nowrap {
+  white-space: nowrap;
+}
+
+#widget {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  padding: 0;
+  background: transparent !important;
+}
+
+.card {
+  min-width: 0;
+  padding: 12px;
+  overflow: hidden;
+  overflow-wrap: break-word;
+  border-radius: var(--radius-2xl);
+  corner-shape: var(--corner-shape);
+  color: var(--card-foreground);
+  background: var(--card);
+}
+
+.widget {
+  min-width: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: var(--radius-lg);
+  corner-shape: var(--corner-shape);
+  box-shadow: 0 0 0 0.5px var(--border-strong, var(--border));
+  color: var(--foreground);
+  background: var(--background);
+}
+
+#widget &gt; :not(.card, .widget, .progress) {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.tooltip {
+  position: fixed;
+  z-index: 50;
+  top: 0;
+  left: 0;
+  width: max-content;
+  max-width: min(
+    20rem,
+    var(--tooltip-available-width, calc(100vw - 10px)),
+    calc(100vw - 10px)
+  );
+  max-height: min(
+    var(--tooltip-available-height, calc(100vh - 10px)),
+    calc(100vh - 10px)
+  );
+  padding: 4px 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  corner-shape: var(--corner-shape);
+  color: var(--popover-foreground);
+  background: var(--popover);
+  box-shadow: none;
+  font-size: var(--font-size-tooltip);
+  line-height: var(--line-height-tooltip);
+  overflow-wrap: break-word;
+  white-space: normal;
+  pointer-events: none;
+  user-select: none;
+}
+
+.viz-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(max(180px, 24%), 1fr));
+  gap: 10px;
+}
+
+.viz-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.viz-stat-value {
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.25;
+}
+
+.viz-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+hr {
+  width: 100%;
+  height: 1px;
+  margin-block: 6px;
+  border: 0;
+  background: var(--border);
+}
+
+.nav {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 4px;
+}
+
+.progress {
+  display: flex;
+  height: 8px;
+  margin-block: calc((var(--line-height-normal, 1.5em) - 8px) / 2);
+  overflow: hidden;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--muted);
+}
+
+.progress-bar:only-child {
+  border-radius: var(--radius-full);
+}
+
+.progress-bar {
+  height: 100%;
+  flex-shrink: 0;
+  border: 0;
+  background: var(--viz-series-1);
+}
+
+.viz-badge {
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+  color: var(--accent-foreground);
+  background: var(--accent);
+  font-weight: var(--font-weight-medium);
+}
+
+small,
+.text-small,
+.viz-badge {
+  font-size: var(--font-size-small);
+  line-height: var(--line-height-small);
+}
+
+.text-muted {
+  color: var(--muted-foreground);
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.viz-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.viz-controls &gt; .form-label {
+  display: grid;
+  min-width: min(100%, 260px);
+  flex: 1 1 280px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 2px 12px;
+  margin-bottom: 0;
+}
+
+.viz-controls &gt; .form-label &gt; :is(.form-control, .form-range, .form-select) {
+  grid-column: 1 / -1;
+}
+
+.btn,
+.nav-link,
+.form-check-input,
+.form-control,
+.form-range,
+.form-select {
+  font: inherit;
+}
+
+.btn,
+.nav-link {
+  appearance: button;
+  display: inline-flex;
+  inline-size: fit-content;
+  max-inline-size: 100%;
+  min-height: 28px;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  margin: 0;
+  padding: 0 8px;
+  -webkit-app-region: no-drag;
+  border: 1px solid var(--input);
+  border-radius: var(--radius-lg);
+  corner-shape: var(--corner-shape);
+  color: var(--secondary-foreground);
+  background: var(--secondary);
+  cursor: var(--cursor-interaction, pointer);
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+.btn:is(.btn-block, .viz-tile) {
+  inline-size: 100%;
+}
+
+.btn.viz-tile {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+a.btn {
+  cursor: var(--cursor-interaction, pointer);
+  text-decoration: none;
+}
+
+.btn:not(:disabled):hover,
+.nav-link:not(:disabled):not([aria-disabled=&quot;true&quot;]):hover {
+  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.btn-primary {
+  border-color: transparent;
+  color: var(--primary-foreground);
+  background: var(--foreground);
+  background-clip: padding-box;
+}
+
+.btn-primary .text-muted {
+  color: color-mix(in srgb, var(--primary-foreground) 50%, transparent);
+}
+
+.btn-primary:not(:disabled):hover {
+  background: color-mix(in srgb, var(--foreground) 80%, transparent);
+  background-clip: padding-box;
+}
+
+.btn-ghost {
+  border-color: transparent;
+  color: var(--muted-foreground);
+  background: transparent;
+}
+
+.btn-ghost:not(:disabled):hover {
+  color: var(--foreground);
+  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.nav-pills .nav-link {
+  min-width: 0;
+  border-color: transparent;
+  color: var(--muted-foreground);
+  background: transparent;
+}
+
+.nav-justified .nav-link {
+  flex: 1 1 0;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+.nav-pills .nav-link.active {
+  color: var(--foreground);
+  background: var(--muted);
+}
+
+/* Shared preview chrome; product styles stay inside each variant. */
+.viz-dotted-background {
+  background-image: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--foreground) 14%, transparent) 0.8px,
+    transparent 0.8px
+  );
+  background-position: center;
+  background-size: 16px 16px;
+}
+
+.viz-carousel {
+  position: relative;
+  min-width: 0;
+}
+
+.viz-carousel:has(&gt; .viz-carousel-controls) {
+  min-height: calc(60px + var(--viz-carousel-picker-height, 0px));
+  padding-bottom: 60px;
+}
+
+.viz-carousel &gt; [data-variant][hidden] {
+  display: none !important;
+}
+
+.viz-carousel &gt; [data-variant] {
+  isolation: isolate;
+}
+
+.viz-carousel-controls {
+  --viz-carousel-hover: light-dark(
+    color-mix(in srgb, var(--foreground) 5.4%, transparent),
+    color-mix(in srgb, var(--foreground) 7.8%, transparent)
+  );
+  position: absolute;
+  z-index: 2;
+  bottom: 8px;
+  left: 50%;
+  display: flex;
+  width: max-content;
+  /* Leave room for the host&#x27;s design-controls launcher at the trailing edge. */
+  max-width: calc(100% - 96px);
+  align-items: center;
+  gap: 0;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  color: var(--foreground);
+  background: var(--background);
+  font-family: var(--font-sans);
+  /* Match the settings dropdown chrome independently of the content font size. */
+  font-size: 13px;
+  font-weight: var(--font-weight-normal);
+  line-height: 18px;
+  transform: translateX(-50%);
+  user-select: none;
+}
+
+.viz-carousel-controls button,
+.viz-carousel-picker &gt; summary {
+  display: flex;
+  min-height: 30px;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 0 6px;
+  -webkit-app-region: no-drag;
+  border: 0;
+  border-radius: 14px;
+  color: inherit;
+  background: transparent;
+  font: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.viz-carousel-controls &gt; button,
+.viz-carousel-picker &gt; summary {
+  position: relative;
+  isolation: isolate;
+}
+
+.viz-carousel-controls &gt; button {
+  --icon-size: 16px;
+  width: 30px;
+  padding: 0;
+}
+
+.viz-carousel-picker &gt; summary {
+  padding-inline: 12px;
+}
+
+.viz-carousel-controls .viz-carousel-caret {
+  width: 14px;
+  height: 14px;
+  flex: none;
+  margin: 0;
+  color: inherit;
+  transform: rotate(180deg);
+}
+
+.viz-carousel-controls &gt; button &gt; svg,
+.viz-carousel-controls .viz-carousel-caret,
+.viz-carousel-count {
+  opacity: 0.5;
+}
+
+.viz-carousel-controls &gt; button::before,
+.viz-carousel-picker &gt; summary::before {
+  position: absolute;
+  z-index: -1;
+  inset: 3px;
+  border-radius: 12px;
+  content: &quot;&quot;;
+  pointer-events: none;
+}
+
+.viz-carousel-controls &gt; button:hover::before,
+.viz-carousel-picker &gt; summary:hover::before {
+  background: var(--viz-carousel-hover);
+}
+
+.viz-carousel-controls &gt; button,
+.viz-carousel-controls [data-lucide],
+.viz-carousel-controls .lucide {
+  flex-shrink: 0;
+}
+
+.viz-carousel-picker {
+  min-width: 0;
+}
+
+.viz-carousel-picker &gt; summary {
+  min-width: 0;
+  list-style: none;
+}
+
+.viz-carousel-picker &gt; summary::-webkit-details-marker {
+  display: none;
+}
+
+.viz-carousel-count {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.viz-carousel-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.viz-carousel-options {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 4px);
+  left: 0;
+  display: flex;
+  max-height: 240px;
+  flex-direction: column;
+  gap: 2px;
+  overflow: auto;
+  padding: 4px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--background);
+  box-shadow: 0 4px 12px light-dark(rgb(0 0 0 / 6%), rgb(0 0 0 / 25%));
+}
+
+.viz-carousel-options &gt; button {
+  width: 100%;
+  min-height: 28px;
+  justify-content: flex-start;
+  padding: 4px 8px;
+  font-size: var(--font-size-small);
+  text-align: start;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.viz-carousel-options &gt; [aria-current=&quot;true&quot;],
+.viz-carousel-options &gt; button:hover {
+  background: var(--viz-carousel-hover);
+}
+
+.btn:disabled,
+.nav-link:disabled,
+.nav-link[aria-disabled=&quot;true&quot;] {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+[data-lucide] {
+  stroke-width: 1.6;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--foreground);
+}
+
+.form-control {
+  display: block;
+  width: 100%;
+  min-height: 28px;
+  padding: 0 8px;
+  outline: none;
+  border: 1px solid var(--input);
+  border-radius: var(--radius-lg);
+  corner-shape: var(--corner-shape);
+  color: var(--foreground);
+  background: var(--secondary);
+}
+
+.form-control::placeholder {
+  color: var(--muted-foreground);
+}
+
+.form-control[type=&quot;file&quot;] {
+  padding: 0;
+  overflow: hidden;
+  cursor: var(--cursor-interaction, pointer);
+}
+
+.form-control[type=&quot;file&quot;]::file-selector-button {
+  min-height: 26px;
+  margin-right: 8px;
+  padding: 0 8px;
+  border: 0;
+  border-right: 1px solid var(--input);
+  color: var(--secondary-foreground);
+  background: var(--secondary);
+  cursor: inherit;
+  font: inherit;
+}
+
+.form-control[type=&quot;file&quot;]:not(:disabled):hover::file-selector-button {
+  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.form-control-color[type=&quot;color&quot;] {
+  width: 40px;
+  height: 28px;
+  padding: 3px;
+  cursor: var(--cursor-interaction, pointer);
+}
+
+.form-control-color[type=&quot;color&quot;]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+.form-control-color[type=&quot;color&quot;]::-webkit-color-swatch {
+  border: 0;
+  border-radius: calc(var(--radius-lg) - 4px);
+  corner-shape: var(--corner-shape);
+}
+
+textarea.form-control {
+  height: auto;
+  min-height: 72px;
+  padding: 8px 10px;
+  resize: vertical;
+}
+
+.form-control:focus-visible {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-control:disabled,
+.form-select:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.form-select {
+  appearance: none;
+  display: block;
+  width: 100%;
+  min-height: 28px;
+  margin: 0;
+  padding: 0 32px 0 8px;
+  outline: none;
+  border: 1px solid var(--input);
+  border-radius: var(--radius-lg);
+  corner-shape: var(--corner-shape);
+  color: var(--foreground);
+  background-color: var(--secondary);
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--muted-foreground) 50%),
+    linear-gradient(135deg, var(--muted-foreground) 50%, transparent 50%);
+  background-position:
+    calc(100% - 14px) 50%,
+    calc(100% - 10px) 50%;
+  background-repeat: no-repeat;
+  background-size: 4px 4px;
+  cursor: var(--cursor-interaction, default);
+}
+
+.form-select:not(:disabled):hover {
+  background-color: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.form-select:focus-visible {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-check {
+  display: flex;
+  min-height: 20px;
+  align-items: center;
+  gap: 6px;
+}
+
+.form-check-input {
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  flex: 0 0 auto;
+  margin: 0;
+  border: 1px solid var(--input);
+  color: var(--primary-foreground);
+  background-color: transparent;
+  cursor: var(--cursor-interaction, default);
+  transition:
+    background-color 150ms,
+    border-color 150ms,
+    box-shadow 150ms;
+}
+
+.form-check:not(.form-switch) .form-check-input[type=&quot;checkbox&quot;] {
+  border-color: var(--input);
+  border-radius: var(--radius-sm);
+  corner-shape: var(--corner-shape);
+  background-color: var(--secondary);
+  box-shadow: var(--shadow-sm);
+}
+
+.form-check:not(.form-switch)
+  .form-check-input:not(:disabled):not(:checked):hover {
+  background-color: var(--card);
+}
+
+.form-check:not(.form-switch) .form-check-input[type=&quot;checkbox&quot;]:checked {
+  border-color: var(--primary);
+  background-color: var(--primary);
+}
+
+.form-check:not(.form-switch)
+  .form-check-input[type=&quot;checkbox&quot;]:checked::before {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--primary-foreground);
+  content: &quot;&quot;;
+  mask: var(--checkmark-image) center / 12px 12px no-repeat;
+}
+
+.form-check-input[type=&quot;radio&quot;] {
+  width: 14px;
+  height: 14px;
+  border-radius: var(--radius-full);
+}
+
+.form-check-input[type=&quot;radio&quot;]:checked {
+  border: 2px solid var(--primary);
+  background:
+    radial-gradient(circle, var(--primary-foreground) 0 2.5px, transparent 3px),
+    var(--primary);
+}
+
+.form-check:not(.form-switch) .form-check-input:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.form-check:not(.form-switch) .form-check-input:disabled {
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.form-check:not(.form-switch) .form-check-input:disabled + .form-check-label {
+  cursor: not-allowed;
+}
+
+.form-switch .form-check-input:disabled,
+.form-switch .form-check-input:disabled + .form-check-label {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.form-check-label {
+  color: var(--foreground);
+  cursor: var(--cursor-interaction, default);
+}
+
+.form-switch .form-check-input {
+  position: relative;
+  width: 32px;
+  height: 20px;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--muted);
+  box-shadow: none;
+  transition: background-color 200ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.form-switch .form-check-input::before {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 16px;
+  height: 16px;
+  box-sizing: border-box;
+  border: 1px solid light-dark(var(--primary-foreground), var(--foreground));
+  border-radius: var(--radius-full);
+  background: light-dark(var(--primary-foreground), var(--foreground));
+  box-shadow: var(--shadow-sm);
+  content: &quot;&quot;;
+  transform: translate(2px, -50%);
+  transition: transform 200ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.form-switch .form-check-input:checked {
+  background: var(--primary);
+}
+
+.form-switch .form-check-input:checked::before {
+  transform: translate(14px, -50%);
+}
+
+.form-switch .form-check-input:focus-visible {
+  box-shadow: 0 0 0 2px var(--ring);
+}
+
+.form-range {
+  appearance: none;
+  display: block;
+  width: 100%;
+  height: 28px;
+  flex: 1;
+  margin: 0;
+  padding: 0;
+  outline: none;
+  border: 0;
+  accent-color: var(--primary);
+  background: linear-gradient(
+      color-mix(in srgb, var(--foreground) 7%, transparent),
+      color-mix(in srgb, var(--foreground) 7%, transparent)
+    )
+    center / 100% 2px no-repeat;
+}
+
+.form-range::-webkit-slider-runnable-track {
+  height: 28px;
+  background: transparent;
+}
+
+.form-range::-webkit-slider-thumb {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  margin-top: 4px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  background: light-dark(var(--primary-foreground), var(--foreground));
+}
+
+.form-range:focus-visible::-webkit-slider-thumb {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-range::-moz-range-track {
+  height: 28px;
+  background: transparent;
+}
+
+.form-range::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  background: light-dark(var(--primary-foreground), var(--foreground));
+}
+
+.form-range:focus-visible::-moz-range-thumb {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-range:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.btn:not(.btn-primary, .viz-tile):is(
+  [aria-pressed=&quot;true&quot;],
+  [aria-selected=&quot;true&quot;],
+  .is-selected
+) {
+  border-color: var(--primary);
+  color: var(--primary-foreground);
+  background: var(--primary);
+}
+
+.btn.viz-tile:is([aria-pressed=&quot;true&quot;], [aria-selected=&quot;true&quot;], .is-selected) {
+  border-color: var(--primary);
+  box-shadow: inset 0 0 0 1px var(--primary);
+}
+
+.btn:focus-visible,
+.nav-link:focus-visible,
+.viz-carousel-controls :is(button, summary):focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+@media (pointer: coarse) {
+  .viz-carousel:has(&gt; .viz-carousel-controls) {
+    min-height: calc(76px + var(--viz-carousel-picker-height, 0px));
+    padding-bottom: 76px;
+  }
+
+  .btn,
+  .nav-link,
+  .viz-carousel-controls button,
+  .viz-carousel-picker &gt; summary,
+  .form-control,
+  .form-select {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  /* Keep small-screen WebKit from zooming when a text field receives focus. */
+  .form-control,
+  .form-select {
+    font-size: max(16px, var(--font-size-normal));
+  }
+
+  .form-control[type=&quot;file&quot;]::file-selector-button {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .form-control-color[type=&quot;color&quot;] {
+    width: 44px;
+    height: 44px;
+  }
+
+  .form-control:is(
+    [type=&quot;date&quot;],
+    [type=&quot;datetime-local&quot;],
+    [type=&quot;month&quot;],
+    [type=&quot;time&quot;],
+    [type=&quot;week&quot;]
+  ) {
+    min-width: 0;
+    max-width: 100%;
+    padding-block: 8px;
+  }
+
+  .form-check {
+    min-height: 44px;
+    padding-inline: 15px;
+  }
+
+  .form-check-input {
+    position: relative;
+  }
+
+  .form-check-input::after {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 44px;
+    height: 44px;
+    content: &quot;&quot;;
+    transform: translate(-50%, -50%);
+  }
+
+  .form-check-label {
+    display: inline-flex;
+    min-width: 44px;
+    min-height: 44px;
+    align-items: center;
+  }
+
+  .form-range {
+    height: 44px;
+    touch-action: pan-y;
+  }
+
+  .form-range::-webkit-slider-runnable-track {
+    height: 44px;
+  }
+
+  .form-range::-moz-range-track {
+    height: 44px;
+  }
+
+  .form-range::-webkit-slider-thumb {
+    margin-top: 12px;
+  }
+}
+
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+#widget &gt; svg {
+  width: 100%;
+}
+
+/* Model-authored chart rules can otherwise stretch icons after these styles load. */
+svg.lucide {
+  display: block;
+  width: var(--icon-size) !important;
+  height: var(--icon-size) !important;
+  flex: none;
+  margin: 0 !important;
+  stroke-width: 1.6;
+}
+
+.text-warning,
+.text-destructive {
+  color: var(--destructive);
+}
+
+html&gt;body{padding:0}&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;script type=&quot;application/json&quot; id=&quot;codex-visualization-widget-state&quot;&gt;__CODEX_VISUALIZATION_WIDGET_STATE__&lt;/script&gt;
+&lt;script&gt;(() =&gt; {
+  const root = document.documentElement;
+  const mediaQuery = globalThis.matchMedia(&quot;(prefers-color-scheme: dark)&quot;);
+  const apply = Reflect.apply;
+  const isArray = Array.isArray;
+  const hasOwn = Object.hasOwn;
+  const parentWindow = globalThis.parent;
+  const stringify = JSON.stringify;
+  const parse = JSON.parse;
+  const encode = TextEncoder.prototype.encode.bind(new TextEncoder());
+  const initialStateElement = document.getElementById(
+    &quot;codex-visualization-widget-state&quot;,
+  );
+  const initialGlobals = parse(initialStateElement?.textContent ?? &quot;{}&quot;);
+  initialStateElement?.remove();
+  /** @type {Record&lt;string, unknown&gt; | null} */
+  let state = initialGlobals.widgetState ?? null;
+  const statePersistence = initialGlobals.statePersistence ?? &quot;none&quot;;
+  let nextStateRequestId = 0;
+  /** @type {Map&lt;number, { resolve: () =&gt; void; reject: (error: Error) =&gt; void; timeout: ReturnType&lt;typeof globalThis.setTimeout&gt;; serializedState: string }&gt;} */
+  const pendingStateWrites = new Map();
+  const persistenceError = () =&gt;
+    Object.assign(
+      new Error(&quot;The host could not persist the widget state update&quot;),
+      {
+        code: -32000,
+        data: { code: &quot;widget_state_persistence_failed&quot;, retryable: false },
+      },
+    );
+  /**
+   * @param {object} prototype
+   * @param {string} property
+   */
+  const getPrototypeGetter = (prototype, property) =&gt; {
+    // oxlint-disable-next-line typescript/unbound-method -- invoked through captured Reflect.apply
+    const getter = Object.getOwnPropertyDescriptor(prototype, property)?.get;
+    if (getter == null) {
+      throw new Error(`Missing ${property} getter`);
+    }
+    return getter;
+  };
+  const getMessageData = getPrototypeGetter(MessageEvent.prototype, &quot;data&quot;);
+  const getMessagePorts = getPrototypeGetter(MessageEvent.prototype, &quot;ports&quot;);
+  const getMessageSource = getPrototypeGetter(MessageEvent.prototype, &quot;source&quot;);
+  // oxlint-disable-next-line typescript/unbound-method -- captured before the untrusted fragment runs
+  const addHostMessageListener = MessagePort.prototype.addEventListener;
+  // oxlint-disable-next-line typescript/unbound-method -- captured before the untrusted fragment runs
+  const postHostMessage = MessagePort.prototype.postMessage;
+  // oxlint-disable-next-line typescript/unbound-method -- captured before the untrusted fragment runs
+  const startHostPort = MessagePort.prototype.start;
+  // oxlint-disable-next-line typescript/unbound-method -- captured before the untrusted fragment runs
+  const stopMessagePropagation = Event.prototype.stopImmediatePropagation;
+  /** @type {MessagePort | null} */
+  let hostPort = null;
+  const postToHost = (type, payload) =&gt; {
+    if (hostPort != null) {
+      apply(postHostMessage, hostPort, [{ type, ...payload }]);
+    }
+  };
+  const openExternal = ({ href }) =&gt; {
+    if (globalThis.navigator.userActivation?.isActive === true) {
+      postToHost(&quot;open-external&quot;, { href });
+    }
+  };
+  const sendFollowUpMessage = ({ context, prompt, title }) =&gt; {
+    if (globalThis.navigator.userActivation?.isActive === true) {
+      postToHost(&quot;follow-up&quot;, { context, prompt, title });
+    }
+    return Promise.resolve();
+  };
+  /**
+   * @param {Record&lt;string, unknown&gt; | ((previous: Record&lt;string, unknown&gt; | null) =&gt; Record&lt;string, unknown&gt;)} next
+   * @returns {Promise&lt;void&gt;}
+   */
+  const setWidgetState = async (next) =&gt; {
+    const nextState = typeof next === &quot;function&quot; ? next(state) : next;
+    if (
+      nextState == null ||
+      typeof nextState !== &quot;object&quot; ||
+      isArray(nextState)
+    ) {
+      throw new TypeError(&quot;Widget state must be a JSON object&quot;);
+    }
+    const inputState = stringify(
+      nextState,
+      (_key, /** @type {unknown} */ value) =&gt; {
+        if (
+          typeof value === &quot;undefined&quot; ||
+          typeof value === &quot;function&quot; ||
+          typeof value === &quot;symbol&quot; ||
+          (typeof value === &quot;number&quot; &amp;&amp; !Number.isFinite(value))
+        ) {
+          throw new TypeError(&quot;Widget state must be a JSON object&quot;);
+        }
+        return value;
+      },
+    );
+    const parsedState = parse(inputState);
+    if (
+      parsedState == null ||
+      typeof parsedState !== &quot;object&quot; ||
+      isArray(parsedState)
+    ) {
+      throw new TypeError(&quot;Widget state must be a JSON object&quot;);
+    }
+    const storedState = {
+      modelContent: null,
+      privateContent: null,
+      ...parsedState,
+    };
+    const serializedState = stringify(storedState);
+    if (encode(serializedState).length &gt; 16 * 1024) {
+      throw new TypeError(
+        &quot;Widget state must be a JSON object of at most 16 KiB&quot;,
+      );
+    }
+    if (
+      hasOwn(storedState, &quot;imageIds&quot;) &amp;&amp;
+      (!isArray(storedState.imageIds) ||
+        storedState.imageIds.some(
+          (/** @type {unknown} */ id) =&gt; typeof id !== &quot;string&quot;,
+        ))
+    ) {
+      throw new TypeError(&quot;Widget state imageIds must be an array of strings&quot;);
+    }
+    if (storedState.imageIds?.length &gt; 0) {
+      throw Object.assign(
+        new TypeError(&quot;Visualization state does not support image attachments&quot;),
+        { code: -32602, data: { code: &quot;images_unsupported&quot; } },
+      );
+    }
+    state = storedState;
+    globalThis.openai.widgetState = state;
+    globalThis.dispatchEvent(
+      new CustomEvent(&quot;openai:set_globals&quot;, {
+        detail: { globals: { widgetState: state } },
+      }),
+    );
+    if (statePersistence === &quot;none&quot;) {
+      throw persistenceError();
+    }
+    const id = ++nextStateRequestId;
+    return new Promise((resolve, reject) =&gt; {
+      const timeout = globalThis.setTimeout(() =&gt; {
+        pendingStateWrites.delete(id);
+        reject(persistenceError());
+      }, 30_000);
+      pendingStateWrites.set(id, { resolve, reject, timeout, serializedState });
+      postToHost(&quot;widget-state-write&quot;, { id, state: serializedState });
+    });
+  };
+  const syncTheme = () =&gt; {
+    const theme = mediaQuery.matches ? &quot;dark&quot; : &quot;light&quot;;
+    root.dataset.theme = theme;
+    globalThis.openai = {
+      ...globalThis.openai,
+      openExternal,
+      sendFollowUpMessage,
+      setWidgetState,
+      theme,
+      visualizationStyleVariables: {},
+      visualizationTheme: theme,
+      widgetState: state,
+      statePersistence,
+      stateModelContext: &quot;none&quot;,
+    };
+    globalThis.dispatchEvent(
+      new CustomEvent(&quot;openai:set_globals&quot;, {
+        detail: { globals: globalThis.openai },
+      }),
+    );
+  };
+  const sendHeight = () =&gt; {
+    postToHost(&quot;height&quot;, {
+      height: Math.ceil(
+        Math.max(
+          document.body.scrollHeight,
+          document.body.getBoundingClientRect().height,
+        ),
+      ),
+    });
+  };
+
+  globalThis.addEventListener(
+    &quot;message&quot;,
+    (event) =&gt; {
+      const data = apply(getMessageData, event, []);
+      const ports = apply(getMessagePorts, event, []);
+      const source = apply(getMessageSource, event, []);
+      if (
+        hostPort != null ||
+        source !== parentWindow ||
+        typeof data !== &quot;object&quot; ||
+        data?.type !== &quot;codex-visualization-initialize&quot; ||
+        !isArray(ports) ||
+        ports.length !== 1
+      ) {
+        return;
+      }
+      apply(stopMessagePropagation, event, []);
+      const nextHostPort = ports[0];
+      try {
+        apply(addHostMessageListener, nextHostPort, [
+          &quot;message&quot;,
+          (event) =&gt; {
+            const data = apply(getMessageData, event, []);
+            if (typeof data === &quot;object&quot; &amp;&amp; data?.type === &quot;measure&quot;) {
+              sendHeight();
+            } else if (
+              typeof data === &quot;object&quot; &amp;&amp;
+              data?.type === &quot;widget-state-result&quot;
+            ) {
+              /** @type {unknown} */
+              const id = data.id;
+              if (typeof id !== &quot;number&quot;) {
+                return;
+              }
+              const pending = pendingStateWrites.get(id);
+              if (pending != null) {
+                pendingStateWrites.delete(id);
+                globalThis.clearTimeout(pending.timeout);
+                if (data.ok === true) {
+                  pending.resolve();
+                } else {
+                  pending.reject(persistenceError());
+                }
+              }
+            }
+          },
+        ]);
+        apply(startHostPort, nextHostPort, []);
+      } catch {
+        return;
+      }
+      hostPort = nextHostPort;
+      for (const [id, { serializedState }] of pendingStateWrites) {
+        postToHost(&quot;widget-state-write&quot;, { id, state: serializedState });
+      }
+      sendHeight();
+    },
+    { capture: true },
+  );
+  document.currentScript?.remove();
+  mediaQuery.addEventListener(&quot;change&quot;, syncTheme);
+  globalThis.addEventListener(&quot;click&quot;, (event) =&gt; {
+    if (event.defaultPrevented) {
+      return;
+    }
+    let element = null;
+    if (event.target instanceof globalThis.Element) {
+      element = event.target;
+    } else if (event.target instanceof globalThis.Node) {
+      element = event.target.parentElement;
+    }
+    const link = element?.closest(&quot;a[href]&quot;);
+    const href = link?.getAttribute(&quot;href&quot;);
+    if (href == null) {
+      return;
+    }
+    if (href.startsWith(&quot;#&quot;)) {
+      let id;
+      try {
+        id = decodeURIComponent(href.slice(1));
+      } catch {
+        return;
+      }
+      const target = id.length === 0 ? root : document.getElementById(id);
+      if (
+        target == null ||
+        globalThis.navigator.userActivation?.isActive !== true
+      ) {
+        return;
+      }
+      event.preventDefault();
+      postToHost(&quot;scroll-to&quot;, {
+        top: target.getBoundingClientRect().top + globalThis.scrollY,
+      });
+      return;
+    }
+    event.preventDefault();
+    openExternal({ href });
+  });
+  new ResizeObserver(sendHeight).observe(document.body);
+  syncTheme();
+})();
+&lt;/script&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500;1,600&amp;family=DM+Sans:wght@400;500;600;700&amp;display=swap&quot;&gt;
+&lt;style&gt;
+#brigade-v2 .b2-stage{min-height:850px;padding:5px 0 9px}
+#brigade-v2 .b2-frame{--b-bg:#101310;--b-surface:#191e19;--b-raised:#232a23;--b-line:#354034;--b-text:#f4f4e9;--b-muted:#b5c0af;--b-accent:#d8edb8;--b-warn:#efc490;--b-glow:rgba(204,238,166,.19);font:16px/1.5 &#x27;DM Sans&#x27;,sans-serif;color:var(--b-text);color-scheme:dark;background:var(--b-bg);position:relative;isolation:isolate;border:1px solid #414c3c;border-radius:28px;height:836px;display:flex;flex-direction:column;overflow:hidden;container-type:inline-size;box-shadow:0 12px 42px #0002}
+#brigade-v2 .b2-phone{max-width:414px;width:100%;margin:0 auto}
+#brigade-v2 .b2-frame *{box-sizing:border-box}#brigade-v2 .b2-frame h1,#brigade-v2 .b2-frame h2,#brigade-v2 .b2-frame h3,#brigade-v2 .b2-frame p{margin:0}#brigade-v2 .b2-frame button,#brigade-v2 .b2-frame input,#brigade-v2 .b2-frame textarea,#brigade-v2 .b2-frame select{font:inherit}#brigade-v2 .b2-frame button{cursor:pointer}#brigade-v2 .b2-frame button:focus-visible,#brigade-v2 .b2-frame input:focus-visible,#brigade-v2 .b2-frame textarea:focus-visible,#brigade-v2 .b2-frame select:focus-visible{outline:2px solid var(--b-accent);outline-offset:4px}#brigade-v2 .b2-frame svg{width:20px;height:20px;flex-shrink:0}#brigade-v2 .b2-frame button:disabled{opacity:.4;cursor:not-allowed;box-shadow:none}#brigade-v2 .b2-header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:23px 25px 19px;flex-shrink:0;z-index:4;background:var(--b-bg)}#brigade-v2 .b2-brand{font-size:26px;font-weight:600;letter-spacing:-1.2px;line-height:1}.b2-brand em{color:var(--b-accent);font-style:normal}#brigade-v2 .b2-headright{display:flex;align-items:center;gap:13px}#brigade-v2 .b2-sync{display:flex;align-items:center;gap:6px;border:0;background:none;color:var(--b-accent);font-size:12px;min-height:44px;padding:0 2px}#brigade-v2 .b2-sync svg{width:14px;height:14px}#brigade-v2 .b2-avatar{height:34px;width:34px;border-radius:50%;display:grid;place-items:center;background:var(--b-raised);border:1px solid #536348;color:var(--b-accent);font-size:11px;font-weight:600}
+#brigade-v2 .b2-scroll{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#3d4938 transparent;scroll-padding-bottom:130px}#brigade-v2 .b2-content{padding:13px 25px calc(140px + env(safe-area-inset-bottom,0px));max-width:1140px;margin:auto}#brigade-v2 .b2-eyebrow{font-size:11px;font-weight:500;letter-spacing:1.7px;text-transform:uppercase;color:var(--b-muted)}#brigade-v2 .b2-pagehead{margin-bottom:25px}#brigade-v2 h1{font-size:43px;line-height:1.05;letter-spacing:-1.8px;font-weight:500;margin:12px 0!important}#brigade-v2 h2{font-size:19px;letter-spacing:-.45px;font-weight:500}#brigade-v2 h3{font-size:16px;font-weight:500}#brigade-v2 .b2-sub{font-size:14px;color:var(--b-muted);line-height:1.6;margin-top:10px!important}#brigade-v2 .b2-muted{color:var(--b-muted);font-size:13px}#brigade-v2 .b2-overline{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}#brigade-v2 .b2-overline .b2-link{font-size:13px}#brigade-v2 .b2-link{border:0;background:none;color:var(--b-accent);display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:44px;padding:5px 0;font-size:14px;text-decoration:none}#brigade-v2 .b2-link svg{width:16px;height:16px}#brigade-v2 .b2-row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}#brigade-v2 .b2-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:22px}
+#brigade-v2 .b2-button{min-height:52px;display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:13px 19px;color:var(--b-accent);background:linear-gradient(180deg,#243020,#182016);border:1px solid #779459;border-radius:12px;box-shadow:inset 0 1px 8px #cbe4a214,0 0 14px var(--b-glow);font-size:15px;font-weight:500;line-height:1.3;animation:none!important;transition:none!important;text-align:center}#brigade-v2 .b2-button.full{width:100%}#brigade-v2 .b2-button.quiet{background:#1b2119;border-color:#46573b;box-shadow:0 0 8px #cbe4a20b}#brigade-v2 .b2-button:hover:not(:disabled){border-color:var(--b-accent)}#brigade-v2 .b2-square{width:48px;min-height:48px;border-radius:12px;padding:10px;background:var(--b-surface);color:var(--b-accent);border:1px solid #536447;display:grid;place-items:center;flex-shrink:0}#brigade-v2 .b2-back{margin:-5px 0 12px}#brigade-v2 .b2-tag{font-size:11px;letter-spacing:.2px;display:inline-flex;align-items:center;gap:6px;color:var(--b-accent);font-weight:500}#brigade-v2 .b2-tag svg{width:13px;height:13px}#brigade-v2 .b2-tag.warn{color:var(--b-warn)}#brigade-v2 .b2-tag.neutral{color:var(--b-muted)}#brigade-v2 .b2-dot{width:5px;height:5px;display:inline-block;border-radius:50%;background:currentColor;box-shadow:0 0 9px currentColor}
+#brigade-v2 .b2-service{display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--b-line);border-bottom:1px solid var(--b-line);padding:17px 0;margin:24px 0 28px}#brigade-v2 .b2-time{font-size:29px;letter-spacing:-1px;font-weight:500;font-variant-numeric:tabular-nums;line-height:1.2}#brigade-v2 .b2-focus{position:relative;padding:23px;background:radial-gradient(ellipse at 100% 0,#71895e1c,transparent 70%),var(--b-surface);border:1px solid #4b5d3f;border-radius:19px}#brigade-v2 .b2-dish{font:italic 500 43px/1.04 &#x27;Cormorant Garamond&#x27;,Georgia,serif;letter-spacing:-.5px;margin:17px 0!important}#brigade-v2 .b2-focus .b2-dish{max-width:250px}#brigade-v2 .b2-numbers{display:flex;align-items:flex-end;justify-content:space-between;margin-top:24px;gap:12px}#brigade-v2 .b2-big{font-size:38px;line-height:1;letter-spacing:-1px;font-variant-numeric:tabular-nums}#brigade-v2 .b2-big span{font-size:19px;color:var(--b-muted);margin-left:6px}#brigade-v2 .b2-track{height:4px;background:#35412f;border-radius:5px;margin:15px 0 23px;overflow:hidden}#brigade-v2 .b2-track&gt;span{display:block;height:100%;background:var(--b-accent)}#brigade-v2 .b2-attention{display:flex;align-items:center;gap:13px;width:100%;padding:20px 0;margin:9px 0;border:0;border-bottom:1px solid var(--b-line);background:transparent;color:var(--b-text);text-align:left;font-size:14px;min-height:72px}#brigade-v2 .b2-attention&gt;.b2-attention-icon{width:37px;height:37px;background:#312c21;border-radius:11px;display:grid;place-items:center;color:var(--b-warn);flex-shrink:0}#brigade-v2 .b2-attention&gt;span:nth-child(2){flex:1}#brigade-v2 .b2-attention small{display:block;color:var(--b-muted);font-size:12px;margin-top:4px}#brigade-v2 .b2-next{margin-top:26px}#brigade-v2 .b2-next .b2-dish{font-size:31px;margin:9px 0!important}#brigade-v2 .b2-nextrow{display:flex;justify-content:space-between;align-items:center;gap:18px;padding:14px 0;border-bottom:1px solid var(--b-line)}#brigade-v2 .b2-nextrow .b2-square{width:44px;min-height:44px}#brigade-v2 .b2-footnote{margin-top:30px!important;color:var(--b-muted);font-size:11px;letter-spacing:.3px}
+#brigade-v2 .b2-dock-area{position:absolute;z-index:20;bottom:max(17px,env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);width:calc(100% - 24px);max-width:382px;padding-top:8px}#brigade-v2 .b2-dock-area:before{content:&#x27;&#x27;;position:absolute;left:-12px;right:-12px;top:-20px;bottom:-18px;background:linear-gradient(transparent,#101310 70%);pointer-events:none;z-index:-1}#brigade-v2 .b2-dock{display:flex;align-items:stretch;justify-content:center;padding:6px;border:1px solid #5b6552;border-radius:25px;background:#1a2019;box-shadow:inset 0 1px 0 #edf7d510,0 12px 35px #000a,0 0 25px #cceba009;position:relative;overflow:hidden}#brigade-v2 .b2-dock button{min-width:0;flex:1;min-height:58px;border:0;background:transparent;color:#adb6a7;border-radius:18px;padding:7px 2px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;font-size:11px;font-weight:500;position:relative;isolation:isolate}#brigade-v2 .b2-dock button&gt;svg{width:21px;height:21px}#brigade-v2 .b2-dock button[aria-current=page]{color:#e5f9c8;background:radial-gradient(ellipse at 50% 100%,#c7f19625,transparent 78%)}#brigade-v2 .b2-dock button[aria-current=page]:after{content:&#x27;&#x27;;position:absolute;bottom:0;left:25%;right:25%;height:2px;background:#def3be;box-shadow:0 0 9px 2px #cfeba37a;border-radius:50%}#brigade-v2 .b2-dock button:hover{color:var(--b-text);background:radial-gradient(ellipse at 50% 100%,#d8edb815,transparent 80%)}#brigade-v2 .b2-dock .b2-wideitem{display:none}#brigade-v2 .b2-dock .b2-moreitem{display:flex}
+#brigade-v2 .b2-panel{padding:22px;background:var(--b-surface);border:1px solid var(--b-line);border-radius:18px;margin:18px 0}#brigade-v2 .b2-field{display:grid;gap:8px;margin:19px 0;font-size:13px;color:var(--b-muted)}#brigade-v2 .b2-field input,#brigade-v2 .b2-field select,#brigade-v2 .b2-field textarea,#brigade-v2 .b2-search{width:100%;padding:13px 14px;min-height:52px;border:1px solid #53614c;border-radius:11px;background:#141914;color:var(--b-text);font-size:16px}#brigade-v2 .b2-field textarea{min-height:140px;resize:vertical}#brigade-v2 .b2-tabs{display:flex;border-bottom:1px solid var(--b-line);gap:24px;margin:0 0 24px}#brigade-v2 .b2-tabs button{display:inline-flex;align-items:center;gap:6px;min-height:47px;padding:10px 0;background:none;border:0;border-bottom:2px solid transparent;color:var(--b-muted);font-size:14px;white-space:nowrap}#brigade-v2 .b2-tabs button[aria-pressed=true]{color:var(--b-accent);border-bottom-color:var(--b-accent)}#brigade-v2 .b2-searchbox{position:relative;margin:23px 0 10px}#brigade-v2 .b2-searchbox&gt;svg{position:absolute;left:14px;top:16px;color:var(--b-muted);width:18px}#brigade-v2 .b2-search{padding-left:43px;background:transparent}
+#brigade-v2 .b2-recipe-grid{display:grid;grid-template-columns:1fr;border:1px solid #3f4a39;border-radius:17px;overflow:hidden;background:var(--b-surface)}#brigade-v2 .b2-recipe-cell{position:relative;isolation:isolate;width:100%;padding:25px;text-align:left;background:transparent;border:0;border-bottom:1px solid #3f4a39;color:var(--b-text);min-height:206px;display:flex;flex-direction:column;justify-content:space-between;gap:17px}#brigade-v2 .b2-recipe-cell:last-child{border-bottom:0}#brigade-v2 .b2-recipe-cell:before{content:&#x27;&#x27;;position:absolute;inset:0;z-index:-1;background:radial-gradient(100% 140% at 70% 0,#d6f3a421,transparent 75%),linear-gradient(155deg,#384a2b,#1b2318);opacity:0}#brigade-v2 .b2-recipe-cell:first-child:before,#brigade-v2 .b2-recipe-cell:hover:before,#brigade-v2 .b2-recipe-cell:focus-visible:before{opacity:1}#brigade-v2 .b2-recipe-grid:has(.b2-recipe-cell:hover) .b2-recipe-cell:not(:hover):before,#brigade-v2 .b2-recipe-grid:has(.b2-recipe-cell:focus-visible) .b2-recipe-cell:not(:focus-visible):before{opacity:0}#brigade-v2 .b2-recipe-cell .b2-dish{font-size:37px;margin:0!important;max-width:250px}#brigade-v2 .b2-cellfoot{display:flex;align-items:center;justify-content:space-between;color:var(--b-muted);font-size:12px}#brigade-v2 .b2-cellfoot svg{color:var(--b-accent);width:18px}#brigade-v2 .b2-recipe-index{font-size:10px;letter-spacing:1.5px;color:var(--b-muted)}#brigade-v2 .b2-facts{display:flex;gap:25px;padding:21px 0;border-top:1px solid var(--b-line);border-bottom:1px solid var(--b-line);margin:22px 0;flex-wrap:wrap}#brigade-v2 .b2-facts b{display:block;font-size:25px;font-weight:500;font-variant-numeric:tabular-nums}#brigade-v2 .b2-facts span{font-size:12px;color:var(--b-muted)}#brigade-v2 .b2-ingredient{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:17px 0;border-bottom:1px solid var(--b-line);font-size:15px}#brigade-v2 .b2-ingredient b{font-weight:500;white-space:nowrap;font-variant-numeric:tabular-nums}#brigade-v2 .b2-step{display:flex;gap:18px;padding:21px 0;border-bottom:1px solid var(--b-line)}#brigade-v2 .b2-step&gt;span{color:var(--b-accent);font-size:12px;padding-top:4px}#brigade-v2 .b2-step p{font-size:15px;color:var(--b-muted);margin-top:6px}#brigade-v2 .b2-step strong{font-size:17px;font-weight:500}
+#brigade-v2 .b2-callout{padding:16px 18px;border-left:2px solid var(--b-warn);background:#27261d;font-size:14px;line-height:1.6;color:var(--b-muted);margin:22px 0;border-radius:0 9px 9px 0}#brigade-v2 .b2-callout strong{color:var(--b-text);font-weight:500}#brigade-v2 .b2-question{font-size:26px!important;line-height:1.23;letter-spacing:-.7px!important;margin:24px 0!important}#brigade-v2 .b2-choice{display:flex;align-items:center;gap:13px;border:1px solid #48533f;border-radius:12px;padding:17px 15px;margin:12px 0;min-height:64px;background:var(--b-surface);font-size:15px}#brigade-v2 .b2-choice:has(input:checked){background:#273220;border-color:var(--b-accent)}#brigade-v2 .b2-choice input{accent-color:var(--b-accent);width:19px;height:19px;margin:0;flex-shrink:0}#brigade-v2 .b2-check{display:flex;gap:12px;align-items:flex-start;min-height:48px;font-size:14px;margin:21px 0}#brigade-v2 .b2-check input{width:22px;height:22px;accent-color:var(--b-accent);flex-shrink:0;margin:0}#brigade-v2 .b2-source{padding:23px;border:1px solid #43533c;border-radius:17px;background:#1b291d;font-size:17px;line-height:1.8;margin:20px 0}#brigade-v2 .b2-source p{margin-top:18px}#brigade-v2 .b2-hand{font:italic 500 29px/1.8 &#x27;Cormorant Garamond&#x27;,serif;background:#e2d8bf;color:#34382d}#brigade-v2 .b2-hand .b2-muted{color:#515944}#brigade-v2 .b2-counter{display:grid;grid-template-columns:52px 1fr 52px;gap:16px;align-items:center;margin:20px 0}#brigade-v2 .b2-counter input{min-width:0;text-align:center;border:0;background:transparent;color:var(--b-text);font-size:53px;letter-spacing:-2px;font-weight:500;width:100%;appearance:textfield;font-variant-numeric:tabular-nums}#brigade-v2 .b2-counter input::-webkit-inner-spin-button{appearance:none}#brigade-v2 .b2-productline{border-bottom:1px solid var(--b-line);padding:20px 0}#brigade-v2 .b2-productline h3{font-size:18px}#brigade-v2 .b2-productline .b2-row{margin-bottom:13px}#brigade-v2 .b2-qtygrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}#brigade-v2 .b2-qtygrid span{display:block;font-size:11px;color:var(--b-muted);margin-bottom:5px}#brigade-v2 .b2-qtygrid b{font-size:18px;font-weight:500;white-space:nowrap;font-variant-numeric:tabular-nums}#brigade-v2 .b2-fold{background:none;border:0;color:var(--b-accent);padding:10px 0;min-height:44px;display:flex;align-items:center;gap:6px;font-size:13px}
+#brigade-v2 .b2-task{padding:20px 0;border-bottom:1px solid var(--b-line);display:flex;gap:13px;align-items:flex-start}#brigade-v2 .b2-task input{accent-color:var(--b-accent);width:23px;height:23px;margin:1px 0;flex-shrink:0}#brigade-v2 .b2-task label{min-height:44px;font-size:15px;flex:1}#brigade-v2 .b2-task label small{display:block;color:var(--b-muted);font-size:12px;margin-top:6px}#brigade-v2 .b2-task:has(input:checked) label&gt;span{text-decoration:line-through;color:var(--b-muted)}#brigade-v2 .b2-menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}#brigade-v2 .b2-menu-grid button{padding:20px 15px;min-height:120px;border:1px solid #3e4c36;border-radius:15px;background:var(--b-surface);text-align:left;color:var(--b-text);display:flex;flex-direction:column;align-items:flex-start;gap:17px;font-size:16px}#brigade-v2 .b2-menu-grid svg{color:var(--b-accent);width:23px;height:23px}#brigade-v2 .b2-order{border:1px solid var(--b-line);border-radius:16px;padding:22px;margin:16px 0;background:var(--b-surface)}#brigade-v2 .b2-order h2{font-size:23px;margin:9px 0 16px!important}#brigade-v2 .b2-toast{background:#26391f;color:#dfefcc;padding:14px 16px;border:1px solid #546e40;border-radius:12px;font-size:14px;margin-bottom:20px}#brigade-v2 .b2-offline{padding:12px 16px;margin-bottom:20px;background:#322b1e;color:var(--b-warn);font-size:13px;border-radius:10px}#brigade-v2 .b2-empty{padding:30px 0;text-align:center}#brigade-v2 .b2-empty svg{margin:auto;color:var(--b-accent);width:34px;height:34px}#brigade-v2 .b2-empty h2{margin:20px 0 10px!important;font-size:25px}
+@container(min-width:650px){#brigade-v2 h1 br{display:none}#brigade-v2 .b2-header{padding:24px 42px 18px}#brigade-v2 .b2-content{padding:25px 42px 140px}#brigade-v2 h1{font-size:54px}#brigade-v2 .b2-homegrid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:38px;align-items:start}#brigade-v2 .b2-homegrid .b2-service{margin-top:0}#brigade-v2 .b2-focus{padding:30px}#brigade-v2 .b2-focus .b2-dish{font-size:54px;max-width:340px}#brigade-v2 .b2-pagehead{margin-bottom:32px}#brigade-v2 .b2-recipe-grid{grid-template-columns:1fr 1fr}#brigade-v2 .b2-recipe-cell{border-right:1px solid var(--b-line);min-height:235px;padding:29px}#brigade-v2 .b2-recipe-cell:nth-child(even){border-right:0}#brigade-v2 .b2-recipe-cell:nth-last-child(-n+2){border-bottom:0}#brigade-v2 .b2-recipe-cell .b2-dish{font-size:43px}#brigade-v2 .b2-two{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start}#brigade-v2 .b2-wide-limit{max-width:600px;margin-left:auto;margin-right:auto}#brigade-v2 .b2-dock-area{max-width:730px;width:calc(100% - 70px)}#brigade-v2 .b2-dock{padding:7px 13px;border-radius:24px}#brigade-v2 .b2-dock button{min-height:59px;font-size:11px;gap:7px}#brigade-v2 .b2-dock .b2-wideitem{display:flex}#brigade-v2 .b2-dock .b2-moreitem{display:none}#brigade-v2 .b2-menu-grid{grid-template-columns:repeat(3,1fr)}#brigade-v2 .b2-inline-head{display:flex;justify-content:space-between;align-items:center;gap:25px}#brigade-v2 .b2-inline-head&gt;.b2-button{flex-shrink:0}#brigade-v2 .b2-inline-head&gt;.b2-pagehead{margin-bottom:0}}
+@container(max-width:340px){#brigade-v2 .b2-header{padding:19px 18px 15px}#brigade-v2 .b2-content{padding:10px 18px 135px}#brigade-v2 h1{font-size:38px}#brigade-v2 .b2-dish{font-size:39px}#brigade-v2 .b2-focus{padding:19px}#brigade-v2 .b2-qtygrid b{font-size:16px}#brigade-v2 .b2-dock-area{width:calc(100% - 18px);bottom:max(14px,env(safe-area-inset-bottom,0px))}#brigade-v2 .b2-dock{padding:5px 3px}#brigade-v2 .b2-dock button{font-size:11px}#brigade-v2 .b2-tabs{gap:18px}}
+@media(prefers-reduced-motion:no-preference){#brigade-v2 .b2-recipe-cell:before{transition:opacity 160ms ease}}
+#brigade-v2 .b2-capture .b2-pagehead{margin-bottom:15px}#brigade-v2 .b2-capture .b2-pagehead .b2-dish{font-size:39px;margin:9px 0!important}#brigade-v2 .b2-capture .b2-tabs{margin-bottom:18px}#brigade-v2 .b2-capture .b2-track{display:none}#brigade-v2 .b2-capture .b2-callout{margin:15px 0;padding:12px 15px}#brigade-v2 .b2-capture .b2-question{margin:17px 0!important}#brigade-v2 .b2-capture .b2-choice{min-height:54px;padding:13px;margin:8px 0}#brigade-v2 .b2-capture .b2-actions{margin-top:17px}#brigade-v2 .b2-capture .b2-sub{font-size:13px;line-height:1.45}#brigade-v2 .b2-frame input,#brigade-v2 .b2-frame textarea{scroll-margin-block:90px 140px}
+&lt;/style&gt;
+&lt;div id=&quot;brigade-v2&quot; lang=&quot;es&quot;&gt;
+ &lt;div class=&quot;viz-carousel&quot; aria-label=&quot;Brigade, diseño móvil y escritorio&quot; data-previous-label=&quot;Anterior&quot; data-next-label=&quot;Siguiente&quot;&gt;
+  &lt;section data-variant=&quot;Celular · primero&quot; aria-label=&quot;Brigade en celular&quot;&gt;&lt;div class=&quot;b2-stage viz-dotted-background&quot;&gt;&lt;div class=&quot;b2-frame b2-phone&quot; id=&quot;brigade-v2-phone&quot; aria-label=&quot;Brigade móvil&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;/section&gt;
+  &lt;section data-variant=&quot;Escritorio&quot; aria-label=&quot;Brigade en escritorio&quot; hidden&gt;&lt;div class=&quot;b2-stage&quot;&gt;&lt;div class=&quot;b2-frame&quot; id=&quot;brigade-v2-desktop&quot; aria-label=&quot;Brigade escritorio&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;/section&gt;
+ &lt;/div&gt;
+&lt;/div&gt;
+&lt;script&gt;
+(()=&gt;{
+const root=document.getElementById(&#x27;brigade-v2&#x27;);
+const I=name=&gt;`&lt;i data-lucide=&quot;${name}&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;`;
+const E=v=&gt;String(v).replace(/[&amp;&lt;&gt;&quot;&#x27;]/g,c=&gt;({&#x27;&amp;&#x27;:&#x27;&amp;amp;&#x27;,&#x27;&lt;&#x27;:&#x27;&amp;lt;&#x27;,&#x27;&gt;&#x27;:&#x27;&amp;gt;&#x27;,&#x27;&quot;&#x27;:&#x27;&amp;quot;&#x27;,&quot;&#x27;&quot;:&#x27;&amp;#39;&#x27;}[c]));
+const F=v=&gt;new Intl.NumberFormat(&#x27;es-UY&#x27;,{maximumFractionDigits:2}).format(v);
+const initial={screen:&#x27;home&#x27;,offline:false,role:&#x27;Chef&#x27;,portions:40,produced:20,pending:0,recipe:&#x27;Crema de calabaza&#x27;,recipeTab:&#x27;Ingredientes&#x27;,productionTab:&#x27;Cantidades&#x27;,captureTab:&#x27;Revisión&#x27;,source:&#x27;WhatsApp&#x27;,question:0,salt:&#x27;&#x27;,weight:&#x27;&#x27;,reviewed:false,recipeSaved:false,search:&#x27;&#x27;,filter:&#x27;Todas&#x27;,done:[true,false,false],orderStatus:&#x27;Borrador&#x27;,stock:5,toast:&#x27;&#x27;,confirm:false,sourceNote:&#x27;&#x27;,eventName:&#x27;Almuerzo de bienvenida&#x27;};
+const apps={};
+function mount(id,key){
+const app=document.getElementById(id);const previous=window.openai?.widgetState?.privateContent?.v2?.[key];const s={...initial,...(previous||{}),done:[...(previous?.done||initial.done)]};apps[key]=s;
+const options={glow:.19};
+const B=(text,action,quiet=false,disabled=false)=&gt;`&lt;button type=&quot;button&quot; class=&quot;b2-button ${quiet?&#x27;quiet&#x27;:&#x27;&#x27;}&quot; data-go=&quot;${action}&quot; ${disabled?&#x27;disabled&#x27;:&#x27;&#x27;}&gt;${text}&lt;/button&gt;`;
+const full=(text,action,disabled=false)=&gt;`&lt;button type=&quot;button&quot; class=&quot;b2-button full&quot; data-go=&quot;${action}&quot; ${disabled?&#x27;disabled&#x27;:&#x27;&#x27;}&gt;${text}&lt;/button&gt;`;
+const tag=(text,kind=&#x27;&#x27;)=&gt;`&lt;span class=&quot;b2-tag ${kind}&quot;&gt;&lt;span class=&quot;b2-dot&quot;&gt;&lt;/span&gt;${text}&lt;/span&gt;`;
+const H=(eyebrow,title,sub=&#x27;&#x27;)=&gt;`&lt;div class=&quot;b2-pagehead&quot;&gt;&lt;div class=&quot;b2-eyebrow&quot;&gt;${eyebrow}&lt;/div&gt;&lt;h1&gt;${title}&lt;/h1&gt;${sub?`&lt;p class=&quot;b2-sub&quot;&gt;${sub}&lt;/p&gt;`:&#x27;&#x27;}&lt;/div&gt;`;
+const back=(text,action)=&gt;`&lt;button class=&quot;b2-link b2-back&quot; data-go=&quot;${action}&quot;&gt;${I(&#x27;arrow-left&#x27;)}${text}&lt;/button&gt;`;
+const allNav=[[&#x27;home&#x27;,&#x27;Hoy&#x27;,&#x27;sun&#x27;],[&#x27;recipes&#x27;,&#x27;Recetas&#x27;,&#x27;book-open&#x27;],[&#x27;production&#x27;,&#x27;Cocina&#x27;,&#x27;cooking-pot&#x27;],[&#x27;orders&#x27;,&#x27;Pedidos&#x27;,&#x27;shopping-basket&#x27;],[&#x27;stock&#x27;,&#x27;Stock&#x27;,&#x27;boxes&#x27;],[&#x27;tasks&#x27;,&#x27;Equipo&#x27;,&#x27;users&#x27;],[&#x27;events&#x27;,&#x27;Eventos&#x27;,&#x27;calendar-days&#x27;]];
+function persist(){window.openai?.setWidgetState?.({modelContent:{revision:2,view:key,page:s.screen,role:s.role,offline:s.offline},privateContent:{v2:Object.fromEntries(Object.entries(apps).map(([k,v])=&gt;[k,{...v,toast:&#x27;&#x27;}]))}}).catch(()=&gt;{});}
+function stockRows(){const f=s.portions/20;return [[&#x27;Calabaza&#x27;,3,.8,s.stock,&#x27;kg&#x27;],[&#x27;Cebolla&#x27;,.6,.9,2,&#x27;kg&#x27;],[&#x27;Crema de leche&#x27;,.4,1,.3,&#x27;L&#x27;],[&#x27;Caldo&#x27;,2,1,5,&#x27;L&#x27;]].map(([name,net,yieldRatio,available,unit])=&gt;{const gross=net*f/yieldRatio;const missing=Math.max(0,gross-available);return `&lt;article class=&quot;b2-productline&quot;&gt;&lt;div class=&quot;b2-row&quot;&gt;&lt;h3&gt;${name}&lt;/h3&gt;${missing?tag(`Faltan ${F(missing)} ${unit}`,&#x27;warn&#x27;):tag(&#x27;Disponible&#x27;)}&lt;/div&gt;&lt;div class=&quot;b2-qtygrid&quot;&gt;&lt;div&gt;&lt;span&gt;Neto&lt;/span&gt;&lt;b&gt;${F(net*f)} ${unit}&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;Bruto&lt;/span&gt;&lt;b&gt;${F(gross)} ${unit}&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;Disponible&lt;/span&gt;&lt;b&gt;${F(available)} ${unit}&lt;/b&gt;&lt;/div&gt;&lt;/div&gt;${yieldRatio&lt;1?`&lt;p class=&quot;b2-muted&quot; style=&quot;margin-top:11px&quot;&gt;Limpieza: ${yieldRatio*100}% de rendimiento&lt;/p&gt;`:&#x27;&#x27;}&lt;/article&gt;`;}).join(&#x27;&#x27;);}
+function tasks(){return [&#x27;Pesar la mise en place&#x27;,&#x27;Cocinar y triturar la crema&#x27;,&#x27;Comprobar rendimiento final&#x27;].map((t,i)=&gt;`&lt;div class=&quot;b2-task&quot;&gt;&lt;input type=&quot;checkbox&quot; id=&quot;${id}-task-${i}&quot; data-task=&quot;${i}&quot; ${s.done[i]?&#x27;checked&#x27;:&#x27;&#x27;}&gt;&lt;label for=&quot;${id}-task-${i}&quot;&gt;&lt;span&gt;${t}&lt;/span&gt;&lt;small&gt;${i===0?&#x27;10:00 · Lucía&#x27;:i===1?&#x27;11:00 · Lucía&#x27;:&#x27;12:00 · Chef&#x27;}&lt;/small&gt;&lt;/label&gt;&lt;/div&gt;`).join(&#x27;&#x27;);}
+function home(){if(s.role===&#x27;Commis&#x27;)return H(&#x27;EL MIRADOR · TU JORNADA&#x27;,&#x27;Buen día, &lt;br&gt;Lucía.&#x27;,&#x27;La crema de calabaza necesita tu atención.&#x27;)+`&lt;div class=&quot;b2-service&quot;&gt;&lt;span class=&quot;b2-muted&quot;&gt;Tu próximo pase&lt;/span&gt;&lt;span class=&quot;b2-time&quot;&gt;12:30&lt;/span&gt;&lt;/div&gt;${tasks()}&lt;div class=&quot;b2-actions&quot;&gt;${full(&#x27;Abrir producción &#x27;+I(&#x27;arrow-up-right&#x27;),&#x27;production&#x27;)}&lt;/div&gt;`;
+const missing=Math.max(0,3*(s.portions/20)/.8-s.stock)&gt;0?2:1;
+return H(&#x27;EL MIRADOR · MIÉRCOLES 30&#x27;,&#x27;Buen día, &lt;br&gt;Joab.&#x27;)+`&lt;div class=&quot;b2-homegrid&quot;&gt;&lt;div&gt;&lt;div class=&quot;b2-service&quot;&gt;&lt;div&gt;&lt;div class=&quot;b2-muted&quot;&gt;Servicio de mediodía&lt;/div&gt;&lt;div style=&quot;font-size:14px;margin-top:3px&quot;&gt;2 preparaciones en cocina&lt;/div&gt;&lt;/div&gt;&lt;div style=&quot;text-align:right&quot;&gt;&lt;div class=&quot;b2-eyebrow&quot; style=&quot;font-size:9px;margin-bottom:4px&quot;&gt;PRÓXIMO PASE&lt;/div&gt;&lt;div class=&quot;b2-time&quot;&gt;12:30&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;b2-overline&quot;&gt;&lt;h2&gt;Continuar donde estabas&lt;/h2&gt;&lt;/div&gt;&lt;article class=&quot;b2-focus&quot;&gt;&lt;div class=&quot;b2-row&quot;&gt;${tag(&#x27;En marcha&#x27;)}&lt;span class=&quot;b2-muted&quot;&gt;Lucía · 12:00&lt;/span&gt;&lt;/div&gt;&lt;h2 class=&quot;b2-dish&quot;&gt;Crema de&lt;br&gt;calabaza&lt;/h2&gt;&lt;div class=&quot;b2-numbers&quot;&gt;&lt;div class=&quot;b2-big&quot;&gt;${s.produced}&lt;span&gt;/ ${s.portions}&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;b2-muted&quot;&gt;porciones listas&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;b2-track&quot;&gt;&lt;span style=&quot;width:${Math.min(s.produced/s.portions*100,100)}%&quot;&gt;&lt;/span&gt;&lt;/div&gt;${full(&#x27;Continuar producción &#x27;+I(&#x27;arrow-up-right&#x27;),&#x27;production&#x27;)}&lt;/article&gt;&lt;/div&gt;&lt;div&gt;&lt;button class=&quot;b2-attention&quot; data-go=&quot;orders&quot;&gt;&lt;span class=&quot;b2-attention-icon&quot;&gt;${I(&#x27;package-search&#x27;)}&lt;/span&gt;&lt;span&gt;${missing} faltantes para resolver&lt;small&gt;Revisar cantidades y proveedores&lt;/small&gt;&lt;/span&gt;${I(&#x27;arrow-up-right&#x27;)}&lt;/button&gt;&lt;div class=&quot;b2-next&quot;&gt;&lt;div class=&quot;b2-eyebrow&quot;&gt;DESPUÉS, EN EL PASE&lt;/div&gt;&lt;div class=&quot;b2-nextrow&quot;&gt;&lt;div&gt;&lt;h3 class=&quot;b2-dish&quot;&gt;Merluza al horno&lt;/h3&gt;&lt;span class=&quot;b2-muted&quot;&gt;Mateo · 40 porciones · 12:20&lt;/span&gt;&lt;/div&gt;&lt;button class=&quot;b2-square&quot; data-go=&quot;fish&quot; aria-label=&quot;Abrir merluza al horno&quot;&gt;${I(&#x27;arrow-up-right&#x27;)}&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;&lt;button class=&quot;b2-attention&quot; data-go=&quot;capture&quot;&gt;&lt;span class=&quot;b2-attention-icon&quot; style=&quot;background:#273120;color:var(--b-accent)&quot;&gt;${I(&#x27;scan-line&#x27;)}&lt;/span&gt;&lt;span&gt;Tu receta, desde una foto&lt;small&gt;Capturas, mensajes o cuadernos&lt;/small&gt;&lt;/span&gt;${I(&#x27;plus&#x27;)}&lt;/button&gt;&lt;p class=&quot;b2-footnote&quot;&gt;Última sincronización · 09:42&lt;/p&gt;&lt;/div&gt;&lt;/div&gt;`;}
+function recipes(){const list=[[&#x27;Crema de calabaza&#x27;,&#x27;Compartidas&#x27;,&#x27;20 porciones · 5 L&#x27;,&#x27;recipe&#x27;],[&#x27;Merluza al horno&#x27;,&#x27;Compartidas&#x27;,&#x27;40 porciones · Pescados&#x27;,&#x27;fish&#x27;],[&#x27;Cebolla confitada&#x27;,&#x27;Privadas&#x27;,s.recipeSaved?&#x27;Revisada por el chef&#x27;:&#x27;Captura por revisar&#x27;,&#x27;capture&#x27;],[&#x27;Masa de focaccia&#x27;,&#x27;Privadas&#x27;,&#x27;2 bandejas · Panadería&#x27;,&#x27;focaccia&#x27;]].filter(([name,type])=&gt;name.toLowerCase().includes(s.search.toLowerCase())&amp;&amp;(s.filter===&#x27;Todas&#x27;||type===s.filter));return `&lt;div class=&quot;b2-inline-head&quot;&gt;${H(&#x27;RECETARIO&#x27;,&#x27;Tu recetario.&#x27;)}${B(I(&#x27;scan-line&#x27;)+&#x27; Capturar receta&#x27;,&#x27;capture&#x27;)}&lt;/div&gt;&lt;div class=&quot;b2-searchbox&quot;&gt;${I(&#x27;search&#x27;)}&lt;input class=&quot;b2-search&quot; data-search placeholder=&quot;Buscar una preparación&quot; aria-label=&quot;Buscar una preparación&quot; value=&quot;${E(s.search)}&quot;&gt;&lt;/div&gt;&lt;div class=&quot;b2-tabs&quot;&gt;${[&#x27;Todas&#x27;,&#x27;Compartidas&#x27;,&#x27;Privadas&#x27;].map(x=&gt;`&lt;button data-filter=&quot;${x}&quot; aria-pressed=&quot;${s.filter===x}&quot;&gt;${x}&lt;/button&gt;`).join(&#x27;&#x27;)}&lt;/div&gt;&lt;div class=&quot;b2-recipe-grid&quot;&gt;${list.map(([name,type,meta,action],i)=&gt;`&lt;button class=&quot;b2-recipe-cell&quot; data-go=&quot;${action}&quot;&gt;&lt;div class=&quot;b2-row&quot;&gt;&lt;span class=&quot;b2-recipe-index&quot;&gt;RECETA / 0${i+1}&lt;/span&gt;&lt;span class=&quot;b2-tag neutral&quot;&gt;${I(type===&#x27;Privadas&#x27;?&#x27;lock-keyhole&#x27;:&#x27;users&#x27;)}${type===&#x27;Privadas&#x27;?&#x27;Tuya · privada&#x27;:&#x27;Equipo&#x27;}&lt;/span&gt;&lt;/div&gt;&lt;h2 class=&quot;b2-dish&quot;&gt;${name}&lt;/h2&gt;&lt;div class=&quot;b2-cellfoot&quot;&gt;&lt;span&gt;${meta}&lt;/span&gt;${I(&#x27;arrow-up-right&#x27;)}&lt;/div&gt;&lt;/button&gt;`).join(&#x27;&#x27;)||&#x27;&lt;div class=&quot;b2-empty&quot;&gt;&lt;h2&gt;No encontramos esa receta&lt;/h2&gt;&lt;p class=&quot;b2-sub&quot;&gt;Probá otro nombre.&lt;/p&gt;&lt;/div&gt;&#x27;}&lt;/div&gt;&lt;div class=&quot;b2-actions&quot;&gt;${full(I(&#x27;plus&#x27;)+&#x27; Escribir una receta&#x27;,&#x27;manual&#x27;)}&lt;/div&gt;`;}
+function recipe(){const fish=s.screen===&#x27;fish&#x27;;const bread=s.screen===&#x27;focaccia&#x27;;const name=fish?&#x27;Merluza al horno&#x27;:bread?&#x27;Masa de focaccia&#x27;:&#x27;Crema de calabaza&#x27;;return back(&#x27;Recetario&#x27;,&#x27;recipes&#x27;)+`&lt;div class=&quot;b2-row&quot;&gt;${tag(bread?&#x27;Tuya · privada&#x27;:&#x27;Compartida con cocina&#x27;)}&lt;span class=&quot;b2-muted&quot;&gt;Versión ${bread?&#x27;1&#x27;:&#x27;3&#x27;}&lt;/span&gt;&lt;/div&gt;&lt;h1 class=&quot;b2-dish&quot; style=&quot;font-size:49px;margin:22px 0!important&quot;&gt;${name}&lt;/h1&gt;&lt;div class=&quot;b2-facts&quot;&gt;&lt;div&gt;&lt;b&gt;${fish?&#x27;40&#x27;:bread?&#x27;2&#x27;:&#x27;20&#x27;}&lt;/b&gt;&lt;span&gt;${bread?&#x27;Bandejas&#x27;:&#x27;Porciones&#x27;}&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;b&gt;${fish?&#x27;8 kg&#x27;:bread?&#x27;3,2 kg&#x27;:&#x27;5 L&#x27;}&lt;/b&gt;&lt;span&gt;Rendimiento&lt;/span&gt;&lt;/div&gt;${!bread?`&lt;div&gt;&lt;b&gt;${fish?&#x27;200 g&#x27;:&#x27;250 mL&#x27;}&lt;/b&gt;&lt;span&gt;Por porción&lt;/span&gt;&lt;/div&gt;`:&#x27;&#x27;}&lt;/div&gt;${fish||bread?`&lt;div class=&quot;b2-panel&quot;&gt;&lt;h2&gt;${fish?&#x27;Mise en place lista&#x27;:&#x27;Receta personal&#x27;}&lt;/h2&gt;&lt;p class=&quot;b2-sub&quot;&gt;${fish?&#x27;Mateo prepara el servicio de las 12:20. 40 porciones de pescado neto de 200 g.&#x27;:&#x27;Borrador del recetario personal. Ingredientes y procedimiento por completar en esta muestra.&#x27;}&lt;/p&gt;&lt;/div&gt;`:`&lt;div class=&quot;b2-tabs&quot;&gt;${[&#x27;Ingredientes&#x27;,&#x27;Pasos&#x27;].map(t=&gt;`&lt;button data-recipetab=&quot;${t}&quot; aria-pressed=&quot;${s.recipeTab===t}&quot;&gt;${t}&lt;/button&gt;`).join(&#x27;&#x27;)}&lt;button data-go=&quot;share&quot;&gt;Compartir&lt;/button&gt;&lt;/div&gt;${s.share?`&lt;div class=&quot;b2-panel&quot;&gt;&lt;h2&gt;Acceso de lectura&lt;/h2&gt;&lt;p class=&quot;b2-sub&quot;&gt;El autor conserva la propiedad de la receta.&lt;/p&gt;&lt;label class=&quot;b2-check&quot;&gt;&lt;input type=&quot;checkbox&quot; checked data-share&gt;Compartir con el equipo de El Mirador&lt;/label&gt;${full(&#x27;Guardar acceso&#x27;,&#x27;save-share&#x27;)}&lt;/div&gt;`:&#x27;&#x27;}${s.recipeTab===&#x27;Ingredientes&#x27;?`${[[&#x27;Calabaza limpia&#x27;,&#x27;3 kg&#x27;],[&#x27;Cebolla limpia&#x27;,&#x27;600 g&#x27;],[&#x27;Caldo de verduras&#x27;,&#x27;2 L&#x27;],[&#x27;Crema de leche&#x27;,&#x27;400 mL&#x27;],[&#x27;Aceite de oliva&#x27;,&#x27;80 mL&#x27;],[&#x27;Sal&#x27;,&#x27;Al final&#x27;]].map(([n,q])=&gt;`&lt;div class=&quot;b2-ingredient&quot;&gt;&lt;span&gt;${n}&lt;/span&gt;&lt;b&gt;${q}&lt;/b&gt;&lt;/div&gt;`).join(&#x27;&#x27;)}&lt;p class=&quot;b2-sub&quot;&gt;Cantidades netas. Contiene lácteos.&lt;/p&gt;`:`${[[&#x27;Preparar&#x27;,&#x27;Pelar, pesar netos y cortar la calabaza y la cebolla.&#x27;],[&#x27;Rehogar&#x27;,&#x27;Cocinar la cebolla en aceite a fuego suave, sin dorar.&#x27;],[&#x27;Cocinar&#x27;,&#x27;Agregar calabaza y caldo. Cocinar hasta que esté tierna.&#x27;],[&#x27;Terminar&#x27;,&#x27;Triturar, incorporar crema y ajustar sal. Comprobar el rendimiento final de 5 L.&#x27;]].map(([title,text],i)=&gt;`&lt;div class=&quot;b2-step&quot;&gt;&lt;span&gt;0${i+1}&lt;/span&gt;&lt;div&gt;&lt;strong&gt;${title}&lt;/strong&gt;&lt;p&gt;${text}&lt;/p&gt;&lt;/div&gt;&lt;/div&gt;`).join(&#x27;&#x27;)}`}` }&lt;div class=&quot;b2-actions&quot;&gt;${full(fish||bread?&#x27;Volver al recetario&#x27;:&#x27;Planificar producción &#x27;+I(&#x27;arrow-up-right&#x27;),fish||bread?&#x27;recipes&#x27;:&#x27;production&#x27;)}&lt;/div&gt;&lt;p class=&quot;b2-footnote&quot;&gt;${I(&#x27;download&#x27;)} Disponible en este dispositivo&lt;/p&gt;`;}
+function capture(){return `&lt;div class=&quot;b2-wide-limit b2-capture&quot;&gt;&lt;div class=&quot;b2-pagehead&quot;&gt;&lt;div class=&quot;b2-eyebrow&quot;&gt;CAPTURA · REVISAR RECETA&lt;/div&gt;&lt;h1 class=&quot;b2-dish&quot;&gt;Cebolla confitada&lt;/h1&gt;&lt;/div&gt;&lt;div class=&quot;b2-tabs&quot;&gt;${[&#x27;Revisión&#x27;,&#x27;Original&#x27;].map(t=&gt;`&lt;button data-capturetab=&quot;${t}&quot; aria-pressed=&quot;${s.captureTab===t}&quot;&gt;${t}&lt;/button&gt;`).join(&#x27;&#x27;)}&lt;button data-go=&quot;add-images&quot;&gt;${I(&#x27;image-plus&#x27;)} Imágenes&lt;/button&gt;&lt;/div&gt;${s.addImages?`&lt;label class=&quot;b2-field&quot;&gt;Elegí una o varias imágenes&lt;input type=&quot;file&quot; accept=&quot;image/*&quot; multiple data-files&gt;&lt;/label&gt;&lt;p class=&quot;b2-muted&quot;&gt;La muestra conserva las imágenes en tu dispositivo; no las envía.&lt;/p&gt;`:&#x27;&#x27;}${s.captureTab===&#x27;Original&#x27;?`&lt;div class=&quot;b2-row&quot;&gt;&lt;h2&gt;Fuente de la receta&lt;/h2&gt;&lt;button class=&quot;b2-link&quot; data-go=&quot;toggle-source&quot;&gt;${s.source===&#x27;WhatsApp&#x27;?&#x27;Ver cuaderno&#x27;:&#x27;Ver WhatsApp&#x27;}&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;b2-source ${s.source===&#x27;Cuaderno&#x27;?&#x27;b2-hand&#x27;:&#x27;&#x27;}&quot;&gt;&lt;span class=&quot;b2-muted&quot;&gt;${s.source} · ejemplo recreado&lt;/span&gt;&lt;p&gt;Cebolla confitada&lt;br&gt;2 kg cebolla y sal&lt;br&gt;aceite 100 ml&lt;br&gt;cortar fino fuego bajo tapada&lt;br&gt;destapar terminar sin dorar&lt;/p&gt;&lt;/div&gt;&lt;label class=&quot;b2-field&quot;&gt;Texto extraído, editable&lt;textarea data-source-note&gt;${E(s.sourceNote||&#x27;Cebolla confitada\n2 kg cebolla y sal\nAceite 100 ml\nFino, fuego bajo, tapada.\nDestapar y terminar sin dorar.&#x27;)}&lt;/textarea&gt;&lt;/label&gt;${full(&#x27;Volver a la revisión&#x27;,&#x27;return-review&#x27;)}`:review()}&lt;/div&gt;`;}
+function review(){if(s.recipeSaved)return `&lt;div class=&quot;b2-empty&quot;&gt;${I(&#x27;circle-check&#x27;)}&lt;h2&gt;Ya está en tu recetario.&lt;/h2&gt;&lt;p class=&quot;b2-sub&quot;&gt;Cebolla confitada · Privada&lt;/p&gt;&lt;/div&gt;&lt;div class=&quot;b2-panel&quot;&gt;&lt;span class=&quot;b2-tag&quot;&gt;Confirmado por vos&lt;/span&gt;&lt;p class=&quot;b2-sub&quot;&gt;Sal: ${s.salt===&#x27;inicio&#x27;?&#x27;al inicio, para sudar la cebolla&#x27;:s.salt===&#x27;final&#x27;?&#x27;al final de la cocción&#x27;:E(s.saltNote||&#x27;según tu indicación&#x27;)}. Cebolla: 2 kg ${s.weight===&#x27;neto&#x27;?&#x27;limpios&#x27;:&#x27;antes de limpiar&#x27;}.&lt;/p&gt;&lt;/div&gt;${full(&#x27;Volver al recetario&#x27;,&#x27;recipes&#x27;)}`;
+if(s.question===2)return `&lt;div class=&quot;b2-eyebrow&quot;&gt;ÚLTIMA REVISIÓN&lt;/div&gt;&lt;h2 class=&quot;b2-dish&quot;&gt;Cebolla confitada&lt;/h2&gt;&lt;div class=&quot;b2-ingredient&quot;&gt;&lt;span&gt;Cebolla ${s.weight===&#x27;neto&#x27;?&#x27;limpia&#x27;:&#x27;sin limpiar&#x27;}&lt;/span&gt;&lt;b&gt;2 kg&lt;/b&gt;&lt;/div&gt;&lt;div class=&quot;b2-ingredient&quot;&gt;&lt;span&gt;Aceite&lt;/span&gt;&lt;b&gt;100 mL&lt;/b&gt;&lt;/div&gt;&lt;div class=&quot;b2-callout&quot;&gt;&lt;strong&gt;Tu indicación sobre la sal&lt;/strong&gt;&lt;br&gt;${s.salt===&#x27;inicio&#x27;?&#x27;Agregar al inicio para sudar la cebolla.&#x27;:s.salt===&#x27;final&#x27;?&#x27;Agregar al final de la cocción.&#x27;:E(s.saltNote||&#x27;&#x27;)}&lt;/div&gt;&lt;p class=&quot;b2-sub&quot;&gt;Rendimiento final pendiente de medir. Todavía no se puede escalar por porciones.&lt;/p&gt;&lt;label class=&quot;b2-check&quot;&gt;&lt;input type=&quot;checkbox&quot; data-reviewed ${s.reviewed?&#x27;checked&#x27;:&#x27;&#x27;}&gt;Revisé cantidades y procedimiento.&lt;/label&gt;${full(&#x27;Guardar receta privada &#x27;+I(&#x27;check&#x27;),&#x27;save-recipe&#x27;,!s.reviewed)}&lt;button class=&quot;b2-link&quot; data-go=&quot;previous-question&quot;&gt;${I(&#x27;arrow-left&#x27;)} Volver a las respuestas&lt;/button&gt;`;
+const first=s.question===0;return `&lt;div class=&quot;b2-row&quot;&gt;&lt;span class=&quot;b2-eyebrow&quot;&gt;${first?&#x27;01&#x27;:&#x27;02&#x27;} / 02 · CONFIRMAR&lt;/span&gt;${tag(&#x27;Necesita tu criterio&#x27;,&#x27;warn&#x27;)}&lt;/div&gt;&lt;div class=&quot;b2-track&quot; style=&quot;margin:15px 0 26px&quot;&gt;&lt;span style=&quot;width:${first?&#x27;50&#x27;:&#x27;100&#x27;}%&quot;&gt;&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;b2-callout&quot;&gt;&lt;span class=&quot;b2-muted&quot;&gt;En la fuente dice&lt;/span&gt;&lt;br&gt;&lt;strong&gt;“${first?&#x27;cebolla y sal&#x27;:&#x27;2 kg cebolla&#x27;}”&lt;/strong&gt;&lt;/div&gt;&lt;h2 class=&quot;b2-question&quot;&gt;${first?&#x27;¿Cuándo agregás&lt;br&gt;la sal?&#x27;:&#x27;¿Cuándo pesás&lt;br&gt;la cebolla?&#x27;}&lt;/h2&gt;${(first?[[&#x27;inicio&#x27;,&#x27;Al inicio, para sudar&#x27;],[&#x27;final&#x27;,&#x27;Al final de la cocción&#x27;],[&#x27;otro&#x27;,&#x27;Otra indicación&#x27;]]:[[&#x27;bruto&#x27;,&#x27;Antes de limpiar · peso bruto&#x27;],[&#x27;neto&#x27;,&#x27;Ya limpia · peso neto&#x27;]]).map(([value,text])=&gt;`&lt;label class=&quot;b2-choice&quot;&gt;&lt;input type=&quot;radio&quot; name=&quot;${id}-${first?&#x27;salt&#x27;:&#x27;weight&#x27;}&quot; data-answer=&quot;${first?&#x27;salt&#x27;:&#x27;weight&#x27;}&quot; value=&quot;${value}&quot; ${(first?s.salt:s.weight)===value?&#x27;checked&#x27;:&#x27;&#x27;}&gt;${text}&lt;/label&gt;`).join(&#x27;&#x27;)}${first&amp;&amp;s.salt===&#x27;otro&#x27;?`&lt;label class=&quot;b2-field&quot;&gt;Tu indicación&lt;textarea data-salt-note&gt;${E(s.saltNote||&#x27;&#x27;)}&lt;/textarea&gt;&lt;/label&gt;`:&#x27;&#x27;}&lt;p class=&quot;b2-sub&quot;&gt;${first?&#x27;La nota no indica el momento. Elegí la técnica que usás.&#x27;:&#x27;Así evitamos confundir la cantidad útil con lo que hay que comprar.&#x27;}&lt;/p&gt;&lt;div class=&quot;b2-actions&quot;&gt;${full((first?&#x27;Siguiente&#x27;:&#x27;Revisar receta&#x27;)+&#x27; &#x27;+I(&#x27;arrow-right&#x27;),&#x27;next-question&#x27;,first?!s.salt:!s.weight)}&lt;/div&gt;${!first?&#x27;&lt;button class=&quot;b2-link&quot; data-go=&quot;previous-question&quot;&gt;Volver&lt;/button&gt;&#x27;:&#x27;&#x27;}`;}
+function production(){return back(&#x27;Cocina de hoy&#x27;,&#x27;home&#x27;)+`&lt;div class=&quot;b2-row&quot;&gt;${tag(&#x27;En producción&#x27;)}&lt;span class=&quot;b2-muted&quot;&gt;Lucía · 12:00&lt;/span&gt;&lt;/div&gt;&lt;h1 class=&quot;b2-dish&quot; style=&quot;font-size:47px;margin:20px 0!important&quot;&gt;Crema de calabaza&lt;/h1&gt;&lt;div class=&quot;b2-tabs&quot;&gt;${[&#x27;Cantidades&#x27;,&#x27;Tareas&#x27;,&#x27;Registro&#x27;].map(t=&gt;`&lt;button data-productiontab=&quot;${t}&quot; aria-pressed=&quot;${s.productionTab===t}&quot;&gt;${t}&lt;/button&gt;`).join(&#x27;&#x27;)}&lt;/div&gt;${s.productionTab===&#x27;Cantidades&#x27;?`&lt;div class=&quot;b2-two&quot;&gt;&lt;div&gt;&lt;div class=&quot;b2-panel&quot; style=&quot;margin-top:0&quot;&gt;&lt;div class=&quot;b2-row&quot;&gt;&lt;h2&gt;Porciones previstas&lt;/h2&gt;&lt;span class=&quot;b2-tag neutral&quot;&gt;250 mL c/u&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;b2-counter&quot;&gt;&lt;button class=&quot;b2-square&quot; data-go=&quot;minus&quot; aria-label=&quot;Restar cinco porciones&quot;&gt;${I(&#x27;minus&#x27;)}&lt;/button&gt;&lt;input data-portions type=&quot;number&quot; min=&quot;1&quot; max=&quot;500&quot; value=&quot;${s.portions}&quot; aria-label=&quot;Porciones previstas&quot;&gt;&lt;button class=&quot;b2-square&quot; data-go=&quot;plus&quot; aria-label=&quot;Sumar cinco porciones&quot;&gt;${I(&#x27;plus&#x27;)}&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;b2-row&quot;&gt;&lt;span class=&quot;b2-muted&quot;&gt;Rendimiento objetivo&lt;/span&gt;&lt;span style=&quot;font-size:21px&quot;&gt;${F(s.portions*.25)} L&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;button class=&quot;b2-link&quot; data-go=&quot;recipe&quot;&gt;Consultar receta y versión ${I(&#x27;arrow-up-right&#x27;)}&lt;/button&gt;&lt;/div&gt;&lt;div&gt;&lt;div class=&quot;b2-overline&quot;&gt;&lt;h2&gt;Para esta producción&lt;/h2&gt;&lt;span class=&quot;b2-muted&quot;&gt;Versión 3&lt;/span&gt;&lt;/div&gt;${stockRows()}&lt;p class=&quot;b2-sub&quot;&gt;Aceite: ${F(.08*s.portions/20)} L. Sal al final, según receta.&lt;/p&gt;${s.role!==&#x27;Commis&#x27;?`&lt;div class=&quot;b2-actions&quot;&gt;${full(&#x27;Comprar faltantes &#x27;+I(&#x27;arrow-right&#x27;),&#x27;orders&#x27;)}&lt;/div&gt;`:&#x27;&#x27;}&lt;/div&gt;&lt;/div&gt;`:s.productionTab===&#x27;Tareas&#x27;?`&lt;div class=&quot;b2-wide-limit&quot;&gt;${tasks()}&lt;div class=&quot;b2-actions&quot;&gt;${full(&#x27;Registrar una tanda&#x27;,&#x27;go-register&#x27;)}&lt;/div&gt;&lt;/div&gt;`:`&lt;div class=&quot;b2-wide-limit&quot;&gt;&lt;div class=&quot;b2-panel&quot;&gt;&lt;div class=&quot;b2-eyebrow&quot;&gt;PRODUCIDO HASTA AHORA&lt;/div&gt;&lt;div class=&quot;b2-big&quot; style=&quot;margin-top:20px&quot;&gt;${s.produced}&lt;span&gt;/ ${s.portions}&lt;/span&gt;&lt;/div&gt;&lt;p class=&quot;b2-sub&quot;&gt;porciones terminadas&lt;/p&gt;&lt;/div&gt;&lt;label class=&quot;b2-field&quot;&gt;Porciones nuevas de esta tanda&lt;input data-batch type=&quot;number&quot; min=&quot;1&quot; value=&quot;10&quot;&gt;&lt;/label&gt;${full(&#x27;Revisar registro&#x27;,&#x27;review-batch&#x27;)}${s.batchConfirm?`&lt;div class=&quot;b2-panel&quot;&gt;&lt;h2&gt;Sumar ${s.batchConfirm} porciones&lt;/h2&gt;&lt;p class=&quot;b2-sub&quot;&gt;El total pasará a ${s.produced+s.batchConfirm}. ${s.offline?&#x27;Quedará guardado aquí hasta recuperar conexión.&#x27;:&#x27;&#x27;}&lt;/p&gt;&lt;div class=&quot;b2-actions&quot;&gt;${full(&#x27;Confirmar registro&#x27;,&#x27;confirm-batch&#x27;)}${B(&#x27;Cancelar&#x27;,&#x27;cancel-batch&#x27;,true)}&lt;/div&gt;&lt;/div&gt;`:&#x27;&#x27;}&lt;/div&gt;`}`;}
+function orders(){const f=s.portions/20;const items=[[&#x27;Huerta del Sur&#x27;,&#x27;Calabaza&#x27;,Math.max(0,3*f/.8-s.stock),&#x27;kg&#x27;],[&#x27;Lácteos Costa&#x27;,&#x27;Crema de leche&#x27;,Math.max(0,.4*f-.3),&#x27;L&#x27;]].filter(x=&gt;x[2]&gt;0);return H(&#x27;COMPRAS A PROVEEDORES&#x27;,&#x27;Pedidos.&#x27;,&#x27;Cantidades para la producción de crema.&#x27;)+`&lt;div class=&quot;b2-row&quot;&gt;&lt;span class=&quot;b2-muted&quot;&gt;${items.length} proveedores · de ejemplo&lt;/span&gt;${tag(s.orderStatus,s.orderStatus===&#x27;Borrador&#x27;?&#x27;warn&#x27;:&#x27;&#x27;)}&lt;/div&gt;&lt;div class=&quot;b2-two&quot;&gt;${items.map(([supplier,name,q,unit])=&gt;`&lt;article class=&quot;b2-order&quot;&gt;&lt;span class=&quot;b2-eyebrow&quot;&gt;PROVEEDOR&lt;/span&gt;&lt;h2&gt;${supplier}&lt;/h2&gt;&lt;div class=&quot;b2-ingredient&quot;&gt;&lt;span&gt;${name}&lt;/span&gt;&lt;b&gt;${F(q)} ${unit}&lt;/b&gt;&lt;/div&gt;&lt;p class=&quot;b2-sub&quot;&gt;Precio, presentación y entrega por confirmar.&lt;/p&gt;&lt;/article&gt;`).join(&#x27;&#x27;)}&lt;/div&gt;${items.length?`&lt;div class=&quot;b2-wide-limit&quot;&gt;${s.orderStatus===&#x27;Borrador&#x27;?full(&#x27;Revisar antes de enviar &#x27;+I(&#x27;arrow-right&#x27;),&#x27;review-order&#x27;):s.orderStatus===&#x27;Enviado&#x27;?full(&#x27;Registrar confirmación&#x27;,&#x27;confirm-order&#x27;):s.orderStatus===&#x27;Confirmado&#x27;?full(&#x27;Registrar recepción&#x27;,&#x27;receive-order&#x27;):&#x27;&lt;div class=&quot;b2-toast&quot;&gt;Recepción registrada en la muestra.&lt;/div&gt;&#x27;}${s.confirm?`&lt;div class=&quot;b2-panel&quot;&gt;&lt;h2&gt;${items.length} pedidos separados&lt;/h2&gt;&lt;p class=&quot;b2-sub&quot;&gt;Revisá cantidades y proveedores. Esta muestra no envía mensajes.&lt;/p&gt;${s.offline?&#x27;&lt;div class=&quot;b2-offline&quot;&gt;Sin conexión. El pedido queda en borrador.&lt;/div&gt;&#x27;:&#x27;&#x27;}&lt;div class=&quot;b2-actions&quot;&gt;${full(&#x27;Simular envío&#x27;,&#x27;send-order&#x27;,s.offline)}${B(&#x27;Volver&#x27;,&#x27;cancel-order&#x27;,true)}&lt;/div&gt;&lt;/div&gt;`:&#x27;&#x27;}&lt;/div&gt;`:&#x27;&lt;div class=&quot;b2-empty&quot;&gt;&lt;h2&gt;Todo cubierto&lt;/h2&gt;&lt;p class=&quot;b2-sub&quot;&gt;No hay faltantes para esta cantidad.&lt;/p&gt;&lt;/div&gt;&#x27;}&lt;p class=&quot;b2-footnote&quot;&gt;Los pedidos no se envían automáticamente al reconectar.&lt;/p&gt;`;}
+function stock(){return H(&#x27;EXISTENCIAS&#x27;,&#x27;Ingredientes.&#x27;,&#x27;Stock utilizable · Última actualización 09:42&#x27;)+`${[[&#x27;Calabaza&#x27;,`${F(s.stock)} kg`,&#x27;Depósito&#x27;],[&#x27;Cebolla&#x27;,&#x27;2 kg&#x27;,&#x27;Depósito&#x27;],[&#x27;Crema de leche&#x27;,&#x27;0,3 L&#x27;,&#x27;Cámara 1&#x27;],[&#x27;Caldo de verduras&#x27;,&#x27;5 L&#x27;,&#x27;Cámara 1&#x27;]].map(([name,q,place])=&gt;`&lt;div class=&quot;b2-productline&quot;&gt;&lt;div class=&quot;b2-row&quot;&gt;&lt;h3&gt;${name}&lt;/h3&gt;&lt;span style=&quot;font-size:24px;font-variant-numeric:tabular-nums&quot;&gt;${q}&lt;/span&gt;&lt;/div&gt;&lt;span class=&quot;b2-muted&quot;&gt;${place}&lt;/span&gt;&lt;/div&gt;`).join(&#x27;&#x27;)}&lt;div class=&quot;b2-actions&quot;&gt;${full(I(&#x27;package-plus&#x27;)+&#x27; Registrar entrada&#x27;,&#x27;stock-form&#x27;)}&lt;/div&gt;${s.stockForm?`&lt;div class=&quot;b2-panel&quot;&gt;&lt;h2&gt;Entrada de calabaza&lt;/h2&gt;&lt;label class=&quot;b2-field&quot;&gt;Cantidad recibida · kg&lt;input type=&quot;number&quot; data-stock min=&quot;0.01&quot; step=&quot;0.01&quot; value=&quot;2.5&quot;&gt;&lt;/label&gt;${full(&#x27;Confirmar entrada&#x27;,&#x27;save-stock&#x27;)}&lt;/div&gt;`:&#x27;&#x27;}`;}
+function team(){return H(&#x27;EQUIPO / TAREAS&#x27;,&#x27;Tu equipo.&#x27;,&#x27;Trabajo de hoy · El Mirador&#x27;)+`&lt;div class=&quot;b2-two&quot;&gt;&lt;section&gt;&lt;div class=&quot;b2-service&quot;&gt;&lt;div&gt;&lt;h2&gt;Lucía Costa&lt;/h2&gt;&lt;p class=&quot;b2-muted&quot;&gt;Commis · Cocina caliente&lt;/p&gt;&lt;/div&gt;&lt;span class=&quot;b2-avatar&quot;&gt;LC&lt;/span&gt;&lt;/div&gt;${tasks()}&lt;button class=&quot;b2-link&quot; data-go=&quot;production&quot;&gt;Abrir su producción ${I(&#x27;arrow-up-right&#x27;)}&lt;/button&gt;&lt;/section&gt;&lt;section&gt;&lt;div class=&quot;b2-service&quot;&gt;&lt;div&gt;&lt;h2&gt;Mateo Torres&lt;/h2&gt;&lt;p class=&quot;b2-muted&quot;&gt;Sous chef · Pescados&lt;/p&gt;&lt;/div&gt;&lt;span class=&quot;b2-avatar&quot;&gt;MT&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;b2-productline&quot;&gt;${tag(&#x27;Mise en place lista&#x27;)}&lt;h3 class=&quot;b2-dish&quot; style=&quot;font-size:33px&quot;&gt;Merluza al horno&lt;/h3&gt;&lt;span class=&quot;b2-muted&quot;&gt;40 porciones · Para las 12:20&lt;/span&gt;&lt;/div&gt;&lt;button class=&quot;b2-link&quot; data-go=&quot;fish&quot;&gt;Ver preparación ${I(&#x27;arrow-up-right&#x27;)}&lt;/button&gt;&lt;/section&gt;&lt;/div&gt;`;}
+function events(){return H(&#x27;EVENTOS&#x27;,&#x27;Eventos.&#x27;,&#x27;Una ocasión más en tu cocina.&#x27;)+`&lt;article class=&quot;b2-focus&quot;&gt;&lt;div class=&quot;b2-row&quot;&gt;${tag(&#x27;Vie 02 · Octubre&#x27;)}&lt;span class=&quot;b2-muted&quot;&gt;13:00&lt;/span&gt;&lt;/div&gt;&lt;h2 class=&quot;b2-dish&quot;&gt;${E(s.eventName)}&lt;/h2&gt;&lt;div class=&quot;b2-facts&quot;&gt;&lt;div&gt;&lt;b&gt;32&lt;/b&gt;&lt;span&gt;Comensales&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;b&gt;Terraza&lt;/b&gt;&lt;span&gt;Ubicación&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;${full(&#x27;Ver producción vinculada&#x27;,&#x27;event-production&#x27;)}&lt;/article&gt;&lt;div class=&quot;b2-actions&quot;&gt;${full(I(&#x27;pencil&#x27;)+&#x27; Editar evento&#x27;,&#x27;edit-event&#x27;)}&lt;/div&gt;${s.eventForm?`&lt;div class=&quot;b2-panel&quot;&gt;&lt;label class=&quot;b2-field&quot;&gt;Nombre&lt;input data-event-name value=&quot;${E(s.eventName)}&quot;&gt;&lt;/label&gt;&lt;label class=&quot;b2-field&quot;&gt;Notas&lt;textarea&gt;Confirmar restricciones alimentarias.&lt;/textarea&gt;&lt;/label&gt;${full(&#x27;Guardar evento&#x27;,&#x27;save-event&#x27;)}&lt;/div&gt;`:&#x27;&#x27;}`;}
+function more(){return H(&#x27;EL MIRADOR&#x27;,&#x27;Toda tu cocina.&#x27;,&#x27;Elegí dónde querés trabajar.&#x27;)+`&lt;div class=&quot;b2-menu-grid&quot;&gt;${[[&#x27;stock&#x27;,&#x27;Stock&#x27;,&#x27;boxes&#x27;],[&#x27;tasks&#x27;,&#x27;Equipo&#x27;,&#x27;users&#x27;],[&#x27;events&#x27;,&#x27;Eventos&#x27;,&#x27;calendar-days&#x27;],[&#x27;capture&#x27;,&#x27;Capturar&#x27;,&#x27;scan-line&#x27;],[&#x27;sync&#x27;,&#x27;Conexión&#x27;,&#x27;cloud-check&#x27;],[&#x27;manual&#x27;,&#x27;Nueva receta&#x27;,&#x27;notebook-pen&#x27;]].filter(([p])=&gt;s.role!==&#x27;Commis&#x27;||![&#x27;stock&#x27;,&#x27;events&#x27;].includes(p)).map(([p,n,i])=&gt;`&lt;button data-go=&quot;${p}&quot;&gt;${I(i)}${n}&lt;/button&gt;`).join(&#x27;&#x27;)}&lt;/div&gt;`;}
+function sync(){return H(&#x27;GUARDADO Y CONEXIÓN&#x27;,&#x27;Tu trabajo,&lt;br&gt;a salvo.&#x27;)+`&lt;div class=&quot;b2-panel&quot;&gt;&lt;div class=&quot;b2-row&quot;&gt;${tag(s.offline?&#x27;Sin conexión&#x27;:&#x27;Conectado&#x27;,s.offline?&#x27;warn&#x27;:&#x27;&#x27;)}&lt;span class=&quot;b2-muted&quot;&gt;Última: 09:42&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;b2-facts&quot;&gt;&lt;div&gt;&lt;b&gt;${s.pending}&lt;/b&gt;&lt;span&gt;Cambios pendientes&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;b&gt;4&lt;/b&gt;&lt;span&gt;Recetas disponibles&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;p class=&quot;b2-sub&quot;&gt;Los registros guardados aquí se sincronizan al recuperar conexión. Los pedidos requieren envío explícito.&lt;/p&gt;&lt;/div&gt;${full(&#x27;Reintentar sincronización&#x27;,&#x27;reconnect&#x27;)}&lt;p class=&quot;b2-footnote&quot;&gt;Sincronización simulada para revisar el diseño.&lt;/p&gt;`;}
+function manual(){return H(&#x27;RECETA NUEVA&#x27;,&#x27;Tu manera&lt;br&gt;de hacerlo.&#x27;,&#x27;Se guarda privada hasta que decidas compartirla.&#x27;)+`&lt;label class=&quot;b2-field&quot;&gt;Nombre de la preparación&lt;input data-manual-name placeholder=&quot;Por ejemplo: salsa de tomate&quot;&gt;&lt;/label&gt;&lt;label class=&quot;b2-field&quot;&gt;Rendimiento y unidad&lt;input placeholder=&quot;Por ejemplo: 2 L&quot;&gt;&lt;/label&gt;&lt;label class=&quot;b2-field&quot;&gt;Ingredientes&lt;textarea placeholder=&quot;Ingrediente, cantidad y unidad&quot;&gt;&lt;/textarea&gt;&lt;/label&gt;&lt;label class=&quot;b2-field&quot;&gt;Procedimiento&lt;textarea placeholder=&quot;Escribí los pasos en orden&quot;&gt;&lt;/textarea&gt;&lt;/label&gt;${full(&#x27;Guardar borrador&#x27;,&#x27;save-manual&#x27;)}`;}
+function render(keepScroll=false){const pos=app.querySelector(&#x27;.b2-scroll&#x27;)?.scrollTop||0;let active=s.screen;if([&#x27;recipe&#x27;,&#x27;fish&#x27;,&#x27;focaccia&#x27;,&#x27;capture&#x27;,&#x27;manual&#x27;].includes(active))active=&#x27;recipes&#x27;;if([&#x27;stock&#x27;,&#x27;events&#x27;,&#x27;sync&#x27;].includes(active)||(active===&#x27;tasks&#x27;&amp;&amp;s.role!==&#x27;Commis&#x27;))active=&#x27;more&#x27;;
+const pages={home,recipes,recipe,fish:recipe,focaccia:recipe,capture,production,orders,stock,tasks:team,events,more,sync,manual};const content=(pages[s.screen]||home)();
+const nav=allNav.filter(([p])=&gt;s.role!==&#x27;Commis&#x27;||![&#x27;orders&#x27;,&#x27;stock&#x27;,&#x27;events&#x27;].includes(p)).map(([p,n,i],index)=&gt;`&lt;button data-go=&quot;${p}&quot; class=&quot;${index&gt;=4?&#x27;b2-wideitem&#x27;:&#x27;&#x27;}&quot; ${s.screen===p||active===p?&#x27;aria-current=&quot;page&quot;&#x27;:&#x27;&#x27;}&gt;${I(i)}&lt;span&gt;${n}&lt;/span&gt;&lt;/button&gt;`).join(&#x27;&#x27;);
+app.style.setProperty(&#x27;--b-glow&#x27;,`rgba(204,238,166,${options.glow})`);
+app.innerHTML=`&lt;header class=&quot;b2-header&quot;&gt;&lt;div class=&quot;b2-brand&quot;&gt;brigade&lt;em&gt;.&lt;/em&gt;&lt;/div&gt;&lt;div class=&quot;b2-headright&quot;&gt;&lt;button class=&quot;b2-sync&quot; data-go=&quot;sync&quot;&gt;${I(s.offline?&#x27;cloud-off&#x27;:&#x27;cloud-check&#x27;)}${s.offline?&#x27;Sin conexión&#x27;:&#x27;Al día&#x27;}&lt;/button&gt;&lt;span class=&quot;b2-avatar&quot; aria-label=&quot;${s.role===&#x27;Commis&#x27;?&#x27;Lucía, commis&#x27;:&#x27;Joab, chef&#x27;}&quot;&gt;${s.role===&#x27;Commis&#x27;?&#x27;LC&#x27;:&#x27;JB&#x27;}&lt;/span&gt;&lt;/div&gt;&lt;/header&gt;&lt;div class=&quot;b2-scroll&quot; role=&quot;region&quot; aria-label=&quot;Contenido de ${s.screen}&quot;&gt;&lt;main class=&quot;b2-content&quot;&gt;${s.offline&amp;&amp;s.screen!==&#x27;sync&#x27;?`&lt;div class=&quot;b2-offline&quot;&gt;Guardado en este dispositivo · ${s.pending} pendientes&lt;/div&gt;`:&#x27;&#x27;}${s.toast?`&lt;div class=&quot;b2-toast&quot; role=&quot;status&quot;&gt;${E(s.toast)}&lt;/div&gt;`:&#x27;&#x27;}${content}&lt;p class=&quot;b2-footnote&quot;&gt;Brigade · Propuesta 02 · Datos de ejemplo&lt;/p&gt;&lt;/main&gt;&lt;/div&gt;&lt;div class=&quot;b2-dock-area&quot;&gt;&lt;nav class=&quot;b2-dock&quot; aria-label=&quot;Navegación principal&quot;&gt;${nav}&lt;button class=&quot;b2-moreitem&quot; data-go=&quot;more&quot; ${active===&#x27;more&#x27;?&#x27;aria-current=&quot;page&quot;&#x27;:&#x27;&#x27;}&gt;${I(&#x27;grid-2x2&#x27;)}&lt;span&gt;Más&lt;/span&gt;&lt;/button&gt;&lt;/nav&gt;&lt;/div&gt;`;
+if(globalThis.lucide)lucide.createIcons({attrs:{width:20,height:20}});if(keepScroll)app.querySelector(&#x27;.b2-scroll&#x27;).scrollTop=pos;
+}
+function action(go){s.toast=&#x27;&#x27;;let keep=false;const screens=[&#x27;home&#x27;,&#x27;recipes&#x27;,&#x27;recipe&#x27;,&#x27;fish&#x27;,&#x27;focaccia&#x27;,&#x27;capture&#x27;,&#x27;production&#x27;,&#x27;orders&#x27;,&#x27;stock&#x27;,&#x27;tasks&#x27;,&#x27;events&#x27;,&#x27;more&#x27;,&#x27;sync&#x27;,&#x27;manual&#x27;];if(screens.includes(go)){if(s.role===&#x27;Commis&#x27;&amp;&amp;[&#x27;orders&#x27;,&#x27;stock&#x27;,&#x27;events&#x27;].includes(go)){s.toast=&#x27;Esta sección requiere permisos del chef.&#x27;;}else s.screen=go;s.confirm=false;}
+else if(go===&#x27;plus&#x27;||go===&#x27;minus&#x27;){s.portions=Math.max(1,Math.min(500,s.portions+(go===&#x27;plus&#x27;?5:-5)));keep=true;}
+else if(go===&#x27;next-question&#x27;){if(s.question===0&amp;&amp;s.salt===&#x27;otro&#x27;&amp;&amp;!s.saltNote?.trim()){s.toast=&#x27;Escribí tu indicación antes de continuar.&#x27;;}else if((s.question===0&amp;&amp;s.salt)||(s.question===1&amp;&amp;s.weight))s.question++;}
+else if(go===&#x27;previous-question&#x27;)s.question=Math.max(0,s.question-1);
+else if(go===&#x27;return-review&#x27;)s.captureTab=&#x27;Revisión&#x27;;
+else if(go===&#x27;toggle-source&#x27;)s.source=s.source===&#x27;WhatsApp&#x27;?&#x27;Cuaderno&#x27;:&#x27;WhatsApp&#x27;;
+else if(go===&#x27;add-images&#x27;){s.addImages=!s.addImages;keep=true;}
+else if(go===&#x27;save-recipe&#x27;&amp;&amp;s.reviewed){s.recipeSaved=true;s.question=2;}
+else if(go===&#x27;go-register&#x27;)s.productionTab=&#x27;Registro&#x27;;
+else if(go===&#x27;review-batch&#x27;){const q=Number(app.querySelector(&#x27;[data-batch]&#x27;).value);if(Number.isInteger(q)&amp;&amp;q&gt;0)s.batchConfirm=q;else s.toast=&#x27;Ingresá una cantidad entera mayor que cero.&#x27;;keep=true;}
+else if(go===&#x27;confirm-batch&#x27;&amp;&amp;s.batchConfirm){s.produced+=s.batchConfirm;s.batchConfirm=0;if(s.offline)s.pending++;s.toast=s.offline?&#x27;Tanda guardada aquí. Pendiente de sincronización.&#x27;:&#x27;Tanda registrada en la muestra.&#x27;;}
+else if(go===&#x27;cancel-batch&#x27;){s.batchConfirm=0;keep=true;}
+else if(go===&#x27;review-order&#x27;){s.confirm=true;keep=true;}
+else if(go===&#x27;cancel-order&#x27;){s.confirm=false;keep=true;}
+else if(go===&#x27;send-order&#x27;&amp;&amp;!s.offline){s.orderStatus=&#x27;Enviado&#x27;;s.confirm=false;s.toast=&#x27;Envío simulado. No se contactó a proveedores.&#x27;;}
+else if(go===&#x27;confirm-order&#x27;){s.orderStatus=&#x27;Confirmado&#x27;;s.toast=&#x27;Confirmación registrada en esta muestra.&#x27;;}
+else if(go===&#x27;receive-order&#x27;){s.orderStatus=&#x27;Recibido&#x27;;s.toast=&#x27;Recepción simulada. El registro detallado se diseñará con cantidades reales.&#x27;;}
+else if(go===&#x27;stock-form&#x27;){s.stockForm=true;keep=true;}
+else if(go===&#x27;save-stock&#x27;){const q=Number(app.querySelector(&#x27;[data-stock]&#x27;).value);if(q&gt;0){s.stock+=q;s.stockForm=false;if(s.offline)s.pending++;s.toast=`Entrada de ${F(q)} kg registrada en la muestra.`;}else s.toast=&#x27;Ingresá una cantidad mayor que cero.&#x27;;}
+else if(go===&#x27;edit-event&#x27;){s.eventForm=true;keep=true;}
+else if(go===&#x27;save-event&#x27;){const n=app.querySelector(&#x27;[data-event-name]&#x27;).value.trim();if(n){s.eventName=n;s.eventForm=false;s.toast=&#x27;Evento guardado en la muestra.&#x27;;}else s.toast=&#x27;Ingresá el nombre del evento.&#x27;;}
+else if(go===&#x27;event-production&#x27;)s.toast=&#x27;Viernes 2 · Crema de calabaza · 32 porciones. Esta producción es independiente del plan de hoy.&#x27;;
+else if(go===&#x27;reconnect&#x27;){s.offline=false;s.pending=0;s.toast=&#x27;Conexión recuperada en la muestra. Los pedidos conservan su estado.&#x27;;}
+else if(go===&#x27;save-manual&#x27;){const n=app.querySelector(&#x27;[data-manual-name]&#x27;).value.trim();s.toast=n?`Borrador de “${n}” guardado en la muestra.`:&#x27;Ingresá un nombre para la receta.&#x27;;}
+else if(go===&#x27;share&#x27;){s.share=!s.share;keep=true;}
+else if(go===&#x27;save-share&#x27;){s.share=false;s.toast=&#x27;Acceso de lectura actualizado en la muestra.&#x27;;}
+render(keep);persist();}
+app.addEventListener(&#x27;click&#x27;,e=&gt;{const b=e.target.closest(&#x27;[data-go]&#x27;);if(b&amp;&amp;!b.disabled)action(b.dataset.go);for(const [attr,field]of [[&#x27;filter&#x27;,&#x27;filter&#x27;],[&#x27;recipetab&#x27;,&#x27;recipeTab&#x27;],[&#x27;capturetab&#x27;,&#x27;captureTab&#x27;],[&#x27;productiontab&#x27;,&#x27;productionTab&#x27;]]){const target=e.target.closest(`[data-${attr}]`);if(target){s[field]=target.dataset[attr];render(true);persist();}}});
+app.addEventListener(&#x27;change&#x27;,e=&gt;{const t=e.target;if(t.matches(&#x27;[data-answer]&#x27;)){s[t.dataset.answer]=t.value;s.reviewed=false;}else if(t.matches(&#x27;[data-reviewed]&#x27;))s.reviewed=t.checked;else if(t.matches(&#x27;[data-task]&#x27;)){s.done[Number(t.dataset.task)]=t.checked;if(s.offline)s.pending++;}else if(t.matches(&#x27;[data-portions]&#x27;)){const n=Number(t.value);if(Number.isInteger(n)&amp;&amp;n&gt;0&amp;&amp;n&lt;=500)s.portions=n;else s.toast=&#x27;Usá entre 1 y 500 porciones para esta muestra.&#x27;;}else if(t.matches(&#x27;[data-files]&#x27;))s.toast=`${t.files.length} imagen(es) seleccionadas. La extracción de esta muestra es ficticia.`;else return;render(true);persist();});
+app.addEventListener(&#x27;input&#x27;,e=&gt;{const t=e.target;if(t.matches(&#x27;[data-search]&#x27;)){const caret=t.selectionStart;s.search=t.value;render(true);const input=app.querySelector(&#x27;[data-search]&#x27;);input.focus();input.setSelectionRange(caret,caret);}if(t.matches(&#x27;[data-salt-note]&#x27;))s.saltNote=t.value;if(t.matches(&#x27;[data-source-note]&#x27;))s.sourceNote=t.value;});
+render();if(globalThis.Tweak){const tweak=new Tweak({container:app,onChange:()=&gt;{if(s.role===&#x27;Commis&#x27;&amp;&amp;[&#x27;orders&#x27;,&#x27;stock&#x27;,&#x27;events&#x27;].includes(s.screen))s.screen=&#x27;home&#x27;;render(true);persist();}});tweak.addToggle(s,&#x27;offline&#x27;,{label:&#x27;Sin conexión&#x27;});tweak.addSelect(s,&#x27;role&#x27;,{label:&#x27;Vista por rol&#x27;,options:[&#x27;Chef&#x27;,&#x27;Commis&#x27;]});tweak.addSlider(options,&#x27;glow&#x27;,{label:&#x27;Intensidad del brillo&#x27;,min:.05,max:.3,step:.01});}
+return {state:s,render};
+}
+const phone=mount(&#x27;brigade-v2-phone&#x27;,&#x27;phone&#x27;);const desktop=mount(&#x27;brigade-v2-desktop&#x27;,&#x27;desktop&#x27;);
+window.addEventListener(&#x27;openai:set_globals&#x27;,e=&gt;{const saved=e.detail?.globals?.widgetState?.privateContent?.v2;if(saved)for(const[key,a]of[[&#x27;phone&#x27;,phone],[&#x27;desktop&#x27;,desktop]])if(saved[key]){const incoming={...saved[key]};delete incoming.toast;const current={...a.state};delete current.toast;if(JSON.stringify(current)!==JSON.stringify(incoming)){Object.assign(a.state,incoming);a.render(true);}}});
+})();
+&lt;/script&gt;
+
+&lt;script src=&quot;https://unpkg.com/@floating-ui/core@1.7.3/dist/floating-ui.core.umd.min.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;https://unpkg.com/@floating-ui/dom@1.7.4/dist/floating-ui.dom.umd.min.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+(() =&gt; {
+  if (window.FloatingUIDOM == null) {
+    return;
+  }
+  const { autoUpdate, computePosition, flip, offset, shift, size } =
+    window.FloatingUIDOM;
+  const tooltipPlacements = new Set([&quot;top&quot;, &quot;right&quot;, &quot;bottom&quot;, &quot;left&quot;]);
+  const tooltipId = `codex-visualization-tooltip-${
+    window.crypto?.randomUUID?.() ?? Date.now().toString(36)
+  }`;
+  const tooltipGap = 5;
+  const hoverDelay = 700;
+  const skipDelay = 300;
+  let activeTrigger = null;
+  let pendingTrigger = null;
+  let tooltip = null;
+  let openTimeout = null;
+  let autoUpdateCleanup = null;
+  let positionRequest = 0;
+  let skipDelayUntil = 0;
+  let lastPointerWasTouch = false;
+  let pinnedByTouch = false;
+
+  const getTrigger = (event) =&gt; {
+    for (const target of event.composedPath()) {
+      if (target?.nodeType === Node.ELEMENT_NODE) {
+        const trigger = target.closest(&quot;[data-tooltip]&quot;);
+        if (trigger) return trigger;
+      }
+    }
+    return null;
+  };
+  const containsTarget = (trigger, target) =&gt;
+    target?.nodeType != null &amp;&amp; trigger.contains(target);
+  const getContent = (trigger) =&gt;
+    trigger.getAttribute(&quot;data-tooltip&quot;)?.trim() ?? &quot;&quot;;
+  const getPlacement = (trigger) =&gt; {
+    const placement = trigger.getAttribute(&quot;data-tooltip-placement&quot;);
+    return tooltipPlacements.has(placement) ? placement : &quot;top&quot;;
+  };
+  const getTooltip = () =&gt; {
+    if (tooltip == null) {
+      tooltip = document.createElement(&quot;div&quot;);
+      tooltip.id = tooltipId;
+      tooltip.className = &quot;tooltip&quot;;
+      tooltip.setAttribute(&quot;role&quot;, &quot;tooltip&quot;);
+    }
+    return tooltip;
+  };
+  const setDescribedBy = (trigger, described) =&gt; {
+    const ids = new Set(
+      (trigger.getAttribute(&quot;aria-describedby&quot;) ?? &quot;&quot;)
+        .split(/\s+/)
+        .filter(Boolean),
+    );
+    if (described) {
+      ids.add(tooltipId);
+    } else {
+      ids.delete(tooltipId);
+    }
+    if (ids.size === 0) {
+      trigger.removeAttribute(&quot;aria-describedby&quot;);
+    } else {
+      trigger.setAttribute(&quot;aria-describedby&quot;, [...ids].join(&quot; &quot;));
+    }
+  };
+  const clearOpenTimeout = () =&gt; {
+    if (openTimeout != null) {
+      window.clearTimeout(openTimeout);
+      openTimeout = null;
+    }
+    pendingTrigger = null;
+  };
+  const closeTooltip = (activateSkipDelay = true) =&gt; {
+    clearOpenTimeout();
+    pinnedByTouch = false;
+    positionRequest += 1;
+    autoUpdateCleanup?.();
+    autoUpdateCleanup = null;
+    if (activeTrigger == null) {
+      return;
+    }
+    setDescribedBy(activeTrigger, false);
+    activeTrigger = null;
+    tooltip?.remove();
+    if (activateSkipDelay) {
+      skipDelayUntil = Date.now() + skipDelay;
+    }
+  };
+  const updatePosition = (trigger, floating) =&gt; {
+    const request = ++positionRequest;
+    void computePosition(trigger, floating, {
+      middleware: [
+        offset(tooltipGap),
+        flip({ padding: tooltipGap }),
+        shift({ padding: tooltipGap }),
+        size({
+          padding: tooltipGap,
+          apply({ availableHeight, availableWidth, elements }) {
+            elements.floating.style.setProperty(
+              &quot;--tooltip-available-width&quot;,
+              `${Math.max(0, availableWidth)}px`,
+            );
+            elements.floating.style.setProperty(
+              &quot;--tooltip-available-height&quot;,
+              `${Math.max(0, availableHeight)}px`,
+            );
+          },
+        }),
+      ],
+      placement: getPlacement(trigger),
+      strategy: &quot;fixed&quot;,
+    })
+      .then(({ x, y }) =&gt; {
+        if (activeTrigger !== trigger || request !== positionRequest) {
+          return;
+        }
+        const scale = window.devicePixelRatio || 1;
+        floating.style.transform = `translate(${Math.round(x * scale) / scale}px, ${Math.round(y * scale) / scale}px)`;
+        floating.style.visibility = &quot;visible&quot;;
+      })
+      .catch(() =&gt; {
+        if (activeTrigger === trigger &amp;&amp; request === positionRequest) {
+          closeTooltip(false);
+        }
+      });
+  };
+  const openTooltip = (trigger) =&gt; {
+    const content = getContent(trigger);
+    if (!trigger.isConnected || content.length === 0) {
+      return;
+    }
+    clearOpenTimeout();
+    if (activeTrigger === trigger) {
+      return;
+    }
+    closeTooltip();
+    const floating = getTooltip();
+    floating.textContent = content;
+    floating.style.visibility = &quot;hidden&quot;;
+    floating.style.transform = &quot;translate(0, 0)&quot;;
+    document.body.appendChild(floating);
+    activeTrigger = trigger;
+    setDescribedBy(trigger, true);
+    autoUpdateCleanup = autoUpdate(trigger, floating, () =&gt; {
+      updatePosition(trigger, floating);
+    });
+  };
+  const requestOpen = (trigger, immediate = false) =&gt; {
+    if (
+      getContent(trigger).length === 0 ||
+      activeTrigger === trigger ||
+      pendingTrigger === trigger
+    ) {
+      return;
+    }
+    clearOpenTimeout();
+    pendingTrigger = trigger;
+    const delay =
+      immediate || activeTrigger != null || Date.now() &lt; skipDelayUntil
+        ? 0
+        : hoverDelay;
+    if (delay === 0) {
+      openTooltip(trigger);
+      return;
+    }
+    openTimeout = window.setTimeout(() =&gt; {
+      openTimeout = null;
+      pendingTrigger = null;
+      openTooltip(trigger);
+    }, delay);
+  };
+  const handlePointerOpen = (event) =&gt; {
+    if (event.pointerType === &quot;touch&quot;) {
+      return;
+    }
+    const trigger = getTrigger(event);
+    if (trigger == null || containsTarget(trigger, event.relatedTarget)) {
+      return;
+    }
+    requestOpen(trigger);
+  };
+  const handlePointer = (event) =&gt; {
+    lastPointerWasTouch =
+      event.type === &quot;pointerdown&quot; &amp;&amp; event.pointerType === &quot;touch&quot;;
+  };
+  const handleTouchClick = (event) =&gt; {
+    const isTouch = event.pointerType === &quot;touch&quot; || lastPointerWasTouch;
+    lastPointerWasTouch = false;
+    if (!isTouch || event.detail === 0) {
+      return;
+    }
+    const trigger = getTrigger(event);
+    if (
+      trigger == null ||
+      !trigger.isConnected ||
+      getContent(trigger).length === 0 ||
+      (pinnedByTouch &amp;&amp; activeTrigger === trigger)
+    ) {
+      if (pinnedByTouch) {
+        closeTooltip();
+      }
+      return;
+    }
+    openTooltip(trigger);
+    pinnedByTouch = activeTrigger === trigger;
+    window.setTimeout(() =&gt; {
+      if (activeTrigger === trigger &amp;&amp; !trigger.isConnected) {
+        closeTooltip(false);
+      }
+    }, 0);
+  };
+  const handleLeave = (event) =&gt; {
+    if (pinnedByTouch) {
+      return;
+    }
+    const trigger = getTrigger(event);
+    if (trigger == null || containsTarget(trigger, event.relatedTarget)) {
+      return;
+    }
+    if (activeTrigger === trigger || pendingTrigger === trigger) {
+      closeTooltip();
+    }
+  };
+  const handleFocusIn = (event) =&gt; {
+    const trigger = getTrigger(event);
+    if (trigger?.matches(&quot;:focus-visible&quot;)) {
+      requestOpen(trigger, true);
+    }
+  };
+  const handleKeyDown = (event) =&gt; {
+    if (event.key === &quot;Escape&quot;) {
+      closeTooltip();
+    }
+  };
+  const handleContextMenu = (event) =&gt; {
+    lastPointerWasTouch = false;
+    const trigger = getTrigger(event);
+    if (activeTrigger === trigger || pendingTrigger === trigger) {
+      closeTooltip();
+    }
+  };
+  const handlers = {
+    pointerover: handlePointerOpen,
+    pointerdown: handlePointer,
+    pointercancel: handlePointer,
+    click: handleTouchClick,
+    pointerout: handleLeave,
+    focusin: handleFocusIn,
+    focusout: handleLeave,
+    keydown: handleKeyDown,
+    contextmenu: handleContextMenu,
+  };
+  const roots = new Map();
+  const handledEvents = new WeakSet();
+  const handleEvent = (event) =&gt; {
+    if (handledEvents.has(event)) return;
+    handledEvents.add(event);
+    handlers[event.type](event);
+  };
+  const discoverRoots = (node) =&gt; {
+    if (node.shadowRoot) listen(node.shadowRoot);
+    for (const element of node.querySelectorAll(&quot;*&quot;)) {
+      if (element.shadowRoot) listen(element.shadowRoot);
+    }
+  };
+  const listen = (root) =&gt; {
+    if (roots.has(root)) return;
+    for (const type of Object.keys(handlers)) root.addEventListener(type, handleEvent);
+    const observer = new window.MutationObserver((records) =&gt; {
+      for (const { addedNodes } of records) {
+        for (const node of addedNodes) {
+          if (node.nodeType === Node.ELEMENT_NODE) discoverRoots(node);
+        }
+      }
+      for (const [root, cleanup] of roots) {
+        if (root.host &amp;&amp; !root.host.isConnected) {
+          cleanup();
+          roots.delete(root);
+        }
+      }
+      if (activeTrigger &amp;&amp; !activeTrigger.isConnected) closeTooltip(false);
+    });
+    observer.observe(root, { childList: true, subtree: true });
+    roots.set(root, () =&gt; {
+      observer.disconnect();
+      for (const type of Object.keys(handlers)) root.removeEventListener(type, handleEvent);
+    });
+    discoverRoots(root);
+  };
+  const destroy = () =&gt; {
+    closeTooltip(false);
+    lastPointerWasTouch = false;
+    for (const cleanup of roots.values()) cleanup();
+    roots.clear();
+    tooltip = null;
+  };
+
+  // Events between children of one shadow root never reach the document.
+  listen(document);
+  window.addEventListener(&quot;pagehide&quot;, destroy, { once: true });
+})();
+&lt;/script&gt;
+&lt;script id=&quot;codex-visualization-tabs&quot;&gt;
+(() =&gt; {
+  const selector = &#x27;.nav[role=&quot;tablist&quot;] [role=&quot;tab&quot;]&#x27;;
+  const disabled = &#x27;:disabled,[aria-disabled=&quot;true&quot;]&#x27;;
+  const selectTab = (selected) =&gt; {
+    const panelId = selected.getAttribute(&quot;aria-controls&quot;);
+    for (const tab of selected.closest(&#x27;[role=&quot;tablist&quot;]&#x27;).querySelectorAll(&#x27;[role=&quot;tab&quot;]&#x27;)) {
+      const active = tab === selected;
+      tab.classList.toggle(&quot;active&quot;, active);
+      tab.setAttribute(&quot;aria-selected&quot;, String(active));
+      const id = tab.getAttribute(&quot;aria-controls&quot;);
+      const panel = id &amp;&amp; document.getElementById(id);
+      if (panel != null) {
+        panel.hidden = id !== panelId;
+        if (!panel.hidden &amp;&amp; selected.id) {
+          panel.setAttribute(&quot;aria-labelledby&quot;, selected.id);
+        }
+      }
+    }
+  };
+  const interact = (event) =&gt; {
+    const tab = event.target?.closest?.(selector);
+    if (event.defaultPrevented || tab == null || tab.matches(disabled)) {
+      return;
+    }
+    if (event.type === &quot;click&quot;) {
+      selectTab(tab);
+      return;
+    }
+    const tabs = Array.from(
+      tab.closest(&#x27;[role=&quot;tablist&quot;]&#x27;).querySelectorAll(&#x27;[role=&quot;tab&quot;]&#x27;),
+    ).filter((candidate) =&gt; !candidate.matches(disabled));
+    const current = tabs.indexOf(tab);
+    let next;
+    if (event.key === &quot;ArrowRight&quot; || event.key === &quot;ArrowDown&quot;) {
+      next = (current + 1) % tabs.length;
+    } else if (event.key === &quot;ArrowLeft&quot; || event.key === &quot;ArrowUp&quot;) {
+      next = (current + tabs.length - 1) % tabs.length;
+    } else if (event.key === &quot;Home&quot;) {
+      next = 0;
+    } else if (event.key === &quot;End&quot;) {
+      next = tabs.length - 1;
+    } else {
+      return;
+    }
+    event.preventDefault();
+    tabs[next].focus();
+    selectTab(tabs[next]);
+  };
+
+  for (const list of document.querySelectorAll(&#x27;.nav[role=&quot;tablist&quot;]&#x27;)) {
+    const selected =
+      list.querySelector(&#x27;[role=&quot;tab&quot;][aria-selected=&quot;true&quot;]&#x27;) ??
+      list.querySelector(&#x27;[role=&quot;tab&quot;].active&#x27;) ??
+      list.querySelector(&#x27;[role=&quot;tab&quot;]&#x27;);
+    if (selected != null) {
+      selectTab(selected);
+    }
+  }
+  document.addEventListener(&quot;click&quot;, interact);
+  document.addEventListener(&quot;keydown&quot;, interact);
+  window.addEventListener(&quot;pagehide&quot;, () =&gt; {
+    document.removeEventListener(&quot;click&quot;, interact);
+    document.removeEventListener(&quot;keydown&quot;, interact);
+  }, { once: true });
+})();
+&lt;/script&gt;
+&lt;script id=&quot;codex-visualization-carousel&quot;&gt;
+  (() =&gt; {
+    for (const root of document.querySelectorAll(&quot;.viz-carousel&quot;)) {
+      const panels = Array.from(
+        root.querySelectorAll(&quot;:scope &gt; [data-variant]&quot;),
+      );
+      if (panels.length === 0) {
+        continue;
+      }
+      root.setAttribute(&quot;role&quot;, &quot;group&quot;);
+      panels.forEach((panel, index) =&gt; {
+        panel.hidden = index !== 0;
+        panel.setAttribute(&quot;role&quot;, &quot;group&quot;);
+        if (!panel.hasAttribute(&quot;aria-label&quot;)) {
+          panel.setAttribute(&quot;aria-label&quot;, panel.dataset.variant);
+        }
+      });
+      root.dataset.activeVariant = panels[0].dataset.variant;
+      if (panels.length === 1) {
+        continue;
+      }
+
+      const controls = document.createElement(&quot;div&quot;);
+      controls.className = &quot;viz-carousel-controls&quot;;
+      // Portable copy of the settings dropdown&#x27;s legacy glyph; no 14px icon-package preset matches it.
+      // https://github.com/openai/openai/blob/master/codex/codex-apps/webview/src/icons/chevron.svg
+      controls.innerHTML = `
+      &lt;button type=&quot;button&quot; class=&quot;viz-carousel-previous cursor-interaction&quot;&gt;&lt;i data-lucide=&quot;chevron-left&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&lt;/button&gt;
+      &lt;details class=&quot;viz-carousel-picker&quot;&gt;
+        &lt;summary class=&quot;cursor-interaction&quot;&gt;
+          &lt;span class=&quot;viz-carousel-count tabular-nums&quot;&gt;&lt;/span&gt;
+          &lt;span class=&quot;viz-carousel-name&quot;&gt;&lt;/span&gt;
+          &lt;svg class=&quot;viz-carousel-caret&quot; width=&quot;14&quot; height=&quot;14&quot; viewBox=&quot;0 0 20 21&quot; fill=&quot;none&quot; aria-hidden=&quot;true&quot; focusable=&quot;false&quot;&gt;
+            &lt;path d=&quot;M15.2793 7.71101C15.539 7.45131 15.961 7.45131 16.2207 7.71101C16.4804 7.97071 16.4804 8.39272 16.2207 8.65242L10.4707 14.4024C10.211 14.6621 9.78902 14.6621 9.52932 14.4024L3.77932 8.65242L3.69436 8.54792C3.52385 8.28979 3.55205 7.93828 3.77932 7.71101C4.00659 7.48374 4.3581 7.45554 4.61623 7.62605L4.72073 7.71101L10 12.9903L15.2793 7.71101Z&quot; fill=&quot;currentColor&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;0.6&quot; /&gt;
+          &lt;/svg&gt;
+        &lt;/summary&gt;
+        &lt;div class=&quot;viz-carousel-options&quot;&gt;&lt;/div&gt;
+      &lt;/details&gt;
+      &lt;button type=&quot;button&quot; class=&quot;viz-carousel-next cursor-interaction&quot;&gt;&lt;i data-lucide=&quot;chevron-right&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&lt;/button&gt;`;
+      const previous = controls.querySelector(&quot;.viz-carousel-previous&quot;);
+      const next = controls.querySelector(&quot;.viz-carousel-next&quot;);
+      const picker = controls.querySelector(&quot;.viz-carousel-picker&quot;);
+      const summary = picker.querySelector(&quot;summary&quot;);
+      const count = controls.querySelector(&quot;.viz-carousel-count&quot;);
+      const name = controls.querySelector(&quot;.viz-carousel-name&quot;);
+      const options = controls.querySelector(&quot;.viz-carousel-options&quot;);
+      const status = document.createElement(&quot;span&quot;);
+      status.className = &quot;sr-only&quot;;
+      status.setAttribute(&quot;role&quot;, &quot;status&quot;);
+      status.setAttribute(&quot;aria-live&quot;, &quot;polite&quot;);
+      status.setAttribute(&quot;aria-atomic&quot;, &quot;true&quot;);
+      previous.setAttribute(
+        &quot;aria-label&quot;,
+        root.dataset.previousLabel ?? &quot;Previous variant&quot;,
+      );
+      next.setAttribute(&quot;aria-label&quot;, root.dataset.nextLabel ?? &quot;Next variant&quot;);
+
+      let active = 0;
+      const choices = panels.map((panel, index) =&gt; {
+        const choice = document.createElement(&quot;button&quot;);
+        choice.type = &quot;button&quot;;
+        choice.className = &quot;cursor-interaction&quot;;
+        choice.textContent = panel.dataset.variant;
+        choice.addEventListener(&quot;click&quot;, () =&gt; {
+          select(index);
+          summary.focus();
+        });
+        options.appendChild(choice);
+        return choice;
+      });
+      const select = (index) =&gt; {
+        const changed = active !== index;
+        active = index;
+        panels.forEach((panel, position) =&gt; {
+          panel.hidden = position !== active;
+          choices[position].setAttribute(
+            &quot;aria-current&quot;,
+            String(position === active),
+          );
+        });
+        root.dataset.activeVariant = panels[active].dataset.variant;
+        count.textContent = `${active + 1} / ${panels.length}`;
+        name.textContent = panels[active].dataset.variant;
+        picker.open = false;
+        if (changed) {
+          status.textContent = `${count.textContent}: ${name.textContent}`;
+        }
+      };
+      previous.addEventListener(&quot;click&quot;, () =&gt;
+        select((active + panels.length - 1) % panels.length),
+      );
+      next.addEventListener(&quot;click&quot;, () =&gt;
+        select((active + 1) % panels.length),
+      );
+      picker.addEventListener(&quot;keydown&quot;, (event) =&gt; {
+        if (event.key === &quot;Escape&quot; &amp;&amp; picker.open) {
+          event.preventDefault();
+          picker.open = false;
+          summary.focus();
+        }
+      });
+      const dismiss = (event) =&gt; {
+        if (!picker.contains(event.target)) {
+          picker.open = false;
+        }
+      };
+      const sizePicker = () =&gt; {
+        root.style.setProperty(
+          &quot;--viz-carousel-picker-height&quot;,
+          `${picker.open ? options.offsetHeight : 0}px`,
+        );
+      };
+      picker.addEventListener(&quot;toggle&quot;, sizePicker);
+      window.addEventListener(&quot;resize&quot;, sizePicker);
+      document.addEventListener(&quot;pointerdown&quot;, dismiss);
+      window.addEventListener(
+        &quot;pagehide&quot;,
+        () =&gt; {
+          document.removeEventListener(&quot;pointerdown&quot;, dismiss);
+          window.removeEventListener(&quot;resize&quot;, sizePicker);
+        },
+        { once: true },
+      );
+      root.append(controls, status);
+      select(0);
+    }
+  })();
+&lt;/script&gt;
+&lt;script id=&quot;codex-visualization-lucide&quot; async src=&quot;https://unpkg.com/lucide@1.17.0/dist/umd/lucide.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+(() =&gt; {
+  const initialize = () =&gt; {
+    globalThis.lucide?.createIcons({ attrs: { width: 16, height: 16 } });
+  };
+  if (globalThis.lucide != null) {
+    initialize();
+    return;
+  }
+  document
+    .getElementById(&quot;codex-visualization-lucide&quot;)
+    ?.addEventListener(&quot;load&quot;, initialize, { once: true });
+})();
+&lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+"></iframe>
+<script>(() => {
+  const frame = document.getElementById("codex-visualization");
+  if (!(frame instanceof HTMLIFrameElement)) {
+    return;
+  }
+  let viewportHeight = globalThis.innerHeight;
+  const storageKey = `codex:visualization-widget-state-v2:${JSON.stringify([
+    globalThis.location.pathname,
+    globalThis.location.search,
+  ])}`;
+  const parseState = (serializedState) => {
+    if (
+      typeof serializedState !== "string" ||
+      new TextEncoder().encode(serializedState).length > 16 * 1024
+    ) {
+      throw new TypeError(
+        "Widget state must be a JSON object of at most 16 KiB",
+      );
+    }
+    /** @type {unknown} */
+    const state = JSON.parse(serializedState);
+    if (
+      state == null ||
+      typeof state !== "object" ||
+      Array.isArray(state) ||
+      ("imageIds" in state &&
+        (!Array.isArray(state.imageIds) || state.imageIds.length > 0))
+    ) {
+      throw new TypeError("Widget state must be a JSON object");
+    }
+    const storedState = { modelContent: null, privateContent: null, ...state };
+    const canonicalState = JSON.stringify(
+      storedState,
+      (_key, /** @type {unknown} */ value) => {
+        if (typeof value === "number" && !Number.isFinite(value)) {
+          throw new TypeError("Widget state must contain finite numbers");
+        }
+        return value;
+      },
+    );
+    if (new TextEncoder().encode(canonicalState).length > 16 * 1024) {
+      throw new TypeError(
+        "Widget state must be a JSON object of at most 16 KiB",
+      );
+    }
+    return storedState;
+  };
+  let storage = null;
+  let state = null;
+  try {
+    const localStorage = globalThis.localStorage;
+    const probeKey = `${storageKey}:probe`;
+    localStorage.setItem(probeKey, "1");
+    localStorage.removeItem(probeKey);
+    storage = localStorage;
+    const savedState = storage.getItem(storageKey);
+    if (savedState != null) {
+      try {
+        state = parseState(savedState);
+      } catch {
+        // Invalid saved state does not disable future writes.
+      }
+    }
+  } catch {
+    storage = null;
+  }
+  const initialGlobals = {
+    widgetState: state,
+    statePersistence: storage == null ? "none" : "local",
+  };
+
+  const channel = new MessageChannel();
+  channel.port1.addEventListener("message", (event) => {
+    const data = event.data;
+    if (typeof data !== "object" || data == null) {
+      return;
+    }
+    if (data.type === "widget-state-write") {
+      if (!Number.isSafeInteger(data.id) || data.id <= 0) {
+        return;
+      }
+      let ok = false;
+      try {
+        if (storage != null) {
+          const state = parseState(data.state);
+          storage.setItem(storageKey, JSON.stringify(state));
+          ok = true;
+        }
+      } catch {
+        // Storage denial, quota limits, and invalid state return a failed receipt.
+      }
+      channel.port1.postMessage({
+        type: "widget-state-result",
+        id: data.id,
+        ok,
+      });
+      return;
+    }
+    if (data.type === "height") {
+      const height = data.height;
+      if (
+        typeof height === "number" &&
+        Number.isFinite(height) &&
+        height >= 0 &&
+        height <= 10_000
+      ) {
+        frame.style.height = Math.ceil(height) + "px";
+      }
+      return;
+    }
+    if (data.type === "scroll-to") {
+      const top = data.top;
+      if (
+        typeof top === "number" &&
+        Number.isFinite(top) &&
+        top >= 0 &&
+        globalThis.navigator.userActivation?.isActive === true
+      ) {
+        globalThis.scrollTo({
+          top: Math.ceil(
+            globalThis.scrollY + frame.getBoundingClientRect().top + top,
+          ),
+        });
+      }
+      return;
+    }
+    if (data.type === "open-external") {
+      const rawHref = data.href;
+      if (typeof rawHref !== "string") {
+        return;
+      }
+      let href;
+      try {
+        const url = new URL(rawHref, document.baseURI);
+        if (url.protocol !== "https:") {
+          return;
+        }
+        href = url.href;
+      } catch {
+        return;
+      }
+      if (globalThis.navigator.userActivation?.isActive === true) {
+        const anchor = document.createElement("a");
+        anchor.href = href;
+        anchor.rel = "noopener noreferrer";
+        anchor.target = "_blank";
+        document.body.appendChild(anchor);
+        anchor.click();
+        anchor.remove();
+      }
+      return;
+    }
+    if (data.type === "follow-up") {
+      const prompt = data.prompt;
+      if (
+        typeof prompt !== "string" ||
+        globalThis.navigator.userActivation?.isActive !== true
+      ) {
+        return;
+      }
+      const title = data.title;
+      globalThis.prompt(typeof title === "string" ? title : prompt, prompt);
+    }
+  });
+  channel.port1.start();
+  const srcdoc = frame.dataset.srcdoc;
+  if (srcdoc == null) {
+    return;
+  }
+  globalThis.addEventListener("resize", () => {
+    const height = Number.parseFloat(frame.style.height);
+    if (!Number.isFinite(height) || height <= viewportHeight) {
+      frame.style.removeProperty("height");
+    }
+    viewportHeight = globalThis.innerHeight;
+    channel.port1.postMessage({ type: "measure" });
+  });
+  frame.addEventListener(
+    "load",
+    () => {
+      frame.contentWindow?.postMessage(
+        { type: "codex-visualization-initialize" },
+        "*",
+        [channel.port2],
+      );
+    },
+    { once: true },
+  );
+  // Match the trusted bootstrap element, not the same text in an authored title.
+  frame.srcdoc = srcdoc.replace(
+    '<script type="application/json" id="codex-visualization-widget-state">__CODEX_VISUALIZATION_WIDGET_STATE__<\/script>',
+    () =>
+      '<script type="application/json" id="codex-visualization-widget-state">' +
+      JSON.stringify(initialGlobals).replaceAll("<", "\\u003c") +
+      "<\/script>",
+  );
+  delete frame.dataset.srcdoc;
+})();
+</script>
+</body>
+</html>

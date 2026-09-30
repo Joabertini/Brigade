@@ -1,0 +1,22 @@
+{
+  "product": "Brigade",
+  "revision": 2,
+  "status": "visual_design_approved",
+  "approved_on": "2026-09-30",
+  "approved_by": "project_owner_in_conversation",
+  "presentations": {
+    "mobile": "Celular · primero",
+    "desktop": "Escritorio"
+  },
+  "scope": "Visual design. Complete fields and integration of B-B-Chef and Brigade remain pending.",
+  "files": {
+    "brigade-v2.fragment.html": {
+      "sha256": "a7581d7f5dc8de04f3c6753db8b3d81662d90a12e69a10379eb9401a6502dc42",
+      "bytes": 49307
+    },
+    "brigade-v2.html": {
+      "sha256": "bcf9957fe6a9125840b4e4acafbeb2b63aa422799e4ed4098c67b36577f01ff2",
+      "bytes": 129719
+    }
+  }
+}
