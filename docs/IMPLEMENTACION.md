@@ -1,6 +1,6 @@
 # Implementación en curso
 
-Estado al 30 de septiembre de 2026. Este documento describe lo que funciona en el repositorio; [PRODUCTO.md](PRODUCTO.md) define el alcance del piloto. Aún no está listo para usar con datos reales de la cocina.
+Estado al 1 de octubre de 2026. Este documento describe lo que funciona en el repositorio; [PRODUCTO.md](PRODUCTO.md) define el alcance del piloto. Aún no está listo para usar con datos reales de la cocina.
 
 ## Base ejecutable
 
@@ -8,7 +8,7 @@ Estado al 30 de septiembre de 2026. Este documento describe lo que funciona en e
 | --- | --- | --- |
 | Cliente y diseño | Vite, React/TypeScript y PWA. `src/styles.css` es el CSS del mock aprobado copiado sin cambios (solo se quitó el ámbito `#brigade-v2`); cada vista usa su marcado `b2-*` e iconos Lucide. Las extensiones para datos reales están al final del archivo y usan los mismos tokens. Recarga sin red comprobada en Chromium móvil. | Probar Safari en el iPhone del tester y Android real; pulir todos los estados y campos. |
 | Identidad y equipo | Better Auth sobre D1, alta pública cerrada, configuración inicial con token, sesiones, roles de chef/sous chef/commis, invitaciones por enlace. | Recuperación de cuenta, operación de producción, administración completa de integrantes. |
-| Recetas | Alta manual con ingredientes y pasos, lectura privada, acceso a todo el equipo o a integrantes elegidos; esquema de versiones. | Edición/versionado, archivo, captura por imagen, revisión culinaria y traslado controlado de las recetas heredadas. |
+| Recetas | Alta manual con ingredientes y pasos, lectura privada, acceso a todo el equipo o a integrantes elegidos; esquema de versiones. | Edición/versionado, archivo, conservación de originales y traslado controlado de las recetas heredadas. |
 | Producción | Plan con receta y rendimiento, evento opcional, registro de tandas, operaciones idempotentes. Commis registra solo en producción con tarea asignada. Cada tanda descuenta del stock el bruto de los ingredientes vinculados, en el mismo batch D1 e idempotente por tanda; si el stock registrado no alcanza, queda en 0 sin rechazar la tanda. | Interfaz de asignación, historial de versión de receta completo y resolución de conflictos. |
 | Sin conexión | IndexedDB para recetas, eventos y producciones consultados; cola local de tandas con identificador estable y reintento al volver la red. | Borradores de recetas sincronizables, migración de datos locales al usuario, controles de acceso al caché y tratamiento completo de conflictos. |
 | Eventos | Alta, consulta y edición básica; vínculo opcional con una producción. | Relaciones y vistas completas, validación de fechas y permisos de edición detallados. |
@@ -21,9 +21,9 @@ Estado al 30 de septiembre de 2026. Este documento describe lo que funciona en e
 
 El Worker está separado en `worker/auth.ts`, `permissions.ts`, `recipes.ts`, `production.ts`, `members.ts`, `events.ts`, `inventory.ts` y `purchases.ts`. Las migraciones D1 están en `migrations/0001` a `0006`. `shared/kitchen.ts` concentra cantidades enteras en milésimas, rendimiento y merma; la producción fija el ID de la versión de receta utilizada. Los secretos de desarrollo viven en `.dev.vars` ignorado por Git; `.dev.vars.example` contiene solo nombres de variables.
 
-El prototipo anterior CRA/Supabase y `vercel.json` se preservan sin ejecutar en `legacy/brigade-cra/`. No se migraron datos de una instancia Supabase real. El modo local de la nueva interfaz es útil para comprobar flujos, pero sus datos pertenecen a ese navegador y no tienen respaldo en D1.
+El prototipo anterior CRA/Supabase se preserva sin ejecutar en `legacy/brigade-cra/`. El `vercel.json` de la raíz sí está activo para publicar el frontend y conectar `/api/*` al Worker. No se migraron datos de una instancia Supabase real. El modo local de la nueva interfaz es útil para comprobar flujos, pero sus datos pertenecen a ese navegador y no tienen respaldo en D1.
 
-Despliegue: API y datos en Cloudflare (Worker `brigade.bertinisdnd.workers.dev`, D1 remota `brigade`, secretos `BETTER_AUTH_SECRET` y `BOOTSTRAP_TOKEN`). El frontend se publica en Vercel (proyecto `brigade`, dominio `brigade.bertinilabs.xyz`). `vercel.json` compila Vite y reescribe `/api/*` al Worker, así la sesión queda en el mismo origen que la app. `PUBLIC_ORIGIN` en `wrangler.jsonc` lista los orígenes aceptados por Better Auth; en local se sobrescribe desde `.dev.vars`. El workflow `Brigade CI` ejecuta instalación reproducible, pruebas y compilación en cada PR.
+Despliegue: API y datos en Cloudflare (Worker `brigade.bertinisdnd.workers.dev`, D1 remota `brigade`, secreto `BETTER_AUTH_SECRET`). La primera cocina ya existe y `BOOTSTRAP_TOKEN` no está configurado, por lo que el alta inicial queda deshabilitada. El frontend se publica en Vercel (proyecto `brigade`, dominio `brigade.bertinilabs.xyz`). `vercel.json` compila Vite y reescribe `/api/*` al Worker, así la sesión queda en el mismo origen que la app. `PUBLIC_ORIGIN` en `wrangler.jsonc` lista los orígenes aceptados por Better Auth; en local se sobrescribe desde `.dev.vars`. El workflow `Brigade CI` ejecuta instalación reproducible, pruebas y compilación en cada PR. El Worker sirve la versión `113465cd-2c7b-4562-94c5-8502af776df5` desde el 01/10/2026; la D1 remota no tiene migraciones pendientes. Salud y rechazo de acceso sin sesión se comprobaron en ambos dominios.
 
 ## Correspondencia con B-B-Chef
 
@@ -52,13 +52,13 @@ Las recetas heredadas tienen rendimientos descriptivos o ingredientes sin cantid
 - `npm audit` tras actualizar Vitest: cero alertas. Las pruebas unitarias usan `vitest.config.ts` para aislar cálculos del Worker.
 - Los servidores de vista previa se detuvieron después de cada prueba. Capturas y scripts de comprobación están en `work/` del workspace de la sesión, fuera de Brigade.
 
-Estas pruebas usan Chromium; faltan Safari y Android reales. Los datos D1 usados fueron de prueba, no una cocina del usuario. La base se publicó para revisión en el [PR draft #2](https://github.com/Joabertini/Brigade/pull/2); no hay despliegue de Brigade en Cloudflare ni merge.
+Estas pruebas de interfaz usan Chromium; faltan Safari y Android reales. Los datos D1 usados fueron de prueba, no una cocina del usuario. La base se revisó en el [PR #2](https://github.com/Joabertini/Brigade/pull/2) y la captura por foto se fusionó en el [PR #6](https://github.com/Joabertini/Brigade/pull/6). El despliegue y las comprobaciones públicas del 01/10 están registrados en la [hoja de sesión](sesiones/2026-10-01.md).
 
 ## Riesgos y próximos módulos
 
 1. Impedir que errores 401/403 parezcan cortes de red y oculten revocaciones tras una caché previa.
 2. Vincular recetas al catálogo, calcular requerimientos sin mezclar unidades, sugerir agrupación por proveedor y completar tareas independientes de eventos.
-3. Incorporar captura de imágenes, conservación del original, OCR y modelo de interpretación culinaria con confirmación humana obligatoria para dudas.
+3. Conservar el original de cada captura, admitir varias imágenes por receta y repetir la evaluación con fotos reales del chef; la transcripción e interpretación con confirmación humana ya funcionan.
 4. Completar edición/versionado, conciliación offline, permisos, recuperación de cuenta y pruebas en dispositivos reales.
 
 ## Fuentes técnicas consultadas
