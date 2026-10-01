@@ -1,0 +1,1108 @@
+[
+  {
+    "id": "bbchef-croquetas",
+    "visibility": "private",
+    "course": "Entradas",
+    "version": {
+      "id": "bbchef-croquetas-v1",
+      "recipeId": "bbchef-croquetas",
+      "version": 1,
+      "title": "Croquetas de Jamón Crudo",
+      "description": "Bechamel trabada · alioli de limón\n\nRendimiento original en B-B-Chef: ≈ 80 unidades · 16 porciones de 5.\n\nImportada para revisión: cantidades y procedimiento aún no validados en Brigade; merma no especificada en origen.\n\nNotas de ingredientes del origen: Aceite de oliva: sofrito · Pan rallado: rebozado.",
+      "yieldMilli": 16000,
+      "yieldUnit": "porción",
+      "ingredients": [
+        {
+          "id": "bbchef-croquetas-ing-jamon",
+          "name": "Jamón crudo",
+          "netMilli": 500000,
+          "unit": "g",
+          "wastePermille": 0
+        },
+        {
+          "id": "bbchef-croquetas-ing-ceb_bl",
+          "name": "Cebolla blanca",
+          "netMilli": 200000,
+          "unit": "g",
+          "wastePermille": 0
+        },
+        {
+          "id": "bbchef-croquetas-ing-ceb_mo",
+          "name": "Cebolla morada",
+          "netMilli": 200000,
+          "unit": "g",
+          "wastePermille": 0
+        },
+        {
+          "id": "bbchef-croquetas-ing-manteca",
+          "name": "Manteca",
+          "netMilli": 240000,
+          "unit": "g",
+          "wastePermille": 0
+        },
+        {
+          "id": "bbchef-croquetas-ing-harina",
+          "name": "Harina tamizada",
+          "netMilli": 220000,
+          "unit": "g",
+          "wastePermille": 0
+        },
+        {
+          "id": "bbchef-croquetas-ing-leche",
+          "name": "Leche entera",
+          "netMilli": 2000000,
+          "unit": "ml",
+          "wastePermille": 0
+        },
+        {
+          "id": "bbchef-croquetas-ing-aove",
+          "name": "Aceite de oliva",
+          "netMilli": 15000,
+          "unit": "ml",
+          "wastePermille": 0
+        },
+        {
+          "id": "bbchef-croquetas-ing-pan_ray",
+          "name": "Pan rallado",
+          "netMilli": 300000,
+          "unit": "g",
+          "wastePermille": 0
+        },
+        {
+          "id": "bbchef-croquetas-ing-huevo_c",
+          "name": "Huevos rebozado",
+          "netMilli": 3000,
+          "unit": "un",
+          "wastePermille": 0
+        }
+      ],
+      "steps": [
+        {
+          "id": "bbchef-croquetas-step-crq_1",
+          "title": "Sofrito de cebolla blanca y morada",
+          "instruction": "D-1 · Sin caramelizar — solo sudar",
+          "ingredientIds": []
+        },
+        {
+          "id": "bbchef-croquetas-step-crq_2",
+          "title": "Incorporar jamón brunoise y sudar",
+          "instruction": "D-1 · No dorar el jamón",
+          "ingredientIds": []
+        },
+        {
+          "id": "bbchef-croquetas-step-crq_3",
+          "title": "Agregar manteca + harina → cocinar roux",
+          "instruction": "D-1 · Bien cocido antes de agregar leche",
+          "ingredientIds": []
+        },
+        {
+          "id": "bbchef-croquetas-step-crq_4",
+          "title": "Incorporar leche de a poco → reducir a textura firme",
+          "instruction": "D-1 · Mezclar constante sin parar",
+          "ingredientIds": []
+        },
+        {
+          "id": "bbchef-croquetas-step-crq_5",
+          "title": "Enfriar en placa → cubrir con film contacto",
+          "instruction": "D-1 · Film al contacto para evitar costra",
+          "ingredientIds": []
+        },
+        {
+          "id": "bbchef-croquetas-step-crq_6",
+          "title": "Dar forma 20g c/u → pasar por huevo y pan rallado",
+          "instruction": "D-1 · En frío — la masa firme se trabaja mejor",
+          "ingredientIds": []
+        },
+        {
+          "id": "bbchef-croquetas-step-crq_7",
+          "title": "Guardar rebozadas en frío sobre papel",
+          "instruction": "D-1 · No apilar — se pegan",
+          "ingredientIds": []
+        },
+        {
+          "id": "bbchef-croquetas-step-crq_8",
+          "title": "Sacar croquetas 15 min antes del frío",
+          "instruction": "Una hora antes del servicio · Temperatura ambiente mejora fritura",
+          "ingredientIds": []
+        },
+        {
+          "id": "bbchef-croquetas-step-crq_9",
+          "title": "Freír a 180°C",
+          "instruction": "Durante el servicio · Aceite abundante · dorar parejo · escurrir",
+          "ingredientIds": []
+        }
+      ],
+      "confirmedByChef": true
+    },
+    "updatedAt": "2026-10-01T00:00:00.000Z"
+  },
+  {
+    "id": "bbchef-langostinos",
+    "visibility": "private",
+    "course": "Entradas",
+    "version": {
+      "id": "bbchef-langostinos-v1",
+      "recipeId": "bbchef-langostinos",
+      "version": 1,
+      "title": "Langostinos al Fuego",
+      "description": "Cognac · manteca de hierbas · limón\n\nRendimiento original en B-B-Chef: 5 unidades por persona · ≈ 6 personas.\n\nImportada para revisión: cantidades y procedimiento aún no validados en Brigade; merma no especificada en origen.\n\nNotas de ingredientes del origen: Langostinos: 5 por persona · Cabeza de ajo: 1 cada 10 · Cognac: flambear · Morrón rojo salsa: salsa sriracha.",
+      "yieldMilli": 6000,
+      "yieldUnit": "porción",
+      "ingredients": [
+        {
+          "id": "bbchef-langostinos-ing-langos",
+          "name": "Langostinos",
+          "netMilli": 30000,
+          "unit": "un",
+          "wastePermille": 0
+        },
+        {
+          "id": "bbchef-langostinos-ing-ajo",
+          "name": "Cabeza de ajo",
+          "netMilli": 3000,
+          "unit": "un",
+          "wastePermille": 0
+        },
+        {
+          "id": "bbchef-langostinos-ing-cognac",
+          "name": "Cognac",
+          "netMilli": 100000,
+          "unit": "ml",
+          "wastePermille": 0
+        },
+        {
+          "id": "bbchef-langostinos-ing-morron",
+          "name": "Morrón rojo salsa",
+          "netMilli": 5000000,
+          "unit": "g",
+          "wastePermille": 0
+        },
+        {
+          "id": "bbchef-langostinos-ing-sriracha",
+          "name": "Sriracha",
+          "netMilli": 1000000,
+          "unit": "ml",
+          "wastePermille": 0
+        }
+      ],
+      "steps": [
+        {
+          "id": "bbchef-langostinos-step-lng_1",
+          "title": "Asar morrones → vapor en bolsa → pelar",
+          "instruction": "D-1 · Piel completamente carbonizada",
+          "ingredientIds": []
+        },
+        {
+          "id": "bbchef-langostinos-step-lng_2",
+          "title": "Licuar morrones con sriracha → reducir",
+          "instruction": "D-1 · Punto nappé — guardar en frío",
+          "ingredientIds": []
+        },
+        {
+          "id": "bbchef-langostinos-step-lng_3",
+          "title": "Confitar ajo en aceite",
+          "instruction": "D-1 · 70–80°C · 45 min · no freír",
+          "ingredientIds": []
+        },
+        {
+          "id": "bbchef-langostinos-step-lng_4",
+          "title": "Verificar langostinos limpios y secos",
+          "instruction": "Una hora antes del servicio · Húmedos no sellan — secar con papel",
+          "ingredientIds": []
+        },
+        {
+          "id": "bbchef-langostinos-step-lng_5",
+          "title": "Sellar langostinos en plancha muy caliente",
+          "instruction": "Durante el servicio · Vuelta y vuelta · máx 2 min",
+          "ingredientIds": []
+        },
+        {
+          "id": "bbchef-langostinos-step-lng_6",
+          "title": "Agregar ajo confitado → flambear con cognac",
+          "instruction": "Durante el servicio · Fuera del fuego para encender",
+          "ingredientIds": []
+        },
+        {
+          "id": "bbchef-langostinos-step-lng_7",
+          "title": "Montar con salsa sriracha caliente",
+          "instruction": "Durante el servicio · Salsa regenerada al momento",
+          "ingredientIds": []
+        }
+      ],
+      "confirmedByChef": true
+    },
+    "updatedAt": "2026-10-01T00:00:00.000Z"
+  },
+  {
+    "id": "bbchef-empanadas",
+    "visibility": "private",
+    "course": "Entradas",
+    "version": {
+      "id": "bbchef-empanadas-v1",
+      "recipeId": "bbchef-empanadas",
+      "version": 1,
+      "title": "Empanadas de Lomo Desmechado",
+      "description": "Masa casera · cebolla caramelizada · chimichurri\n\nRendimiento original en B-B-Chef: ≈ 36 empanadas · 12 porciones de 3.\n\nImportada para revisión: cantidades y procedimiento aún no validados en Brigade; merma no especificada en origen.\n\nNotas de ingredientes del origen: Lomo bola de lomo: cubos 5×5 · Caldo de vegetales: c/n.",
+      "yieldMilli": 12000,
+      "yieldUnit": "porción",
+      "ingredients": [
+        {
+          "id": "bbchef-empanadas-ing-lomo",
+          "name": "Lomo bola de lomo",
+          "netMilli": 500000,
+          "unit": "g",
+          "wastePermille": 0
+        },
+        {
+          "id": "bbchef-empanadas-ing-ceb_bl2",
+          "name": "Cebolla blanca",
+          "netMilli": 250000,
+          "unit": "g",
+          "wastePermille": 0
+        },
+        {
+          "id": "bbchef-empanadas-ing-vino_t",
+          "name": "Vino tinto Tannat",
+          "netMilli": 500000,
+          "unit": "ml",
+          "wastePermille": 0
+        },
+        {
+          "id": "bbchef-empanadas-ing-tapas",
+          "name": "Tapas Avanti pequeñas",
+          "netMilli": 36000,
+          "unit": "un",
+          "wastePermille": 0
+        },
+        {
+          "id": "bbchef-empanadas-ing-huevo_e",
+          "name": "Huevos",
+          "netMilli": 6000,
+          "unit": "un",
+          "wastePermille": 0
+        },
+        {
+          "id": "bbchef-empanadas-ing-caldo_v",
+          "name": "Caldo de vegetales",
+          "netMilli": 500000,
+          "unit": "ml",
+          "wastePermille": 0
+        }
+      ],
+      "steps": [
+        {
+          "id": "bbchef-empanadas-step-emp_1",
+          "title": "Sellar lomo en cubos a fuego alto",
+          "instruction": "D-2 · Retirar y reservar",
+          "ingredientIds": []
+        },
+        {
+          "id": "bbchef-empanadas-step-emp_2",
+          "title": "Deglasar con vino → caramelizar cebolla",
+          "instruction": "D-2 · 20–30 min a fuego lento",
+          "ingredientIds": []
+        },
+        {
+          "id": "bbchef-empanadas-step-emp_3",
+          "title": "Agregar carne · cubrir con caldo",
+          "instruction": "D-2 · Fuego bajo hasta textura deseada",
+          "ingredientIds": []
+        },
+        {
+          "id": "bbchef-empanadas-step-emp_4",
+          "title": "Desmechar en caliente → enfriar en su jugo",
+          "instruction": "D-2 · Guarda humedad y sabor",
+          "ingredientIds": []
+        },
+        {
+          "id": "bbchef-empanadas-step-emp_5",
+          "title": "Armar empanadas en frío",
+          "instruction": "D-1 · Relleno frío · tapas frías · cierre firme",
+          "ingredientIds": []
+        },
+        {
+          "id": "bbchef-empanadas-step-emp_6",
+          "title": "Guardar crudas en frío sobre papel enharinado",
+          "instruction": "D-1 · Sin apilar",
+          "ingredientIds": []
+        },
+        {
+          "id": "bbchef-empanadas-step-emp_7",
+          "title": "Hornear a 200°C 15–18 min",
+          "instruction": "Durante el servicio · Hasta doradas",
+          "ingredientIds": []
+        }
+      ],
+      "confirmedByChef": true
+    },
+    "updatedAt": "2026-10-01T00:00:00.000Z"
+  },
+  {
+    "id": "bbchef-boeuf",
+    "visibility": "private",
+    "course": "Principales",
+    "version": {
+      "id": "bbchef-boeuf-v1",
+      "recipeId": "bbchef-boeuf",
+      "version": 1,
+      "title": "Boeuf Bourguignon",
+      "description": "Carrillera de res · Tannat · cremoso de tubérculos\n\nRendimiento original en B-B-Chef: ≈ 6 porciones · con puré mixto.\n\nImportada para revisión: cantidades y procedimiento aún no validados en Brigade; merma no especificada en origen.\n\nNotas de ingredientes del origen: Carrillera limpia: cubos 8×8 · Papa: puré 50% · Boniato: puré 30% · Zanahoria: puré 20%.",
+      "yieldMilli": 6000,
+      "yieldUnit": "porción",
+      "ingredients": [
+        {
+          "id": "bbchef-boeuf-ing-carrillera",
+          "name": "Carrillera limpia",
+          "netMilli": 1000000,
+          "unit": "g",
+          "wastePermille": 0
+        },
+        {
+          "id": "bbchef-boeuf-ing-milepoir",
+          "name": "Mirepoix",
+          "netMilli": 500000,
+          "unit": "g",
+          "wastePermille": 0
+        },
+        {
+          "id": "bbchef-boeuf-ing-caldo_c",
+          "name": "Caldo de carne",
+          "netMilli": 1000000,
+          "unit": "ml",
+          "wastePermille": 0
+        },
+        {
+          "id": "bbchef-boeuf-ing-salsa_t",
+          "name": "Salsa de tomate",
+          "netMilli": 400000,
+          "unit": "ml",
+          "wastePermille": 0
+        },
+        {
+          "id": "bbchef-boeuf-ing-papa",
+          "name": "Papa",
+          "netMilli": 600000,
+          "unit": "g",
+          "wastePermille": 0
+        },
+        {
+          "id": "bbchef-boeuf-ing-boniato",
+          "name": "Boniato",
+          "netMilli": 360000,
+          "unit": "g",
+          "wastePermille": 0
+        },
+        {
+          "id": "bbchef-boeuf-ing-zanahoria",
+          "name": "Zanahoria",
+          "netMilli": 240000,
+          "unit": "g",
+          "wastePermille": 0
+        },
+        {
+          "id": "bbchef-boeuf-ing-leche_p",
+          "name": "Leche puré",
+          "netMilli": 200000,
+          "unit": "ml",
+          "wastePermille": 0
+        }
+      ],
+      "steps": [
+        {
+          "id": "bbchef-boeuf-step-boe_1",
+          "title": "Sellar carrillera en cubos 8×8",
+          "instruction": "D-2 · Plancha o sartén hierro muy caliente",
+          "ingredientIds": []
+        },
+        {
+          "id": "bbchef-boeuf-step-boe_2",
+          "title": "Brasar con mirepoix · caldo · tomate",
+          "instruction": "D-2 · 140°C horno · 3–4h · semi-sumergido",
+          "ingredientIds": []
+        },
+        {
+          "id": "bbchef-boeuf-step-boe_3",
+          "title": "Dejar enfriar en su jugo → refrigerar",
+          "instruction": "D-2 · Reposo una noche mejora sabor",
+          "ingredientIds": []
+        },
+        {
+          "id": "bbchef-boeuf-step-boe_4",
+          "title": "Retirar grasa solidificada",
+          "instruction": "D-1 · Más fácil en frío — sale en bloque",
+          "ingredientIds": []
+        },
+        {
+          "id": "bbchef-boeuf-step-boe_5",
+          "title": "Regenerar boeuf → ajustar reducción",
+          "instruction": "D-1 · Reducir si necesita → punto nappé",
+          "ingredientIds": []
+        },
+        {
+          "id": "bbchef-boeuf-step-boe_6",
+          "title": "Producir puré mixto papa boniato zanahoria",
+          "instruction": "D-1 · 50/30/20 · guardar en frío",
+          "ingredientIds": []
+        },
+        {
+          "id": "bbchef-boeuf-step-boe_7",
+          "title": "Regenerar boeuf a fuego bajo",
+          "instruction": "Día del servicio, preparación · 130°C horno · 20–30 min",
+          "ingredientIds": []
+        },
+        {
+          "id": "bbchef-boeuf-step-boe_8",
+          "title": "Regenerar puré a baño maría",
+          "instruction": "Día del servicio, preparación · Ajustar textura con leche caliente",
+          "ingredientIds": []
+        },
+        {
+          "id": "bbchef-boeuf-step-boe_9",
+          "title": "Verificar temperatura y sazón",
+          "instruction": "Durante el servicio · Sal en escamas al momento",
+          "ingredientIds": []
+        }
+      ],
+      "confirmedByChef": true
+    },
+    "updatedAt": "2026-10-01T00:00:00.000Z"
+  },
+  {
+    "id": "bbchef-gnocchi",
+    "visibility": "private",
+    "course": "Principales",
+    "version": {
+      "id": "bbchef-gnocchi-v1",
+      "recipeId": "bbchef-gnocchi",
+      "version": 1,
+      "title": "Gnocchi di Spinaci",
+      "description": "Salsa de hongos · parmesano al momento\n\nRendimiento original en B-B-Chef: ≈ 6 porciones.\n\nImportada para revisión: cantidades y procedimiento aún no validados en Brigade; merma no especificada en origen.",
+      "yieldMilli": 6000,
+      "yieldUnit": "porción",
+      "ingredients": [
+        {
+          "id": "bbchef-gnocchi-ing-papa_g",
+          "name": "Papa",
+          "netMilli": 1000000,
+          "unit": "g",
+          "wastePermille": 0
+        },
+        {
+          "id": "bbchef-gnocchi-ing-harina_g",
+          "name": "Harina",
+          "netMilli": 500000,
+          "unit": "g",
+          "wastePermille": 0
+        },
+        {
+          "id": "bbchef-gnocchi-ing-espinaca",
+          "name": "Espinaca",
+          "netMilli": 1000,
+          "unit": "atado",
+          "wastePermille": 0
+        }
+      ],
+      "steps": [
+        {
+          "id": "bbchef-gnocchi-step-gnc_1",
+          "title": "Blanquear espinaca → escurrir muy bien → picar",
+          "instruction": "D-1 · Shock térmico · exprimir todo el líquido",
+          "ingredientIds": []
+        },
+        {
+          "id": "bbchef-gnocchi-step-gnc_2",
+          "title": "Hervir papa → procesar en caliente",
+          "instruction": "D-1 · Sin agua — la humedad arruina la masa",
+          "ingredientIds": []
+        },
+        {
+          "id": "bbchef-gnocchi-step-gnc_3",
+          "title": "Integrar papa · espinaca · harina",
+          "instruction": "D-1 · Mezclar justo hasta unir",
+          "ingredientIds": []
+        },
+        {
+          "id": "bbchef-gnocchi-step-gnc_4",
+          "title": "Formar gnocchi → reservar sobre semolín",
+          "instruction": "D-1 · Sin apilar · cubrir",
+          "ingredientIds": []
+        },
+        {
+          "id": "bbchef-gnocchi-step-gnc_5",
+          "title": "Hervir en agua abundante con sal",
+          "instruction": "Durante el servicio · Flotan cuando listos · 2–3 min",
+          "ingredientIds": []
+        },
+        {
+          "id": "bbchef-gnocchi-step-gnc_6",
+          "title": "Saltear en manteca con salsa de hongos",
+          "instruction": "Durante el servicio · Sartén caliente · glasear",
+          "ingredientIds": []
+        }
+      ],
+      "confirmedByChef": true
+    },
+    "updatedAt": "2026-10-01T00:00:00.000Z"
+  },
+  {
+    "id": "bbchef-lasagna",
+    "visibility": "private",
+    "course": "Principales",
+    "version": {
+      "id": "bbchef-lasagna-v1",
+      "recipeId": "bbchef-lasagna",
+      "version": 1,
+      "title": "Lasagna Bolognese",
+      "description": "Masa a mano · ragú lento · bechamel\n\nRendimiento original en B-B-Chef: ≈ 8 porciones.\n\nImportada para revisión: cantidades y procedimiento aún no validados en Brigade; merma no especificada en origen.",
+      "yieldMilli": 8000,
+      "yieldUnit": "porción",
+      "ingredients": [
+        {
+          "id": "bbchef-lasagna-ing-carne_p",
+          "name": "Carne picada magra",
+          "netMilli": 2000000,
+          "unit": "g",
+          "wastePermille": 0
+        },
+        {
+          "id": "bbchef-lasagna-ing-espinaca2",
+          "name": "Espinaca",
+          "netMilli": 5000,
+          "unit": "atado",
+          "wastePermille": 0
+        },
+        {
+          "id": "bbchef-lasagna-ing-masa_l",
+          "name": "Masa láminas",
+          "netMilli": 1000000,
+          "unit": "g",
+          "wastePermille": 0
+        },
+        {
+          "id": "bbchef-lasagna-ing-manteca_b",
+          "name": "Manteca bechamel",
+          "netMilli": 160000,
+          "unit": "g",
+          "wastePermille": 0
+        },
+        {
+          "id": "bbchef-lasagna-ing-harina_b",
+          "name": "Harina bechamel",
+          "netMilli": 120000,
+          "unit": "g",
+          "wastePermille": 0
+        },
+        {
+          "id": "bbchef-lasagna-ing-leche_b",
+          "name": "Leche bechamel",
+          "netMilli": 2000000,
+          "unit": "ml",
+          "wastePermille": 0
+        }
+      ],
+      "steps": [
+        {
+          "id": "bbchef-lasagna-step-las_1",
+          "title": "Preparar ragú lento mínimo 3h",
+          "instruction": "D-2 · Carne · cebolla · tomate · vino · fuego bajo",
+          "ingredientIds": []
+        },
+        {
+          "id": "bbchef-lasagna-step-las_2",
+          "title": "Blanquear espinaca → escurrir → picar",
+          "instruction": "D-2 · Bien seca — la humedad arruina la lasagna",
+          "ingredientIds": []
+        },
+        {
+          "id": "bbchef-lasagna-step-las_3",
+          "title": "Preparar 2 tandas de bechamel",
+          "instruction": "D-1 · 80g manteca · 60g harina · 1L leche c/u",
+          "ingredientIds": []
+        },
+        {
+          "id": "bbchef-lasagna-step-las_4",
+          "title": "Armar lasagna en capas → refrigerar",
+          "instruction": "D-1 · Bechamel · lámina · ragú+espinaca · repetir",
+          "ingredientIds": []
+        },
+        {
+          "id": "bbchef-lasagna-step-las_5",
+          "title": "Sacar lasagna 30 min antes del horno",
+          "instruction": "Día del servicio, preparación · Temperatura uniforme → cocción pareja",
+          "ingredientIds": []
+        },
+        {
+          "id": "bbchef-lasagna-step-las_6",
+          "title": "Hornear a 180°C 35–45 min",
+          "instruction": "Día del servicio, preparación · Tapada · últimos 10 min destapada",
+          "ingredientIds": []
+        },
+        {
+          "id": "bbchef-lasagna-step-las_7",
+          "title": "Reposar 15 min antes de porcionar",
+          "instruction": "Una hora antes del servicio · Si se corta muy caliente se desarma",
+          "ingredientIds": []
+        }
+      ],
+      "confirmedByChef": true
+    },
+    "updatedAt": "2026-10-01T00:00:00.000Z"
+  },
+  {
+    "id": "bbchef-panzotti",
+    "visibility": "private",
+    "course": "Principales",
+    "version": {
+      "id": "bbchef-panzotti-v1",
+      "recipeId": "bbchef-panzotti",
+      "version": 1,
+      "title": "Panzotti de Cordero",
+      "description": "Cordero desmechado · salsa de espinaca y mostaza Dijon\n\nRendimiento original en B-B-Chef: ≈ 6 porciones · braseado D-1.\n\nImportada para revisión: cantidades y procedimiento aún no validados en Brigade; merma no especificada en origen.\n\nNotas de ingredientes del origen: Pierna lomo cordero: cubos 5×5.",
+      "yieldMilli": 6000,
+      "yieldUnit": "porción",
+      "ingredients": [
+        {
+          "id": "bbchef-panzotti-ing-cordero",
+          "name": "Pierna lomo cordero",
+          "netMilli": 1500000,
+          "unit": "g",
+          "wastePermille": 0
+        },
+        {
+          "id": "bbchef-panzotti-ing-salsa_t2",
+          "name": "Salsa de tomate",
+          "netMilli": 1000000,
+          "unit": "ml",
+          "wastePermille": 0
+        },
+        {
+          "id": "bbchef-panzotti-ing-cognac_p",
+          "name": "Cognac",
+          "netMilli": 200000,
+          "unit": "ml",
+          "wastePermille": 0
+        },
+        {
+          "id": "bbchef-panzotti-ing-vino_p",
+          "name": "Vino tinto Tannat",
+          "netMilli": 1000000,
+          "unit": "ml",
+          "wastePermille": 0
+        },
+        {
+          "id": "bbchef-panzotti-ing-ext_t",
+          "name": "Extracto de tomate",
+          "netMilli": 80000,
+          "unit": "g",
+          "wastePermille": 0
+        },
+        {
+          "id": "bbchef-panzotti-ing-cebolla_p",
+          "name": "Cebolla",
+          "netMilli": 300000,
+          "unit": "g",
+          "wastePermille": 0
+        },
+        {
+          "id": "bbchef-panzotti-ing-morron_p",
+          "name": "Morrón",
+          "netMilli": 200000,
+          "unit": "g",
+          "wastePermille": 0
+        },
+        {
+          "id": "bbchef-panzotti-ing-zanahoria_p",
+          "name": "Zanahoria",
+          "netMilli": 150000,
+          "unit": "g",
+          "wastePermille": 0
+        },
+        {
+          "id": "bbchef-panzotti-ing-masa_p",
+          "name": "Masa para pasta",
+          "netMilli": 600000,
+          "unit": "g",
+          "wastePermille": 0
+        }
+      ],
+      "steps": [
+        {
+          "id": "bbchef-panzotti-step-pan_1",
+          "title": "Preparar sofrito base cebolla morrón zanahoria",
+          "instruction": "D-2",
+          "ingredientIds": []
+        },
+        {
+          "id": "bbchef-panzotti-step-pan_2",
+          "title": "Sellar cordero en cubos 5×5",
+          "instruction": "D-2 · Maillard completo · sartén muy caliente",
+          "ingredientIds": []
+        },
+        {
+          "id": "bbchef-panzotti-step-pan_3",
+          "title": "Brasar con tomate · vino · cognac · bouquet garni",
+          "instruction": "D-2 · Fuego muy lento · 3–4h hasta deshacerse",
+          "ingredientIds": []
+        },
+        {
+          "id": "bbchef-panzotti-step-pan_4",
+          "title": "Retirar cordero → desmechar en caliente",
+          "instruction": "D-2",
+          "ingredientIds": []
+        },
+        {
+          "id": "bbchef-panzotti-step-pan_5",
+          "title": "Mixear caldo con vegetales → reducir a punto miel",
+          "instruction": "D-2 · Fuego mínimo — vigilar que no se queme",
+          "ingredientIds": []
+        },
+        {
+          "id": "bbchef-panzotti-step-pan_6",
+          "title": "Integrar reducción al cordero desmechado",
+          "instruction": "D-2",
+          "ingredientIds": []
+        },
+        {
+          "id": "bbchef-panzotti-step-pan_7",
+          "title": "Producir masa de pasta → reposar 2h en frío",
+          "instruction": "D-1",
+          "ingredientIds": []
+        },
+        {
+          "id": "bbchef-panzotti-step-pan_8",
+          "title": "Estirar masa → rellenar → cerrar panzotti",
+          "instruction": "D-1 · Bordes bien sellados · sobre semolín",
+          "ingredientIds": []
+        },
+        {
+          "id": "bbchef-panzotti-step-pan_9",
+          "title": "Hervir panzotti · flotan + 1 min",
+          "instruction": "Durante el servicio · Agua abundante con sal",
+          "ingredientIds": []
+        },
+        {
+          "id": "bbchef-panzotti-step-pan_10",
+          "title": "Glasear en manteca con salsa espinaca-mostaza",
+          "instruction": "Durante el servicio · Sartén caliente · movimiento suave",
+          "ingredientIds": []
+        }
+      ],
+      "confirmedByChef": true
+    },
+    "updatedAt": "2026-10-01T00:00:00.000Z"
+  },
+  {
+    "id": "bbchef-tiramisu",
+    "visibility": "private",
+    "course": "Postres",
+    "version": {
+      "id": "bbchef-tiramisu-v1",
+      "recipeId": "bbchef-tiramisu",
+      "version": 1,
+      "title": "Tiramisú",
+      "description": "Mascarpone · espresso · cacao amargo · reposo 24h\n\nRendimiento original en B-B-Chef: ≈ 8 porciones · preparar D-1.\n\nImportada para revisión: cantidades y procedimiento aún no validados en Brigade; merma no especificada en origen.",
+      "yieldMilli": 8000,
+      "yieldUnit": "porción",
+      "ingredients": [
+        {
+          "id": "bbchef-tiramisu-ing-cream_ch",
+          "name": "Cream cheese",
+          "netMilli": 800000,
+          "unit": "g",
+          "wastePermille": 0
+        },
+        {
+          "id": "bbchef-tiramisu-ing-casancream",
+          "name": "CasanCream",
+          "netMilli": 500000,
+          "unit": "g",
+          "wastePermille": 0
+        },
+        {
+          "id": "bbchef-tiramisu-ing-crema",
+          "name": "Crema de leche",
+          "netMilli": 200000,
+          "unit": "ml",
+          "wastePermille": 0
+        },
+        {
+          "id": "bbchef-tiramisu-ing-huevos_t",
+          "name": "Huevos",
+          "netMilli": 8000,
+          "unit": "un",
+          "wastePermille": 0
+        },
+        {
+          "id": "bbchef-tiramisu-ing-azucar_t",
+          "name": "Azúcar",
+          "netMilli": 250000,
+          "unit": "g",
+          "wastePermille": 0
+        },
+        {
+          "id": "bbchef-tiramisu-ing-gelatina",
+          "name": "Gelatina sin sabor (sobre)",
+          "netMilli": 2000,
+          "unit": "un",
+          "wastePermille": 0
+        },
+        {
+          "id": "bbchef-tiramisu-ing-vainillas",
+          "name": "Plantillas vainillas",
+          "netMilli": 1000,
+          "unit": "paq",
+          "wastePermille": 0
+        },
+        {
+          "id": "bbchef-tiramisu-ing-cafe_sol",
+          "name": "Café soluble",
+          "netMilli": 30000,
+          "unit": "g",
+          "wastePermille": 0
+        },
+        {
+          "id": "bbchef-tiramisu-ing-cafe_exp",
+          "name": "Café expreso",
+          "netMilli": 1000,
+          "unit": "un",
+          "wastePermille": 0
+        }
+      ],
+      "steps": [
+        {
+          "id": "bbchef-tiramisu-step-tir_1",
+          "title": "Preparar almíbar azúcar agua",
+          "instruction": "D-1 · Punto hilo — no caramelo",
+          "ingredientIds": []
+        },
+        {
+          "id": "bbchef-tiramisu-step-tir_2",
+          "title": "Batir 8 huevos → incorporar almíbar en hilo",
+          "instruction": "D-1 · Aparato a bomba — batir hasta que el bowl se enfríe",
+          "ingredientIds": []
+        },
+        {
+          "id": "bbchef-tiramisu-step-tir_3",
+          "title": "Mezclar cream cheese CasanCream expreso",
+          "instruction": "D-1 · Hasta textura sedosa · sin grumos",
+          "ingredientIds": []
+        },
+        {
+          "id": "bbchef-tiramisu-step-tir_4",
+          "title": "Incorporar crema de leche → integrar",
+          "instruction": "D-1 · No sobre-batir",
+          "ingredientIds": []
+        },
+        {
+          "id": "bbchef-tiramisu-step-tir_5",
+          "title": "Hidratar gelatina → integrar a mezcla de quesos",
+          "instruction": "D-1 · Equiparar densidades antes de mezclar",
+          "ingredientIds": []
+        },
+        {
+          "id": "bbchef-tiramisu-step-tir_6",
+          "title": "Humedecer vainillas → armar capas → refrigerar",
+          "instruction": "D-1 · Mínimo 4h · ideal 12–24h",
+          "ingredientIds": []
+        },
+        {
+          "id": "bbchef-tiramisu-step-tir_7",
+          "title": "Espolvorear cacao amargo al momento",
+          "instruction": "Durante el servicio · Nunca antes — se humedece",
+          "ingredientIds": []
+        }
+      ],
+      "confirmedByChef": true
+    },
+    "updatedAt": "2026-10-01T00:00:00.000Z"
+  },
+  {
+    "id": "bbchef-peras",
+    "visibility": "private",
+    "course": "Postres",
+    "version": {
+      "id": "bbchef-peras-v1",
+      "recipeId": "bbchef-peras",
+      "version": 1,
+      "title": "Peras al Vino Tinto",
+      "description": "Tannat uruguayo · canela · helado de crema\n\nRendimiento original en B-B-Chef: 5 peras · 1 por persona.\n\nImportada para revisión: cantidades y procedimiento aún no validados en Brigade; merma no especificada en origen.\n\nNotas de ingredientes del origen: Peras William Packham: firmes.",
+      "yieldMilli": 5000,
+      "yieldUnit": "porción",
+      "ingredients": [
+        {
+          "id": "bbchef-peras-ing-peras",
+          "name": "Peras William Packham",
+          "netMilli": 5000,
+          "unit": "un",
+          "wastePermille": 0
+        },
+        {
+          "id": "bbchef-peras-ing-vino_r",
+          "name": "Vino tinto Tannat",
+          "netMilli": 625000,
+          "unit": "ml",
+          "wastePermille": 0
+        },
+        {
+          "id": "bbchef-peras-ing-azucar_p",
+          "name": "Azúcar",
+          "netMilli": 125000,
+          "unit": "g",
+          "wastePermille": 0
+        },
+        {
+          "id": "bbchef-peras-ing-canela",
+          "name": "Canela en rama",
+          "netMilli": 1000,
+          "unit": "un",
+          "wastePermille": 0
+        },
+        {
+          "id": "bbchef-peras-ing-clavo",
+          "name": "Clavo de olor",
+          "netMilli": 4000,
+          "unit": "un",
+          "wastePermille": 0
+        },
+        {
+          "id": "bbchef-peras-ing-naranja_p",
+          "name": "Naranja cáscara",
+          "netMilli": 1000,
+          "unit": "un",
+          "wastePermille": 0
+        }
+      ],
+      "steps": [
+        {
+          "id": "bbchef-peras-step-per_1",
+          "title": "Calentar vino con azúcar y especias",
+          "instruction": "D-1 · Disolver azúcar antes de agregar peras",
+          "ingredientIds": []
+        },
+        {
+          "id": "bbchef-peras-step-per_2",
+          "title": "Pochar peras enteras a fuego bajo 20 min",
+          "instruction": "D-1 · Tapar · girar para teñir parejo",
+          "ingredientIds": []
+        },
+        {
+          "id": "bbchef-peras-step-per_3",
+          "title": "Retirar peras → reducir líquido a almíbar",
+          "instruction": "D-1 · 10 min a fuego alto",
+          "ingredientIds": []
+        },
+        {
+          "id": "bbchef-peras-step-per_4",
+          "title": "Enfriar peras en la reducción → refrigerar",
+          "instruction": "D-1 · El sabor profundiza en reposo",
+          "ingredientIds": []
+        },
+        {
+          "id": "bbchef-peras-step-per_5",
+          "title": "Regenerar peras suavemente en la salsa",
+          "instruction": "Día del servicio, preparación · Fuego muy bajo · no desarmar",
+          "ingredientIds": []
+        },
+        {
+          "id": "bbchef-peras-step-per_6",
+          "title": "Servir con reducción y helado de crema",
+          "instruction": "Durante el servicio · Contraste de temperatura",
+          "ingredientIds": []
+        }
+      ],
+      "confirmedByChef": true
+    },
+    "updatedAt": "2026-10-01T00:00:00.000Z"
+  },
+  {
+    "id": "bbchef-brulee",
+    "visibility": "private",
+    "course": "Postres",
+    "version": {
+      "id": "bbchef-brulee-v1",
+      "recipeId": "bbchef-brulee",
+      "version": 1,
+      "title": "Crème Brûlée",
+      "description": "Vainilla natural · costra quemada al momento\n\nRendimiento original en B-B-Chef: 5 ramekins · preparar D-1.\n\nImportada para revisión: cantidades y procedimiento aún no validados en Brigade; merma no especificada en origen.",
+      "yieldMilli": 5000,
+      "yieldUnit": "porción",
+      "ingredients": [
+        {
+          "id": "bbchef-brulee-ing-crema_b",
+          "name": "Crema de leche 35%",
+          "netMilli": 500000,
+          "unit": "ml",
+          "wastePermille": 0
+        },
+        {
+          "id": "bbchef-brulee-ing-yemas",
+          "name": "Yemas",
+          "netMilli": 5000,
+          "unit": "un",
+          "wastePermille": 0
+        },
+        {
+          "id": "bbchef-brulee-ing-azucar_b",
+          "name": "Azúcar crema",
+          "netMilli": 80000,
+          "unit": "g",
+          "wastePermille": 0
+        },
+        {
+          "id": "bbchef-brulee-ing-vainilla",
+          "name": "Vaina de vainilla",
+          "netMilli": 1000,
+          "unit": "un",
+          "wastePermille": 0
+        },
+        {
+          "id": "bbchef-brulee-ing-azucar_c",
+          "name": "Azúcar costra",
+          "netMilli": 40000,
+          "unit": "g",
+          "wastePermille": 0
+        }
+      ],
+      "steps": [
+        {
+          "id": "bbchef-brulee-step-bru_1",
+          "title": "Hervir crema con vainilla → reposar 10 min",
+          "instruction": "D-1 · Si usás vaina: abrir y raspar",
+          "ingredientIds": []
+        },
+        {
+          "id": "bbchef-brulee-step-bru_2",
+          "title": "Mezclar yemas azúcar sin incorporar aire",
+          "instruction": "D-1 · Sin batidor de varillas — sin espuma",
+          "ingredientIds": []
+        },
+        {
+          "id": "bbchef-brulee-step-bru_3",
+          "title": "Agregar crema en hilo → colar → distribuir en ramekins",
+          "instruction": "D-1 · Sin burbujear",
+          "ingredientIds": []
+        },
+        {
+          "id": "bbchef-brulee-step-bru_4",
+          "title": "Hornear a baño maría 150°C 40 min",
+          "instruction": "D-1 · Bordes firmes · centro tiembla · correcto",
+          "ingredientIds": []
+        },
+        {
+          "id": "bbchef-brulee-step-bru_5",
+          "title": "Enfriar → refrigerar mínimo 3h",
+          "instruction": "D-1 · Ideal de un día para el otro",
+          "ingredientIds": []
+        },
+        {
+          "id": "bbchef-brulee-step-bru_6",
+          "title": "Esparcir azúcar fino → quemar con soplete",
+          "instruction": "Durante el servicio · Capa fina y pareja · dorado oscuro",
+          "ingredientIds": []
+        }
+      ],
+      "confirmedByChef": true
+    },
+    "updatedAt": "2026-10-01T00:00:00.000Z"
+  }
+]
