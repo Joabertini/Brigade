@@ -10,6 +10,7 @@
 | Diseño aprobado: iPhone primero, Android, navegación inferior fija y Vengeance UI | [DISENO_REVISION_02.md](DISENO_REVISION_02.md) | Aprobadas las presentaciones móvil y escritorio |
 | Copia exacta del diseño aprobado y vista navegable | [diseno/aprobado/README.md](diseno/aprobado/README.md) | Fuente, HTML independiente y manifiesto de integridad |
 | Implementación, correspondencia de código y estado verificado | [IMPLEMENTACION.md](IMPLEMENTACION.md) | `src/main.tsx`, `src/features/*`, `shared/kitchen.ts`, `worker/index.ts`, `migrations/*` |
+| Recetas migradas desde B-B-Chef y límites de la copia | [IMPORTACION_BBCHEF.md](IMPORTACION_BBCHEF.md) | `recipes`, `recipe_versions`, `recipe_ingredients`, `recipe_steps` en D1 remota |
 | Trabajo de esta sesión | [sesiones/2026-10-01.md](sesiones/2026-10-01.md) | — |
 | Sesión anterior | [sesiones/2026-09-30.md](sesiones/2026-09-30.md) | — |
 
