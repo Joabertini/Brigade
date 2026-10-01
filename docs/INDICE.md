@@ -10,6 +10,7 @@
 | Diseño aprobado: iPhone primero, Android, navegación inferior fija y Vengeance UI | [DISENO_REVISION_02.md](DISENO_REVISION_02.md) | Aprobadas las presentaciones móvil y escritorio |
 | Copia exacta del diseño aprobado y vista navegable | [diseno/aprobado/README.md](diseno/aprobado/README.md) | Fuente, HTML independiente y manifiesto de integridad |
 | Implementación, correspondencia de código y estado verificado | [IMPLEMENTACION.md](IMPLEMENTACION.md) | `src/main.tsx`, `src/features/*`, `shared/kitchen.ts`, `worker/index.ts`, `migrations/*` |
-| Trabajo de esta sesión | [sesiones/2026-09-30.md](sesiones/2026-09-30.md) | — |
+| Trabajo de esta sesión | [sesiones/2026-10-01.md](sesiones/2026-10-01.md) | — |
+| Sesión anterior | [sesiones/2026-09-30.md](sesiones/2026-09-30.md) | — |
 
 En `d1fd62c` no existían README, documentación del producto, esquema de base de datos, migraciones ni pruebas. La implementación nueva está en curso; [IMPLEMENTACION.md](IMPLEMENTACION.md) distingue lo ejecutable de lo pendiente. Antes de implementar cualquier módulo, consultar el documento correspondiente y actualizarlo al terminar la tarea.
