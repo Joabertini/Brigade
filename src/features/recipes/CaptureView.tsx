@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { ArrowLeft, ArrowRight, Sparkles } from "lucide-react";
+import { useRef, useState } from "react";
+import { ArrowLeft, ArrowRight, Camera, Sparkles } from "lucide-react";
 import { formatMilli, type Unit } from "../../../shared/kitchen";
 import { normalizeUnit, type DraftQuestion, type RecipeDraft } from "../../../shared/capture";
 import { Back, Button, ErrorNote, PageHead, Tag } from "../../components/ui";
@@ -26,10 +26,23 @@ function parseAmountLabel(label: string): { amount: string; unit: Unit } | null 
 
 type Answer = { choice: string; free: string; amount: string; unit: Unit };
 
-export function CaptureView({ online, cloudMode, onInterpret, onReview, onCancel }: {
+/** Phone photos are several MB; the longest side is capped and re-encoded as JPEG before upload. */
+async function photoDataUrl(file: File, maxSide = 1600): Promise<string> {
+  const bitmap = await createImageBitmap(file);
+  const scale = Math.min(1, maxSide / Math.max(bitmap.width, bitmap.height));
+  const canvas = document.createElement("canvas");
+  canvas.width = Math.round(bitmap.width * scale);
+  canvas.height = Math.round(bitmap.height * scale);
+  canvas.getContext("2d")!.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+  bitmap.close();
+  return canvas.toDataURL("image/jpeg", 0.85);
+}
+
+export function CaptureView({ online, cloudMode, onInterpret, onTranscribe, onReview, onCancel }: {
   online: boolean;
   cloudMode: boolean;
   onInterpret: (text: string) => Promise<RecipeDraft>;
+  onTranscribe: (image: string) => Promise<string>;
   onReview: (prefill: RecipePrefill) => void;
   onCancel: () => void;
 }) {
@@ -40,6 +53,21 @@ export function CaptureView({ online, cloudMode, onInterpret, onReview, onCancel
   const [answers, setAnswers] = useState<Record<string, Answer>>({});
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const [reading, setReading] = useState(false);
+  const [fromPhoto, setFromPhoto] = useState(false);
+  const photoInput = useRef<HTMLInputElement>(null);
+
+  async function readPhoto(file: File | undefined) {
+    if (!file) return;
+    setReading(true); setError("");
+    try {
+      const text = await onTranscribe(await photoDataUrl(file));
+      // A second photo (next page of the same recipe) is appended instead of replacing.
+      setSource((current) => current.trim() ? `${current.trim()}\n\n${text}` : text);
+      setFromPhoto(true);
+    } catch (cause) { setError(cause instanceof Error ? cause.message : "No se pudo leer la foto"); }
+    finally { setReading(false); if (photoInput.current) photoInput.current.value = ""; }
+  }
 
   async function interpret() {
     setBusy(true); setError("");
@@ -107,12 +135,15 @@ export function CaptureView({ online, cloudMode, onInterpret, onReview, onCancel
 
   if (!draft) return <section className="b2-wide-limit b2-capture">
     <Back onClick={onCancel}>Recetario</Back>
-    <PageHead eyebrow="CAPTURA · PEGAR TEXTO" title={<>Tu receta,<br />desde un texto.</>} sub="Pegá un mensaje, una nota o lo que copiaste del cuaderno. Brigade arma la receta y te pregunta lo que no esté claro." />
+    <PageHead eyebrow="CAPTURA · FOTO O TEXTO" title={<>Tu receta,<br />desde una foto.</>} sub="Sacale una foto al cuaderno o pegá un mensaje. Brigade arma la receta y te pregunta lo que no esté claro." />
     {!cloudMode && <div className="b2-offline">Conectá tu cocina para interpretar recetas.</div>}
     {cloudMode && !online && <div className="b2-offline">Sin conexión. La interpretación necesita red; el texto queda acá.</div>}
+    <input ref={photoInput} type="file" accept="image/*" hidden onChange={(event) => void readPhoto(event.target.files?.[0])} />
+    <Button full disabled={reading || busy || !online || !cloudMode} onClick={() => photoInput.current?.click()}>{reading ? "Leyendo la foto…" : <><Camera /> {source.trim() ? "Sumar otra foto" : "Sacar foto o elegir imagen"}</>}</Button>
+    {fromPhoto && <p className="b2-sub">Texto leído de la foto. Revisalo antes de interpretar; [?] marca lo que no se pudo leer.</p>}
     <label className="b2-field">Texto de la receta<textarea value={source} onChange={(event) => setSource(event.target.value)} maxLength={8000} placeholder={"Pancitos de 30 g para paneras\n1.250k harina\n40 g azúcar\n…"} style={{ minHeight: 220 }} /></label>
     <ErrorNote>{error}</ErrorNote>
-    <Button full disabled={busy || !online || !cloudMode || !source.trim()} onClick={() => void interpret()}>{busy ? "Leyendo la receta…" : <>Interpretar receta <Sparkles /></>}</Button>
+    <Button full quiet={!source.trim()} disabled={busy || reading || !online || !cloudMode || !source.trim()} onClick={() => void interpret()}>{busy ? "Leyendo la receta…" : <>Interpretar receta <Sparkles /></>}</Button>
     <p className="b2-footnote">Nada se guarda hasta que revises y confirmes.</p>
   </section>;
 

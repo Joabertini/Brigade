@@ -87,6 +87,12 @@ export function normalizeDraft(raw: RawDraft, sourceText = ""): RecipeDraft {
     item.amountMilli = milli(quantities[0][1]);
     item.unit = unit;
   });
+  // "[?]" marks something a photo transcription could not read: never trust an amount from that line, ask instead.
+  const sourceLines = sourceText.split(/\r?\n/);
+  ingredients.forEach((item) => {
+    const line = item.source ? sourceLines.find((value) => value.includes(item.source)) ?? item.source : "";
+    if (line.includes("[?]")) item.amountMilli = null;
+  });
   // "200 g azúcar + 150 p/caramelo": the second amount shares the unit and belongs to the same ingredient.
   ingredients.forEach((item) => {
     if (item.amountMilli === null || item.unit !== null || !item.source) return;

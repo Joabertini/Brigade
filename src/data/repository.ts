@@ -54,6 +54,7 @@ export interface KitchenRepository {
   listRequirements(): Promise<Requirements>;
   linkIngredient(recipeId: string, ingredientId: string, catalogIngredientId: string | null): Promise<void>;
   interpretRecipe(text: string): Promise<RecipeDraft>;
+  transcribeRecipe(image: string): Promise<string>;
 }
 
 export class LocalRepository implements KitchenRepository {
@@ -112,6 +113,7 @@ export class LocalRepository implements KitchenRepository {
   listRequirements() { return Promise.resolve({ needs: [], unlinked: [] }); }
   linkIngredient() { return Promise.reject(new Error("Conectá tu cocina para vincular stock")); }
   interpretRecipe(): Promise<RecipeDraft> { return Promise.reject(new Error("Conectá tu cocina para interpretar recetas")); }
+  transcribeRecipe(): Promise<string> { return Promise.reject(new Error("Conectá tu cocina para leer fotos")); }
 }
 
 type RecipeSummary = { id: string; version_id: string; visibility: "private" | "kitchen"; owner_user_id: string; course: string | null };
@@ -428,6 +430,14 @@ export class CloudRepository implements KitchenRepository {
       method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ text }),
     });
     return result.draft;
+  }
+
+  async transcribeRecipe(image: string): Promise<string> {
+    if (!navigator.onLine) throw new Error("Sin conexión. Leer la foto necesita red.");
+    const result = await this.request<{ text: string }>(`${this.root()}/recipes/transcribe`, {
+      method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ image }),
+    });
+    return result.text;
   }
 
   async syncPending(): Promise<void> {

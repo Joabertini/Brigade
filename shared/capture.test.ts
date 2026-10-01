@@ -157,6 +157,19 @@ describe("cantidades compartidas en una línea", () => {
   });
 });
 
+describe("transcripción de foto", () => {
+  it("no confía en una cantidad de un renglón con [?]", () => {
+    const source = "Chimichurri\nperejil [?] atados\najo 1 cabeza";
+    const draft = normalizeDraft({
+      title: "Chimichurri", yield: { amount: 1, unit: "L" }, steps: [{ title: "Mezclar", instruction: "Mezclar" }],
+      ingredients: [{ name: "perejil", amount: 2, unit: "atado", source: "perejil [?] atados" }, { name: "ajo", amount: 1, unit: "un", source: "ajo 1 cabeza" }],
+    }, source);
+    expect(draft.ingredients[0].amountMilli).toBeNull();
+    expect(draft.ingredients[1].amountMilli).toBe(1000);
+    expect(draft.questions.some((item) => item.topic === "ingredient" && item.ingredientIndex === 0)).toBe(true);
+  });
+});
+
 describe("recuperación desde la fuente", () => {
   it("recupera la cantidad copiada en la fuente, sin robarla de otro ingrediente", () => {
     const draft = normalizeDraft({
