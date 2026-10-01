@@ -13,7 +13,7 @@ const newId = () => crypto.randomUUID();
 type Filter = "Todas" | "Compartidas" | "Privadas";
 type Member = { id: string; name: string; email?: string; role: string };
 
-export function RecipesView({ recipes, ingredients: catalog, courses, canAddCourse, cloudMode, online, canPlan, canLink, currentUserId, intent, onInterpret, onAddCourse, onCourse, onCreate, onSaved, onPlan, onMembers, onShare, onVisibility, onLink }: {
+export function RecipesView({ recipes, ingredients: catalog, courses, canAddCourse, cloudMode, online, canPlan, canLink, currentUserId, intent, onInterpret, onTranscribe, onAddCourse, onCourse, onCreate, onSaved, onPlan, onMembers, onShare, onVisibility, onLink }: {
   recipes: LocalRecipe[];
   ingredients: CatalogIngredient[];
   courses: string[];
@@ -25,6 +25,7 @@ export function RecipesView({ recipes, ingredients: catalog, courses, canAddCour
   currentUserId?: string;
   intent: "" | "new" | "capture";
   onInterpret: (text: string) => Promise<RecipeDraft>;
+  onTranscribe: (image: string) => Promise<string>;
   onAddCourse: (name: string) => Promise<void>;
   onCourse: (recipe: LocalRecipe, course: string | null) => Promise<void>;
   onCreate: (version: RecipeVersion, course: string | null) => Promise<void>;
@@ -213,7 +214,7 @@ export function RecipesView({ recipes, ingredients: catalog, courses, canAddCour
     </section>;
   }
 
-  if (capturing) return <CaptureView online={online} cloudMode={cloudMode} onInterpret={onInterpret} onReview={review} onCancel={() => setCapturing(false)} />;
+  if (capturing) return <CaptureView online={online} cloudMode={cloudMode} onInterpret={onInterpret} onTranscribe={onTranscribe} onReview={review} onCancel={() => setCapturing(false)} />;
 
   if (editing) return <section>
     <Back onClick={closeForm}>Recetario</Back>
