@@ -47,48 +47,9 @@ export default function App() {
   const repository = useMemo(() => mode === "cloud" && identity ? new CloudRepository(identity) : new LocalRepository(), [mode, identity]);
 
   useEffect(() => {
-    let cancelled = false;
-    async function restore() {
-      if (joinToken) { setMode("join"); return; }
-      let cached: Identity | null = null;
-      try { cached = JSON.parse(localStorage.getItem(identityKey) || "null") as Identity | null; } catch { /* no saved identity */ }
-      if (navigator.onLine) {
-        try {
-          const response = await fetch("/api/me", { credentials: "same-origin" });
-          if (response.ok) {
-            const data = await response.json() as {
-              user: Identity["user"];
-              memberships: { kitchen_id: string; role: Identity["role"] }[];
-            };
-            if (data.memberships[0]) {
-              const restored: Identity = { user: data.user, kitchenId: data.memberships[0].kitchen_id, role: data.memberships[0].role };
-              if (cached && (cached.user.id !== restored.user.id || cached.kitchenId !== restored.kitchenId)) {
-                void clearUserCache(cached.user.id, cached.kitchenId).catch(() => {});
-              }
-              if (!cancelled) {
-                setIdentity(restored); setMode("cloud");
-                localStorage.setItem(identityKey, JSON.stringify(restored));
-              }
-              return;
-            }
-            if (cached) void clearUserCache(cached.user.id, cached.kitchenId).catch(() => {});
-            cached = null;
-          }
-          if (response.status === 401 || response.status === 403) {
-            if (cached) void clearUserCache(cached.user.id, cached.kitchenId).catch(() => {});
-            cached = null;
-          }
-        } catch { /* cached mode can keep working during a network failure */ }
-      }
-      if (cancelled) return;
-      if (cached) { setIdentity(cached); setMode("cloud"); }
-      else {
-        localStorage.removeItem(identityKey);
-        setMode(localStorage.getItem(modeKey) === "local" ? "local" : "login");
-      }
-    }
-    void restore();
-    return () => { cancelled = true; };
+    // Temporary pilot entry: avoid the unreliable account flow on the tester's device.
+    // Cloud sign-in remains available from Connection; no private API is opened anonymously.
+    setMode(joinToken ? "join" : "local");
   }, [joinToken]);
 
   const refresh = useCallback(async () => {

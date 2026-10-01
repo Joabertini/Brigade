@@ -4,6 +4,7 @@ import type { RecipeDraft } from "../../shared/capture";
 import { cleanCourse, courseKey, mergeCourses } from "../../shared/courses";
 import { listLocal, putLocal, type LocalEvent, type LocalProduction, type LocalRecipe } from "../local-db";
 import { deletePending, listPending, putPending, readCache, writeCache, type PendingEntry } from "./cloud-cache";
+import starterRecipes from "./bbchef-starter.json";
 
 export type Identity = { user: { id: string; name: string; email: string }; kitchenId: string; role: "chef" | "sous_chef" | "commis" };
 
@@ -58,7 +59,11 @@ export interface KitchenRepository {
 }
 
 export class LocalRepository implements KitchenRepository {
-  listRecipes() { return listLocal<LocalRecipe>("recipes"); }
+  async listRecipes() {
+    const own = await listLocal<LocalRecipe>("recipes");
+    const ownIds = new Set(own.map((recipe) => recipe.id));
+    return [...own, ...starterRecipes.filter((recipe) => !ownIds.has(recipe.id)) as LocalRecipe[]];
+  }
   async createRecipe(version: RecipeVersion, course: string | null) {
     await putLocal("recipes", {
       id: version.recipeId, visibility: "private", course, version, updatedAt: new Date().toISOString(),
